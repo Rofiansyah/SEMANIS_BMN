@@ -181,7 +181,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center text-sm text-gray-500">
-          <p>© 2024 Sistem Inventaris. All rights reserved.</p>
+          <p>© 2025 SEMANIS BMN. All rights reserved.</p>
         </div>
       </div>
     </div>

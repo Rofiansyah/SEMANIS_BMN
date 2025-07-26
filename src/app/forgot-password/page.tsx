@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           <div className="text-center text-sm text-gray-500">
-            <p>© 2024 SEMANTIS BMN. All rights reserved.</p>
+            <p>© 2025 SEMANIS BMN. All rights reserved.</p>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="text-center text-sm text-gray-500">
-          <p>© 2024 SEMANTIS BMN. All rights reserved.</p>
+          <p>© 2025 SEMANIS BMN. All rights reserved.</p>
         </div>
       </div>
     </div>
