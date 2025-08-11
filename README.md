@@ -26,21 +26,21 @@ Frontend aplikasi sistem inventaris barang menggunakan Next.js 15 dengan TypeScr
 
 ```
 src/
-├── app/                    # Next.js App Router pages
-│   ├── dashboard/         # Dashboard page
+├── app/                  # Next.js App Router pages
+│   ├── dashboard/        # Dashboard page
 │   ├── login/            # Login page
 │   ├── register/         # Register page
 │   ├── layout.tsx        # Root layout
 │   └── page.tsx          # Home page (redirects)
 ├── components/           # Reusable components
-│   └── ui/              # UI components (Button, Input)
-├── contexts/            # React contexts
-│   └── AuthContext.tsx  # Authentication context
-├── lib/                 # Utilities and API client
-│   ├── api.ts           # API client dan endpoints
-│   └── utils.ts         # Utility functions
-└── types/               # TypeScript type definitions
-    └── api.ts           # API response types
+│   └── ui/               # UI components (Button, Input)
+├── contexts/             # React contexts
+│   └── AuthContext.tsx   # Authentication context
+├── lib/                  # Utilities and API client
+│   ├── api.ts            # API client dan endpoints
+│   └── utils.ts          # Utility functions
+└── types/                # TypeScript type definitions
+    └── api.ts            # API response types
 ```
 
 ## Instalasi
