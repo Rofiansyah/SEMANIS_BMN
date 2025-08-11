@@ -75,112 +75,115 @@ export default function UserLoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          {/* Back Button */}
-          <div className="mb-6">
-            <Link 
-              href="/" 
-              className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm"
-            >
-              <ArrowLeft size={16} className="mr-2" />
-              Kembali ke pilihan akun
-            </Link>
-          </div>
+  <div className="w-full max-w-md space-y-8">
+    {/* Card */}
+    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+      {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm transition-colors duration-200"
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          Kembali ke pilihan akun
+        </Link>
+      </div>
 
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <img
-                src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
-                alt="SEMANTIS BMN Logo"
-                style={{ width: '160px', height: 'auto', maxHeight: '120px' }}
-                className="object-contain"
-              />
-            </div>
-          </div>
+      {/* Logo */}
+      <div className="flex justify-center mb-6">
+        <img
+          src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
+          alt="SEMANTIS BMN Logo"
+          className="w-100 sm:w-104 h-auto max-h-28 object-contain"
+        />
+      </div>
 
-          {/* Login Form */}
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-gray-900">Login User</h3>
-          </div>
+      {/* Title */}
+      <div className="text-center mb-6">
+        <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Login User</h3>
+      </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email*
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter your email"
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password*
-              </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter your password"
-                className="w-full"
-              />
-            </div>
-
-            {/* Forgot Password Link */}
-            <div className="text-right">
-              <Link 
-                href="/forgot-password" 
-                className="text-sm text-blue-600 hover:text-blue-800 underline"
-              >
-                Lupa password?
-              </Link>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-md">
-                {error}
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white"
-              loading={loading}
-              disabled={!formData.email || !formData.password}
-            >
-              {loading ? 'Login...' : 'Login'}
-            </Button>
-
-            
-          </form>
-
-          {/* Register Link */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              Belum punya akun?{' '}
-              <Link href="/register" className="text-blue-600 hover:text-blue-800 underline font-medium">
-                Daftar di sini
-              </Link>
-            </p>
-          </div>
+      {/* Login Form */}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            Email*
+          </label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter your email"
+            className="w-full"
+          />
         </div>
 
-        <div className="text-center text-sm text-gray-500">
-          <p>© 2025 SEMANIS BMN. All rights reserved.</p>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            Password*
+          </label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter your password"
+            className="w-full"
+          />
         </div>
+
+        {/* Forgot Password */}
+        <div className="text-right">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-blue-600 hover:text-blue-800 underline"
+          >
+            Lupa password?
+          </Link>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-md text-sm">
+            {error}
+          </div>
+        )}
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white transition-colors duration-200"
+          loading={loading}
+          disabled={!formData.email || !formData.password}
+        >
+          {loading ? 'Login...' : 'Login'}
+        </Button>
+      </form>
+
+      {/* Register Link */}
+      <div className="mt-8 text-center">
+        <p className="text-sm text-gray-600">
+          Belum punya akun?{' '}
+          <Link
+            href="/register"
+            className="text-blue-600 hover:text-blue-800 underline font-medium"
+          >
+            Daftar di sini
+          </Link>
+        </p>
       </div>
     </div>
+
+    {/* Footer */}
+    <div className="text-center text-xs sm:text-sm text-gray-500">
+      © 2025 SEMANIS BMN. All rights reserved.
+    </div>
+  </div>
+</div>
   );
 }
