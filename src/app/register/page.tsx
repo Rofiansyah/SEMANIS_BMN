@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Left Side - Illustration */}
+      {/* Left Side - Illustration
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center p-8">
         <div className="text-center text-white">
           <div className="w-64 h-64 bg-white bg-opacity-20 rounded-lg mb-8 flex items-center justify-center">
@@ -86,7 +86,7 @@ export default function RegisterPage() {
             Kelola inventaris dengan mudah dan efisien
           </p>
         </div>
-      </div>
+      </div> */}
 
       {/* Right Side - Register Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
