@@ -24,7 +24,7 @@ export function LoginForm({
   error = '', 
   title = 'Login Admin',
   emailPlaceholder = 'Enter your email',
-  passwordPlaceholder = 'minimum 8 characters'
+  passwordPlaceholder = 'Enter your password'
 }: LoginFormProps) {
   const [formData, setFormData] = useState<FormData>({
     email: '',

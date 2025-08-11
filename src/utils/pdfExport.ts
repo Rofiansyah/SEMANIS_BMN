@@ -40,7 +40,7 @@ export const exportBarangStatisticsPDF = (data: BarangStatistics) => {
   // Subtitle
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text('SEMANTIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
+  doc.text('SEMANIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
   doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 105, 50, { align: 'center' });
   
   // Line separator
@@ -94,7 +94,7 @@ export const exportBarangStatisticsPDF = (data: BarangStatistics) => {
   
   // Footer
   doc.setFontSize(10);
-  doc.text('Digenerate otomatis oleh SEMANTIS BMN', 105, 280, { align: 'center' });
+  doc.text('Digenerate otomatis oleh SEMANIS BMN', 105, 280, { align: 'center' });
   
   // Save the PDF
   doc.save(`Laporan-Statistik-Barang-${new Date().toISOString().split('T')[0]}.pdf`);
@@ -111,7 +111,7 @@ export const exportPeminjamanStatisticsPDF = (data: PeminjamanStatistics) => {
   // Subtitle
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text('SEMANTIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
+  doc.text('SEMANIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
   doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 105, 50, { align: 'center' });
   
   if (data.bulan) {
@@ -193,7 +193,7 @@ export const exportPeminjamanStatisticsPDF = (data: PeminjamanStatistics) => {
   
   // Footer
   doc.setFontSize(10);
-  doc.text('Digenerate otomatis oleh SEMANTIS BMN', 105, 280, { align: 'center' });
+  doc.text('Digenerate otomatis oleh SEMANIS BMN', 105, 280, { align: 'center' });
   
   // Save the PDF
   const filename = data.bulan 
@@ -214,7 +214,7 @@ export const exportBarangListPDF = (barangList: BarangItem[], statistics: Barang
   // Subtitle
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text('SEMANTIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
+  doc.text('SEMANIS BMN - Sistem Inventaris', 105, 40, { align: 'center' });
   doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 105, 50, { align: 'center' });
   doc.text(`Total Barang: ${barangList.length}`, 105, 60, { align: 'center' });
   
@@ -309,7 +309,7 @@ export const exportBarangListPDF = (barangList: BarangItem[], statistics: Barang
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.text(`Halaman ${i} dari ${pageCount}`, 105, 285, { align: 'center' });
-    doc.text('Digenerate otomatis oleh SEMANTIS BMN', 105, 295, { align: 'center' });
+    doc.text('Digenerate otomatis oleh SEMANIS BMN', 105, 295, { align: 'center' });
   }
   
   // Save the PDF
