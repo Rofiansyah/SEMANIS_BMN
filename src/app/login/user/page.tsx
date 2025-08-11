@@ -133,7 +133,7 @@ export default function UserLoginPage() {
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                placeholder="minimum 8 characters"
+                placeholder="Enter your password"
                 className="w-full"
               />
             </div>
