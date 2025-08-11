@@ -54,46 +54,48 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          {/* Back Button */}
-          <div className="mb-6">
-            <Link 
-              href="/" 
-              className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm"
-            >
-              <ArrowLeft size={16} className="mr-2" />
-              Kembali ke pilihan akun
-            </Link>
-          </div>
+  <div className="w-full max-w-md space-y-8">
+    {/* Card */}
+    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+      {/* Back Button */}
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm transition-colors duration-200"
+        >
+          <ArrowLeft size={16} className="mr-2" />
+          Kembali ke pilihan akun
+        </Link>
+      </div>
 
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <img
-                src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
-                alt="SEMANTIS BMN Logo"
-                style={{ width: '160px', height: 'auto', maxHeight: '120px' }}
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Login Form */}
-          <LoginForm
-            onSubmit={handleLoginSubmit}
-            loading={loading}
-            error={error}
-            title="Login Admin"
-            emailPlaceholder="Enter your email"
-            passwordPlaceholder="minimum 8 characters"
+      {/* Logo */}
+      <div className="text-center mb-8">
+        <div className="flex justify-center">
+          <img
+            src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
+            alt="SEMANTIS BMN Logo"
+            className="w-64 sm:w-68 h-auto max-h-28 object-contain"
           />
         </div>
-
-        <div className="text-center text-sm text-gray-500">
-          <p>© 2025 SEMANIS BMN. All rights reserved.</p>
-        </div>
       </div>
+
+      {/* Login Form */}
+      <LoginForm
+        onSubmit={handleLoginSubmit}
+        loading={loading}
+        error={error}
+        title="Login Admin"
+        emailPlaceholder="Enter your email"
+        passwordPlaceholder="Minimum 8 characters"
+      />
     </div>
+
+    {/* Footer */}
+    <div className="text-center text-xs sm:text-sm text-gray-500">
+      © 2025 SEMANIS BMN. All rights reserved.
+    </div>
+  </div>
+</div>
+
   );
 }
