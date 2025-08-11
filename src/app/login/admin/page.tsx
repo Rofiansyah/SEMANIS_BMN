@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
           <img
             src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
             alt="SEMANTIS BMN Logo"
-            className="w-64 sm:w-68 h-auto max-h-28 object-contain"
+            className="w-100 sm:w-104 h-auto max-h-28 object-contain"
           />
         </div>
       </div>
