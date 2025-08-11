@@ -1,9 +1,30 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Sidebar } from './Sidebar';
-import { Menu, Bell, LogOut } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
+import { 
+  Menu,
+  Bell,
+  Home, 
+  Package, 
+  Building, 
+  Tag, 
+  BarChart3, 
+  Search,
+  History,
+  ChevronDown,
+  ChevronRight,
+  X,
+  HelpCircle,
+  LogOut,
+  ClipboardList,
+  CheckCircle,
+  BookOpen
+} from 'lucide-react';
+import { Sidebar } from './Sidebar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,6 +36,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
+  const pathname = usePathname();
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
