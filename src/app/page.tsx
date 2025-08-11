@@ -20,7 +20,7 @@ export default function Home() {
           <img
             src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
             alt="Semantis BMN Logo"
-            className="w-28 sm:w-32 h-auto mx-auto"
+            className="w-36 sm:w-40 h-auto mx-auto"
             onLoad={() => console.log('Logo berhasil dimuat')}
             onError={(e) => {
               console.error('Logo gagal dimuat');
