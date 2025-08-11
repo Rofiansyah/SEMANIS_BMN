@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
         error={error}
         title="Login Admin"
         emailPlaceholder="Enter your email"
-        passwordPlaceholder="Minimum 8 characters"
+        passwordPlaceholder="Enter your password"
       />
     </div>
 

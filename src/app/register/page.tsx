@@ -69,14 +69,15 @@ export default function RegisterPage() {
   };
 
   return (
-<div className="min-h-screen bg-gray-50 flex items-center justify-center">
-  <div className="w-full max-w-md space-y-8 p-4">
-    <div className="bg-white rounded-lg shadow-xl p-8">
+<div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div className="w-full max-w-md space-y-8">
+    {/* Card */}
+    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
       {/* Back Button */}
       <div className="mb-6">
-        <Link 
-          href="/login/user" 
-          className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm"
+        <Link
+          href="/login/user"
+          className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm transition-colors duration-200"
         >
           <ArrowLeft size={16} className="mr-2" />
           Kembali ke login
@@ -84,26 +85,23 @@ export default function RegisterPage() {
       </div>
 
       {/* Logo */}
-      <div className="text-center mb-8">
-        <div className="flex justify-center mb-4">
-          <img
-            src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
-            alt="SEMANTIS BMN Logo"
-            style={{ width: '160px', height: 'auto', maxHeight: '120px' }}
-            className="object-contain"
-          />
-        </div>
+      <div className="flex justify-center mb-6">
+        <img
+          src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
+          alt="SEMANTIS BMN Logo"
+          className="w-100 sm:w-104 h-auto max-h-28 object-contain"
+        />
       </div>
 
-      {/* Register Title */}
-      <div className="text-center mb-8">
-        <h3 className="text-xl font-semibold text-gray-900">Register</h3>
+      {/* Title */}
+      <div className="text-center mb-6">
+        <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">Register</h3>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* First Name & Last Name */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
               First name
@@ -115,7 +113,7 @@ export default function RegisterPage() {
               value={formData.firstName}
               onChange={handleInputChange}
               required
-              placeholder="Enter your name"
+              placeholder="Enter your first name"
               className="w-full"
             />
           </div>
@@ -130,14 +128,14 @@ export default function RegisterPage() {
               value={formData.lastName}
               onChange={handleInputChange}
               required
-              placeholder="minimum 8 characters"
+              placeholder="Enter your last name"
               className="w-full"
             />
           </div>
         </div>
 
         {/* Email & Phone */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email
@@ -164,7 +162,7 @@ export default function RegisterPage() {
               value={formData.phone}
               onChange={handleInputChange}
               required
-              placeholder="minimum 8 characters"
+              placeholder="Enter your phone"
               className="w-full"
             />
           </div>
@@ -182,7 +180,7 @@ export default function RegisterPage() {
             value={formData.password}
             onChange={handleInputChange}
             required
-            placeholder="Enter your email"
+            placeholder="Minimum 8 characters"
             className="w-full"
           />
         </div>
@@ -202,28 +200,29 @@ export default function RegisterPage() {
           </label>
         </div>
 
+        {/* Alerts */}
         {error && (
-          <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-md">
+          <div className="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-md text-sm">
             {error}
           </div>
         )}
-
         {success && (
-          <div className="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-md">
+          <div className="bg-green-50 border border-green-300 text-green-700 px-4 py-3 rounded-md text-sm">
             {success}
           </div>
         )}
 
+        {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white"
+          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white transition-colors duration-200"
           loading={loading}
           disabled={
-            !formData.email || 
-            !formData.password || 
-            !formData.firstName || 
-            !formData.lastName || 
-            !formData.phone || 
+            !formData.email ||
+            !formData.password ||
+            !formData.firstName ||
+            !formData.lastName ||
+            !formData.phone ||
             !formData.agreeTerms
           }
         >
@@ -235,15 +234,19 @@ export default function RegisterPage() {
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/login/user" className="text-blue-600 hover:text-blue-800 underline font-medium">
+          <Link
+            href="/login/user"
+            className="text-blue-600 hover:text-blue-800 underline font-medium"
+          >
             Log in
           </Link>
         </p>
       </div>
     </div>
 
-    <div className="text-center text-sm text-gray-500 mt-4">
-      <p>© 2025 SEMANIS BMN. All rights reserved.</p>
+    {/* Footer */}
+    <div className="text-center text-xs sm:text-sm text-gray-500">
+      © 2025 SEMANIS BMN. All rights reserved.
     </div>
   </div>
 </div>
