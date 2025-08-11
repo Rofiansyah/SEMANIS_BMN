@@ -181,7 +181,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
               className="object-contain"
             />
             <div>
-              <h1 className="text-sm font-bold text-gray-900">SEMANTIS BMN</h1>
+              <h1 className="text-sm font-bold text-gray-900">SEMANIS BMN</h1>
               <p className="text-xs text-gray-500">Sistem Inventaris</p>
             </div>
           </div>
