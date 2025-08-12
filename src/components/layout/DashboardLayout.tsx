@@ -28,13 +28,13 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
 
-      {/* Main Content */}
+      {/* Main Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 relative">
           <div className="px-4 lg:px-6">
             <div className="flex items-center justify-between h-16">
-              {/* Left side - Mobile menu button + Title */}
+              {/* Left side */}
               <div className="flex items-center space-x-4">
                 <button
                   onClick={toggleSidebar}
@@ -42,7 +42,6 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
                 >
                   <Menu size={20} className="text-gray-600" />
                 </button>
-
                 {title && (
                   <h1 className="text-lg font-semibold text-gray-900 hidden sm:block">
                     {title}
@@ -78,9 +77,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
 
                   {/* Dropdown */}
                   {userMenuOpen && (
-                    <div
-                      className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50"
-                    >
+                    <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center space-x-2 px-3 py-2 text-left hover:bg-red-50 rounded-md transition-colors text-red-600"
@@ -96,7 +93,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
           </div>
         </header>
 
-        {/* Main Content Area */}
+        {/* Content */}
         <main className="flex-1 overflow-y-auto">
           <div className="p-4 lg:p-6">{children}</div>
         </main>

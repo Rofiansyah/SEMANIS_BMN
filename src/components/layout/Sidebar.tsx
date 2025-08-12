@@ -6,18 +6,9 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 import { 
-  Home, 
-  Package, 
-  Building, 
-  Tag, 
-  BarChart3, 
-  Search,
-  History,
-  ChevronDown,
-  ChevronRight,
-  ClipboardList,
-  CheckCircle,
-  BookOpen
+  Home, Package, Building, Tag, BarChart3, Search,
+  History, ChevronDown, ChevronRight, ClipboardList,
+  CheckCircle, BookOpen
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -38,8 +29,8 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const toggleExpanded = (label: string) => {
-    setExpandedItems(prev => 
-      prev.includes(label) 
+    setExpandedItems(prev =>
+      prev.includes(label)
         ? prev.filter(item => item !== label)
         : [...prev, label]
     );
@@ -102,7 +93,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             </div>
             {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
-          
+
           {isExpanded && (
             <div className="ml-2 border-l border-gray-200">
               {item.children!.map(child => renderMenuItem(child, level + 1))}
@@ -126,20 +117,18 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay untuk mobile */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
 
-      {/* Sidebar */}
       <aside className={`fixed inset-y-0 left-0 transform ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
         
-        {/* Header */}
+        {/* Header Sidebar */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <Image
@@ -162,7 +151,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
           </button>
         </div>
 
-        {/* Menu */}
+        {/* Menu Items */}
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
           {menuItems.map(item => renderMenuItem(item))}
         </nav>
