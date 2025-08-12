@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { kategoriApi } from '@/lib/api';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ interface TambahKategoriModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  loading?: boolean;
 }
 
 interface KategoriFormData {
@@ -18,18 +19,18 @@ interface KategoriFormData {
 }
 
 export function TambahKategoriModal({ isOpen, onClose, onSuccess }: TambahKategoriModalProps) {
-  const [formData, setFormData] = useState<KategoriFormData>({ nama: '' });
+  const [formData, setFormData] = useState<KategoriFormData>({  nama: ''  });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     if (isOpen) {
-      setFormData({ nama: '' });
+      setFormData({ nama: ''  });
     }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!formData.nama.trim()) {
       toast.error('Nama kategori harus diisi');
       return;
@@ -58,26 +59,26 @@ export function TambahKategoriModal({ isOpen, onClose, onSuccess }: TambahKatego
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+    <div 
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-2xl shadow-xl w-full sm:max-w-sm md:max-w-md p-6 animate-fadeIn">
+      <div
+        className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg border border-gray-100 animate-fadeIn"
+      >
         {/* Header */}
-        <div className="flex justify-between items-center border-b pb-3 mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">Tambah Kategori</h3>
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-lg font-semibold text-gray-800">Tambah Lokasi</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-
+        
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <Input
             label="Nama Kategori"
             value={formData.nama}
@@ -87,7 +88,7 @@ export function TambahKategoriModal({ isOpen, onClose, onSuccess }: TambahKatego
           />
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+          <div className="flex flex-col md:flex-row gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
