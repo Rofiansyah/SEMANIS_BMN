@@ -141,7 +141,7 @@ export default function UserLoginPage() {
         <div className="text-right">
           <Link
             href="/forgot-password"
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
+            className="text-sm text-blue-900 hover:text-blue-950 underline"
           >
             Lupa password?
           </Link>
@@ -157,7 +157,7 @@ export default function UserLoginPage() {
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white transition-colors duration-200"
+          className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
           loading={loading}
           disabled={!formData.email || !formData.password}
         >
@@ -171,7 +171,7 @@ export default function UserLoginPage() {
           Belum punya akun?{' '}
           <Link
             href="/register"
-            className="text-blue-600 hover:text-blue-800 underline font-medium"
+            className="text-blue-900 hover:text-blue-950 underline font-medium"
           >
             Daftar di sini
           </Link>

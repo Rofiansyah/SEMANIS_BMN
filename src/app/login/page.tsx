@@ -103,7 +103,7 @@ export default function LoginPage() {
                 }}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                   loginType === 'user'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-950 shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -118,7 +118,7 @@ export default function LoginPage() {
                 }}
                 className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                   loginType === 'admin'
-                    ? 'bg-white text-blue-600 shadow-sm'
+                    ? 'bg-white text-blue-950 shadow-sm'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
               >
@@ -128,7 +128,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
+          <form onSubmit={handleSubmit} className="space-y-6 ">
             <Input
               id="email"
               name="email"
@@ -173,7 +173,7 @@ export default function LoginPage() {
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>
               Belum punya akun?{' '}
-              <a href="/register" className="text-blue-600 hover:text-blue-800 underline">
+              <a href="/register" className="text-blue-900 hover:text-blue-950 underline">
                 Daftar di sini
               </a>
             </p>
