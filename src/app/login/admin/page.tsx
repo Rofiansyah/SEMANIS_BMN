@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
       <div className="mb-6">
         <Link
           href="/"
-          className="inline-flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+          className="inline-flex items-center text-gray-600 hover:text-gray-800 text-sm transition-colors duration-200"
         >
           <ArrowLeft size={16} className="mr-2" />
           Kembali ke pilihan akun
