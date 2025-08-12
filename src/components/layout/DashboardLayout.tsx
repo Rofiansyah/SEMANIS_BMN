@@ -28,7 +28,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
 
-      {/* Main Content */}
+      {/* Main Content - kasih margin kiri di layar ≥ 1280px */}
       <div className="flex-1 flex flex-col overflow-hidden xl:ml-64">
         {/* Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 relative">
@@ -36,6 +36,7 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
             <div className="flex items-center justify-between h-16">
               {/* Left side - Mobile menu button + Title */}
               <div className="flex items-center space-x-4">
+                {/* Hamburger hanya muncul di layar kecil */}
                 <button
                   onClick={toggleSidebar}
                   className="xl:hidden p-2 rounded-md hover:bg-gray-100 transition-colors"

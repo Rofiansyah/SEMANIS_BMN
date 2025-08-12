@@ -135,10 +135,10 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 transform ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      } xl:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
-        
+      <aside
+        className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 z-50 flex flex-col transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} xl:translate-x-0`}
+      >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
