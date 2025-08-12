@@ -128,7 +128,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
             <Input
               id="email"
               name="email"
