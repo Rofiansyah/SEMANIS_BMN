@@ -15,9 +15,6 @@ import {
   History,
   ChevronDown,
   ChevronRight,
-  X,
-  HelpCircle,
-  LogOut,
   ClipboardList,
   CheckCircle,
   BookOpen
@@ -36,14 +33,9 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
-  const { user, isAdmin, logout } = useAuth();
+  const { isAdmin } = useAuth();
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
-
-  const handleLogout = () => {
-    logout();
-    window.location.href = '/';
-  };
 
   const toggleExpanded = (label: string) => {
     setExpandedItems(prev => 
@@ -54,11 +46,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   };
 
   const adminMenuItems: SidebarItem[] = [
-    {
-      label: 'Dashboard',
-      href: '/admin/dashboard',
-      icon: <Home size={20} />
-    },
+    { label: 'Dashboard', href: '/admin/dashboard', icon: <Home size={20} /> },
     {
       label: 'Data Master',
       icon: <Package size={20} />,
@@ -77,31 +65,14 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         { label: 'Sedang Dipinjam', href: '/admin/peminjaman/approved', icon: <BookOpen size={16} /> },
         { label: 'Laporan', href: '/admin/peminjaman/reports', icon: <BarChart3 size={16} /> }
       ]
-    },
-    
+    }
   ];
 
   const userMenuItems: SidebarItem[] = [
-    {
-      label: 'Dashboard',
-      href: '/dashboard',
-      icon: <Home size={20} />
-    },
-    {
-      label: 'Cari Barang',
-      href: '/user/search',
-      icon: <Search size={20} />
-    },
-    {
-      label: 'Status Peminjaman',
-      href: '/user/status',
-      icon: <ClipboardList size={20} />
-    },
-    {
-      label: 'Riwayat Peminjaman',
-      href: '/user/history',
-      icon: <History size={20} />
-    }
+    { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
+    { label: 'Cari Barang', href: '/user/search', icon: <Search size={20} /> },
+    { label: 'Status Peminjaman', href: '/user/status', icon: <ClipboardList size={20} /> },
+    { label: 'Riwayat Peminjaman', href: '/user/history', icon: <History size={20} /> }
   ];
 
   const menuItems = isAdmin ? adminMenuItems : userMenuItems;
@@ -121,7 +92,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         <div key={item.label}>
           <button
             onClick={() => toggleExpanded(item.label)}
-            className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-yellow-100 transition-colors ${
+            className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-yellow-100 transition-colors rounded-md ${
               level > 0 ? 'pl-8' : ''
             }`}
           >
@@ -133,7 +104,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
           </button>
           
           {isExpanded && (
-            <div className="bg-gray-50">
+            <div className="ml-2 border-l border-gray-200">
               {item.children!.map(child => renderMenuItem(child, level + 1))}
             </div>
           )}
@@ -143,13 +114,11 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
     return (
       <Link key={item.label} href={item.href!}>
-        <div className={`flex items-center space-x-3 px-4 py-3 hover:bg-yellow-100 transition-colors ${
+        <div className={`flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-yellow-100 transition-colors ${
           level > 0 ? 'pl-8' : ''
-        } ${isActive ? 'bg-yellow-200 border-r-4 border-yellow-500' : ''}`}>
+        } ${isActive ? 'bg-yellow-200 text-yellow-800 font-semibold' : 'text-gray-700'}`}>
           {item.icon}
-          <span className={`text-sm font-medium ${isActive ? 'text-yellow-800' : 'text-gray-700'}`}>
-            {item.label}
-          </span>
+          <span className="text-sm">{item.label}</span>
         </div>
       </Link>
     );
@@ -157,18 +126,18 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Overlay untuk mobile */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 transform ${
+      <aside className={`fixed inset-y-0 left-0 transform ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0 transition duration-300 ease-in-out lg:static lg:inset-0 w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
+      } lg:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -185,48 +154,19 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
               <p className="text-xs text-gray-500">Sistem Inventaris</p>
             </div>
           </div>
-          
-          {/* Mobile Close Button */}
           <button
             onClick={onToggle}
             className="lg:hidden p-2 rounded-md hover:bg-gray-100"
           >
-            <X size={20} />
+            ✕
           </button>
         </div>
 
-        {/* Menu Items */}
-        <div className="flex-1 overflow-y-auto py-2">
+        {/* Menu */}
+        <nav className="flex-1 overflow-y-auto p-3 space-y-1">
           {menuItems.map(item => renderMenuItem(item))}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-gray-200 p-4">
-          {/* User Info */}
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-xs font-semibold text-gray-600">
-                {user?.nama?.charAt(0) || 'U'}
-              </span>
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-900">{user?.nama || 'User'}</p>
-              <p className="text-xs text-gray-500">{user?.role}</p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="space-y-2">
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-red-50 rounded-md transition-colors text-red-600"
-            >
-              <LogOut size={16} />
-              <span className="text-sm">Logout</span>
-            </button>
-          </div>
-        </div>
-      </div>
+        </nav>
+      </aside>
     </>
   );
 }
