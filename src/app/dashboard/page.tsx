@@ -178,12 +178,11 @@ export default function AdminDashboardPage() {
             </p>
           </div>
           <Button
-            variant="outline"
             onClick={handleExportStatistics}
             disabled={loadingStats || !statistics}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold px-5 py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <FileText size={16} />
+            <FileText size={18} />
             Export PDF Statistik
           </Button>
         </div>
@@ -240,6 +239,7 @@ export default function AdminDashboardPage() {
           </div>
           <div className="p-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Button
+              variant="secondary"
               className="flex items-center justify-center gap-2 h-14"
               onClick={() => setIsBarangModalOpen(true)}
             >
@@ -247,6 +247,7 @@ export default function AdminDashboardPage() {
               Tambah Barang
             </Button>
             <Button
+              variant="secondary"
               className="flex items-center justify-center gap-2 h-14"
               onClick={() => router.push("/admin/kategori")}
             >
@@ -256,18 +257,18 @@ export default function AdminDashboardPage() {
             <Button
               variant="secondary"
               className="flex items-center justify-center gap-2 h-14"
-              onClick={() => setIsLokasiModalOpen(true)}
+              onClick={() => setIsMerekModalOpen(true)}
             >
-              <Building size={20} />
-              Tambah Lokasi
+              <Tag size={20} />
+              Tambah Merek
             </Button>
             <Button
               variant="secondary"
               className="flex items-center justify-center gap-2 h-14"
-              onClick={() => setIsMerekModalOpen(true)}
+              onClick={() => setIsLokasiModalOpen(true)}
             >
-              <Package size={20} />
-              Tambah Merek
+              <Building size={20} />
+              Tambah Lokasi
             </Button>
           </div>
         </div>
