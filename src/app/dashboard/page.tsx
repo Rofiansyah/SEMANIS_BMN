@@ -1,181 +1,371 @@
-'use client';
+"use client";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Button } from '@/components/ui/Button';
-import { Package, Building, Tag, Search, History } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import api from '@/lib/api';
-import toast from 'react-hot-toast';
+import { useAuth } from "@/contexts/AuthContext";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Button } from "@/components/ui/Button";
+import {
+  TambahBarangModal,
+  TambahMerekModal,
+  TambahLokasiModal,
+} from "@/components/modals";
+import {
+  Package,
+  Users,
+  TrendingUp,
+  AlertTriangle,
+  Settings,
+  Tag,
+  Building,
+  FileText,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import {
+  kategoriApi,
+  merekApi,
+  lokasiApi,
+  statisticsApi,
+  peminjamanApi,
+} from "@/lib/api";
+import type {
+  Kategori,
+  Merek,
+  Lokasi,
+  Statistics,
+  Peminjaman,
+} from "@/types/api";
+import { exportBarangStatisticsPDF } from "@/utils/pdfExport";
 
-export default function DashboardPage() {
+export default function AdminDashboardPage() {
   const { user, isAdmin } = useAuth();
   const router = useRouter();
-  const [stats, setStats] = useState({
-    totalBarang: 0,
-    totalKategori: 0,
-    totalLokasi: 0,
-    myPeminjaman: 0
-  });
-  const [loading, setLoading] = useState(true);
+
+  const [isBarangModalOpen, setIsBarangModalOpen] = useState(false);
+  const [isMerekModalOpen, setIsMerekModalOpen] = useState(false);
+  const [isLokasiModalOpen, setIsLokasiModalOpen] = useState(false);
+
+  const [kategoriList, setKategoriList] = useState<Kategori[]>([]);
+  const [merekList, setMerekList] = useState<Merek[]>([]);
+  const [lokasiList, setLokasiList] = useState<Lokasi[]>([]);
+  const [statistics, setStatistics] = useState<Statistics | null>(null);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [recentActivity, setRecentActivity] = useState<Peminjaman[]>([]);
+  const [loadingActivity, setLoadingActivity] = useState(true);
 
   useEffect(() => {
+    if (user && !isAdmin) {
+      router.push("/dashboard");
+      return;
+    }
     if (user && isAdmin) {
-      router.push('/admin/dashboard');
-    } else if (user && !isAdmin) {
-      fetchUserStats();
+      const timer = setTimeout(() => {
+        loadMasterData();
+        loadStatistics();
+        loadRecentActivity();
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [user, isAdmin, router]);
 
-  const fetchUserStats = async () => {
+  const loadMasterData = async () => {
     try {
-      setLoading(true);
-      const [barangRes, kategoriRes, lokasiRes, peminjamanRes] = await Promise.all([
-        api.get('/barang'),
-        api.get('/kategori'),
-        api.get('/lokasi'),
-        api.get('/peminjaman/my-requests').catch(() => ({ data: { data: [] } }))
+      const [kategoriRes, merekRes, lokasiRes] = await Promise.all([
+        kategoriApi.getAll(),
+        merekApi.getAll(),
+        lokasiApi.getAll(),
       ]);
-
-      const barangData = barangRes.data.data.items || barangRes.data.data || [];
-      const kategoriData = kategoriRes.data.data.items || kategoriRes.data.data || [];
-      const lokasiData = lokasiRes.data.data.items || lokasiRes.data.data || [];
-      const peminjamanData = peminjamanRes.data.data || peminjamanRes.data || [];
-
-      setStats({
-        totalBarang: barangData.length,
-        totalKategori: kategoriData.length,
-        totalLokasi: lokasiData.length,
-        myPeminjaman: peminjamanData.filter((p: { status: string }) => p.status === 'DIPINJAM').length
-      });
+      if (kategoriRes.success) setKategoriList(kategoriRes.data);
+      if (merekRes.success) setMerekList(merekRes.data);
+      if (lokasiRes.success) setLokasiList(lokasiRes.data);
     } catch (error) {
-      console.error('Error fetching user stats:', error);
-      toast.error('Gagal memuat statistik dashboard');
-    } finally {
-      setLoading(false);
+      console.error("Failed to load master data:", error);
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  const loadStatistics = async () => {
+    try {
+      setLoadingStats(true);
+      const token = Cookies.get("token");
+      if (!token) {
+        setStatistics({
+          totalBarang: 0,
+          totalUserRoleUsers: 0,
+          barangBaik: 0,
+          barangRusak: 0,
+        });
+        return;
+      }
+      const response = await statisticsApi.get();
+      if (response.success) {
+        setStatistics(response.data);
+      } else {
+        setStatistics({
+          totalBarang: 0,
+          totalUserRoleUsers: 0,
+          barangBaik: 0,
+          barangRusak: 0,
+        });
+      }
+    } catch {
+      setStatistics({
+        totalBarang: 0,
+        totalUserRoleUsers: 0,
+        barangBaik: 0,
+        barangRusak: 0,
+      });
+    } finally {
+      setLoadingStats(false);
+    }
+  };
 
-  if (isAdmin) {
-    return <div>Redirecting to admin dashboard...</div>;
-  }
+  const loadRecentActivity = async () => {
+    try {
+      setLoadingActivity(true);
+      const response = await peminjamanApi.getReports();
+      if (response.status === "success") {
+        const allRequests = [
+          ...response.data.pending,
+          ...response.data.dipinjam,
+          ...response.data.dikembalikan,
+        ].sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() -
+            new Date(a.createdAt).getTime()
+        );
+        setRecentActivity(allRequests.slice(0, 5));
+      }
+    } catch (error) {
+      console.error("Failed to load recent activity:", error);
+    } finally {
+      setLoadingActivity(false);
+    }
+  };
+
+  const handleExportStatistics = () => {
+    if (statistics) {
+      const totalRusak = statistics.barangRusak;
+      const barangRusakRingan = Math.floor(totalRusak / 2);
+      const barangRusakBerat = totalRusak - barangRusakRingan;
+      exportBarangStatisticsPDF({
+        totalBarang: statistics.totalBarang,
+        barangBaik: statistics.barangBaik,
+        barangRusakRingan,
+        barangRusakBerat,
+      });
+    }
+  };
+
+  const handleModalSuccess = () => {
+    loadMasterData();
+    loadStatistics();
+  };
+
+  if (!user) return <div>Loading...</div>;
+  if (!isAdmin) return <div>Access denied</div>;
 
   return (
-    <DashboardLayout title="Dashboard User">
-      <div className="space-y-6">
+    <DashboardLayout title="Admin Dashboard">
+      <div className="space-y-8">
         {/* Welcome Section */}
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Selamat datang, {user.nama}
-          </h2>
-          <p className="text-gray-600">
-            Akses informasi inventaris dan kelola data barang
-          </p>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Selamat datang, Admin {user.nama}
+            </h2>
+            <p className="text-gray-500">
+              Panel kontrol untuk mengelola seluruh sistem inventaris
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={handleExportStatistics}
+            disabled={loadingStats || !statistics}
+            className="flex items-center gap-2"
+          >
+            <FileText size={16} />
+            Export PDF Statistik
+          </Button>
         </div>
 
-        {/* User Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Package className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Barang</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {loading ? '-' : stats.totalBarang}
+        {/* Stats Section */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              label: "Total Barang",
+              value: statistics?.totalBarang || 0,
+              icon: <Package className="h-6 w-6 text-blue-600" />,
+              bg: "bg-blue-100",
+            },
+            {
+              label: "Total Users",
+              value: statistics?.totalUserRoleUsers || 0,
+              icon: <Users className="h-6 w-6 text-green-600" />,
+              bg: "bg-green-100",
+            },
+            {
+              label: "Barang Kondisi Baik",
+              value: statistics?.barangBaik || 0,
+              icon: <TrendingUp className="h-6 w-6 text-green-600" />,
+              bg: "bg-green-100",
+            },
+            {
+              label: "Barang Kondisi Rusak",
+              value: statistics?.barangRusak || 0,
+              icon: <AlertTriangle className="h-6 w-6 text-orange-600" />,
+              bg: "bg-orange-100",
+            },
+          ].map((stat, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-xl shadow-sm p-6 flex items-center gap-4 hover:shadow-md transition"
+            >
+              <div className={`${stat.bg} p-3 rounded-lg`}>{stat.icon}</div>
+              <div>
+                <p className="text-sm text-gray-500">{stat.label}</p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  {loadingStats ? "..." : stat.value}
                 </p>
               </div>
             </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Tag className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Kategori Tersedia</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {loading ? '-' : stats.totalKategori}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Building className="h-6 w-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Lokasi Tersedia</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {loading ? '-' : stats.totalLokasi}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <History className="h-6 w-6 text-orange-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Peminjaman Aktif</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {loading ? '-' : stats.myPeminjaman}
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* User Actions */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">
-              Menu Utama
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Settings size={20} /> Manajemen Master Data
             </h3>
           </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Button 
-                onClick={() => router.push('/user/search')}
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <Search size={20} />
-                <span>Cari Barang</span>
-              </Button>
-              
-              <Button 
-                onClick={() => router.push('/user/status')}
-                variant="secondary" 
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <Package size={20} />
-                <span>Status Peminjaman</span>
-              </Button>
-              
-              <Button 
-                onClick={() => router.push('/user/history')}
-                variant="secondary" 
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <History size={20} />
-                <span>Riwayat Peminjaman</span>
-              </Button>
-            </div>
+          <div className="p-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Button
+              className="flex items-center justify-center gap-2 h-14"
+              onClick={() => setIsBarangModalOpen(true)}
+            >
+              <Package size={20} />
+              Tambah Barang
+            </Button>
+            <Button
+              className="flex items-center justify-center gap-2 h-14"
+              onClick={() => router.push("/admin/kategori")}
+            >
+              <Tag size={20} />
+              Kelola Kategori
+            </Button>
+            <Button
+              variant="secondary"
+              className="flex items-center justify-center gap-2 h-14"
+              onClick={() => setIsLokasiModalOpen(true)}
+            >
+              <Building size={20} />
+              Tambah Lokasi
+            </Button>
+            <Button
+              variant="secondary"
+              className="flex items-center justify-center gap-2 h-14"
+              onClick={() => setIsMerekModalOpen(true)}
+            >
+              <Package size={20} />
+              Tambah Merek
+            </Button>
           </div>
         </div>
-        
+
+        {/* Recent Activity */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b flex justify-between items-center">
+            <h3 className="text-lg font-semibold">Aktivitas Terbaru</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push("/admin/peminjaman/reports")}
+            >
+              Lihat Semua
+            </Button>
+          </div>
+          {loadingActivity ? (
+            <div className="p-6 text-center text-gray-500">Memuat aktivitas...</div>
+          ) : recentActivity.length === 0 ? (
+            <div className="p-6 text-center text-gray-500">
+              Belum ada aktivitas untuk ditampilkan
+            </div>
+          ) : (
+            <div className="divide-y">
+              {recentActivity.map((activity) => (
+                <div
+                  key={activity.id}
+                  className="p-6 flex items-center justify-between hover:bg-gray-50 cursor-pointer transition"
+                  onClick={() =>
+                    router.push(`/admin/peminjaman/${activity.id}`)
+                  }
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                      <Package className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {activity.user.nama} - {activity.barang.nama}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(
+                          activity.tanggalPengajuan
+                        ).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className={`px-3 py-1 text-xs font-medium rounded-full ${
+                      activity.status === "PENDING"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : activity.status === "DIPINJAM"
+                        ? "bg-green-100 text-green-800"
+                        : activity.status === "REJECTED"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-blue-100 text-blue-800"
+                    }`}
+                  >
+                    {activity.status === "PENDING"
+                      ? "Menunggu"
+                      : activity.status === "DIPINJAM"
+                      ? "Sedang Dipinjam"
+                      : activity.status === "REJECTED"
+                      ? "Ditolak"
+                      : "Dikembalikan"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Modals */}
+      <TambahBarangModal
+        isOpen={isBarangModalOpen}
+        onClose={() => setIsBarangModalOpen(false)}
+        onSuccess={handleModalSuccess}
+        kategoriList={kategoriList}
+        merekList={merekList}
+        lokasiList={lokasiList}
+      />
+      <TambahMerekModal
+        isOpen={isMerekModalOpen}
+        onClose={() => setIsMerekModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
+      <TambahLokasiModal
+        isOpen={isLokasiModalOpen}
+        onClose={() => setIsLokasiModalOpen(false)}
+        onSuccess={handleModalSuccess}
+      />
     </DashboardLayout>
   );
 }
