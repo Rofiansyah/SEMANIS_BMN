@@ -307,20 +307,21 @@ export default function AdminDashboardPage() {
               <Button
                 variant="secondary"
                 className="flex items-center justify-center gap-2 h-16"
+                onClick={() => setIsMerekModalOpen(true)}
+              >
+                <Tag size={20} />
+                <span>Tambah Merek</span>
+              </Button>
+
+              <Button
+                variant="secondary"
+                className="flex items-center justify-center gap-2 h-16"
                 onClick={() => setIsLokasiModalOpen(true)}
               >
                 <Building size={20} />
                 <span>Tambah Lokasi</span>
               </Button>
 
-              <Button
-                variant="secondary"
-                className="flex items-center justify-center gap-2 h-16"
-                onClick={() => setIsMerekModalOpen(true)}
-              >
-                <Package size={20} />
-                <span>Tambah Merek</span>
-              </Button>
             </div>
           </div>
         </div>
