@@ -70,16 +70,25 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
                 </button>
 
                 {/* User Info + Avatar + Dropdown */}
-                <div className="relative flex items-center space-x-3 cursor-pointer" ref={dropdownRef} onClick={toggleDropdown}>
+                <div
+                  className="relative flex items-center space-x-3 cursor-pointer"
+                  ref={dropdownRef}
+                  onClick={toggleDropdown}
+                >
+                  {/* Avatar */}
                   <div
-                    className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
+                    className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-end pr-2 hover:bg-gray-400 transition-colors"
                   >
                     <span className="text-gray-700 font-bold text-sm">
                       {user?.nama?.charAt(0) || 'U'}
                     </span>
                   </div>
+
+                  {/* Name & Role */}
                   <div className="hidden sm:block text-left">
-                    <p className="text-sm font-medium text-gray-900">{user?.nama || 'User'}</p>
+                    <p className="text-sm font-medium text-gray-900 leading-tight">
+                      {user?.nama || 'User'}
+                    </p>
                     <p className="text-xs text-gray-500">{user?.role}</p>
                   </div>
 
