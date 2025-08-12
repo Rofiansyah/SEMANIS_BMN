@@ -129,7 +129,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Overlay untuk mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 xl:hidden bg-black/30 backdrop-blur-sm transition-opacity duration-300"
+          className="fixed inset-0 z-40 xl:hidden drop-shadow-[0_0_15px_rgba(0,0,0,0.3)]"
           onClick={onToggle}
         />
       )}
