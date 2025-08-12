@@ -203,11 +203,12 @@ export default function AdminDashboardPage() {
             </p>
           </div>
           <Button
+            variant="outline"
             onClick={handleExportStatistics}
             disabled={loadingStats || !statistics}
-            className="flex items-center gap-2 border border-blue-500 text-gray-600 hover:bg-transparent"
+            className="flex items-center gap-2 text-gray-500"
           >
-            <FileText size={16} className="text-gray-600" />
+            <FileText size={16} />
             Export PDF Statistik
           </Button>
 
@@ -337,9 +338,10 @@ export default function AdminDashboardPage() {
                 Aktivitas Terbaru (Admin View)
               </h3>
               <Button
+                variant="outline"
                 size="sm"
                 onClick={() => router.push("/admin/peminjaman/reports")}
-                className="border border-blue-500 text-gray-600 hover:bg-transparent"
+                className="text-gray-500"
               >
                 Lihat Semua
               </Button>
