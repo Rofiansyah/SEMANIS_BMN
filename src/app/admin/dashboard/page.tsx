@@ -300,7 +300,7 @@ export default function AdminDashboardPage() {
               <Button
                 variant="secondary"
                 className="flex items-center justify-center gap-2 h-16"
-                onClick={() => router.push("/admin/kategori")}
+                onClick={() => setIsKategoriModalOpen(true)}
               >
                 <Tag size={20} />
                 <span>Tambah Kategori</span>
