@@ -16,6 +16,8 @@ import {
   ChevronDown,
   ChevronRight,
   X,
+  HelpCircle,
+  LogOut,
   ClipboardList,
   CheckCircle,
   BookOpen
@@ -34,9 +36,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onToggle }: SidebarProps) {
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, logout } = useAuth();
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = '/';
+  };
 
   const toggleExpanded = (label: string) => {
     setExpandedItems(prev => 
@@ -71,6 +78,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         { label: 'Laporan', href: '/admin/peminjaman/reports', icon: <BarChart3 size={16} /> }
       ]
     },
+    
   ];
 
   const userMenuItems: SidebarItem[] = [
@@ -113,7 +121,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         <div key={item.label}>
           <button
             onClick={() => toggleExpanded(item.label)}
-            className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-yellow-50 transition-colors ${
+            className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-yellow-100 transition-colors ${
               level > 0 ? 'pl-8' : ''
             }`}
           >
@@ -135,9 +143,9 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
     return (
       <Link key={item.label} href={item.href!}>
-        <div className={`flex items-center space-x-3 px-4 py-3 hover:bg-yellow-50 transition-colors ${
+        <div className={`flex items-center space-x-3 px-4 py-3 hover:bg-yellow-100 transition-colors ${
           level > 0 ? 'pl-8' : ''
-        } ${isActive ? 'bg-yellow-100 border-r-4 border-yellow-500' : ''}`}>
+        } ${isActive ? 'bg-yellow-200 border-r-4 border-yellow-500' : ''}`}>
           {item.icon}
           <span className={`text-sm font-medium ${isActive ? 'text-yellow-800' : 'text-gray-700'}`}>
             {item.label}
@@ -152,7 +160,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Mobile Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
@@ -160,7 +168,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 transform ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0 transition-transform duration-300 ease-in-out lg:static w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
+      } lg:translate-x-0 transition duration-300 ease-in-out lg:static lg:inset-0 w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}>
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -190,6 +198,33 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         {/* Menu Items */}
         <div className="flex-1 overflow-y-auto py-2">
           {menuItems.map(item => renderMenuItem(item))}
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-gray-200 p-4">
+          {/* User Info */}
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <span className="text-xs font-semibold text-gray-600">
+                {user?.nama?.charAt(0) || 'U'}
+              </span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">{user?.nama || 'User'}</p>
+              <p className="text-xs text-gray-500">{user?.role}</p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-2">
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-red-50 rounded-md transition-colors text-red-600"
+            >
+              <LogOut size={16} />
+              <span className="text-sm">Logout</span>
+            </button>
+          </div>
         </div>
       </div>
     </>
