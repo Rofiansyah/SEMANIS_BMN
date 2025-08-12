@@ -206,10 +206,10 @@ export default function AdminDashboardPage() {
             variant="outlinesecond"
             onClick={handleExportStatistics}
             disabled={loadingStats || !statistics}
-            className="flex items-center gap-2 text-blue-600"
+            className="flex items-center gap-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
           >
             <FileText size={16} />
-            Export PDF Statistik
+            Export PDF
           </Button>
 
 

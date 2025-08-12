@@ -93,7 +93,7 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
               variant="outline"
               onClick={onClose}
               disabled={loading}
-              className="flex-1"
+              className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
             >
               Batal
             </Button>
@@ -101,7 +101,7 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
               type="submit"
               variant="primary"
               disabled={loading}
-              className="flex-1"
+              className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
             >
               {loading ? 'Menyimpan...' : 'Simpan'}
             </Button>
