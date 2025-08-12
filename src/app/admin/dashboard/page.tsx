@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
             variant="outline"
             onClick={handleExportStatistics}
             disabled={loadingStats || !statistics}
-            className="flex items-center gap-2 text-gray-500"
+            className="flex items-center gap-2 text-blue-600"
           >
             <FileText size={16} />
             Export PDF Statistik
@@ -341,7 +341,7 @@ export default function AdminDashboardPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => router.push("/admin/peminjaman/reports")}
-                className="text-gray-500"
+                className="text-gray-600"
               >
                 Lihat Semua
               </Button>
