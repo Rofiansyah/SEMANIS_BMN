@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
-import { 
-  Home, 
-  Package, 
-  Building, 
-  Tag, 
-  BarChart3, 
+import {
+  Home,
+  Package,
+  Building,
+  Tag,
+  BarChart3,
   Search,
   History,
   ChevronDown,
@@ -38,8 +38,8 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
   const toggleExpanded = (label: string) => {
-    setExpandedItems(prev => 
-      prev.includes(label) 
+    setExpandedItems(prev =>
+      prev.includes(label)
         ? prev.filter(item => item !== label)
         : [...prev, label]
     );
@@ -102,7 +102,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             </div>
             {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
-          
+
           {isExpanded && (
             <div className="ml-2 border-l border-gray-200">
               {item.children!.map(child => renderMenuItem(child, level + 1))}
@@ -114,9 +114,11 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
     return (
       <Link key={item.label} href={item.href!}>
-        <div className={`flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-yellow-100 transition-colors ${
-          level > 0 ? 'pl-8' : ''
-        } ${isActive ? 'bg-yellow-200 text-yellow-800 font-semibold' : 'text-gray-700'}`}>
+        <div
+          className={`flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-yellow-100 transition-colors ${
+            level > 0 ? 'pl-8' : ''
+          } ${isActive ? 'bg-yellow-200 text-yellow-800 font-semibold' : 'text-gray-700'}`}
+        >
           {item.icon}
           <span className="text-sm">{item.label}</span>
         </div>
@@ -126,19 +128,19 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   return (
     <>
-      {/* Overlay untuk mobile */}
+      {/* Overlay Mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 xl:hidden drop-shadow-[0_0_15px_rgba(0,0,0,0.3)]"
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
           onClick={onToggle}
         />
       )}
 
-
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 z-50 flex flex-col transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full'} xl:translate-x-0`}
+        className={`fixed inset-y-0 left-0 transform ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 transition-transform duration-300 ease-in-out w-64 bg-white border-r border-gray-200 z-50 flex flex-col`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -157,7 +159,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
           </div>
           <button
             onClick={onToggle}
-            className="xl:hidden p-2 rounded-md hover:bg-gray-100"
+            className="lg:hidden p-2 rounded-md hover:bg-gray-100"
           >
             ✕
           </button>
