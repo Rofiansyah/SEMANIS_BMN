@@ -341,7 +341,7 @@ export default function AdminDashboardPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => router.push("/admin/peminjaman/reports")}
-                className="text-gray-600"
+                className="text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
               >
                 Lihat Semua
               </Button>

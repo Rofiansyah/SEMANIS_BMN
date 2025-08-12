@@ -52,14 +52,14 @@ export default function Home() {
       <div className="mt-6 space-y-3">
         <Button
           variant="outline"
-          className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-colors duration-200"
+          className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
           onClick={() => router.push('/login/admin')}
         >
           Admin
         </Button>
 
         <Button
-          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white transition-colors duration-200"
+          className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
           onClick={() => router.push('/login/user')}
         >
           User
