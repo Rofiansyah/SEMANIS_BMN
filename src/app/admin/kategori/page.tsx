@@ -44,6 +44,10 @@ export default function AdminKategoriPage() {
     }
   };
 
+  const handleTambahKategoriSuccess = () => {
+    loadKategori();
+  };
+
   const handleCreateKategori = async (data: { nama: string }) => {
     setActionLoading(true);
     try {
@@ -231,8 +235,8 @@ export default function AdminKategoriPage() {
       {/* Modals */}
       <TambahKategoriModal
         isOpen={isTambahModalOpen}
-        onClose={closeCreateModal}
-        onSubmit={handleCreateKategori}
+        onClose={() => setIsTambahModalOpen(false)}
+        onSuccess={handleTambahKategoriSuccess}
         loading={actionLoading}
       />
       
