@@ -50,17 +50,6 @@ api.interceptors.request.use(
   }
 );
 
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response?.status === 401) {
-//       Cookies.remove('token');
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
 export const authApi = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     console.log('API: Attempting login to:', `${BASE_URL}/auth/login`);
