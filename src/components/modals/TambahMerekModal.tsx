@@ -23,18 +23,23 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
   const [formData, setFormData] = useState<MerekFormData>({
     nama: '',
     deskripsi: '',
-    alamat: ''
+    alamat:''
   });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({ nama: '', deskripsi: '', alamat: '' });
+      setFormData({
+        nama: '',
+        deskripsi: '',
+        alamat:''
+      });
     }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!formData.nama.trim()) {
       toast.error('Nama merek harus diisi');
       return;
@@ -63,18 +68,25 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+    <div 
+      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
     >
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border border-gray-200">
+      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border-0">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Tambah Merek</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
-
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Nama Merek"
@@ -84,21 +96,9 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
             required
           />
 
-          <Input
-            label="Deskripsi"
-            value={formData.deskripsi}
-            onChange={(e) => handleInputChange('deskripsi', e.target.value)}
-            placeholder="Masukkan deskripsi merek"
-          />
-
-          <Input
-            label="Alamat"
-            value={formData.alamat}
-            onChange={(e) => handleInputChange('alamat', e.target.value)}
-            placeholder="Masukkan alamat merek"
-          />
-
-          <div className="flex space-x-3 pt-2">
+          
+          
+          <div className="flex space-x-3 mt-6">
             <Button
               type="button"
               variant="outline"
