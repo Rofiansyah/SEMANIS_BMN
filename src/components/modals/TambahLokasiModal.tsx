@@ -18,22 +18,18 @@ interface LokasiFormData {
 }
 
 export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiModalProps) {
-  const [formData, setFormData] = useState<LokasiFormData>({
-    nama: ''
-  });
+  const [formData, setFormData] = useState<LokasiFormData>({ nama: '' });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        nama: ''
-      });
+      setFormData({ nama: '' });
     }
   }, [isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.nama.trim()) {
       toast.error('Nama lokasi harus diisi');
       return;
@@ -62,42 +58,42 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
+    <div
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border-0">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Tambah Lokasi</h3>
+      <div
+        className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg border border-gray-100 animate-fadeIn"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-lg font-semibold text-gray-800">Tambah Lokasi</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 transition"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           <Input
-            label="Nama Lokasi"
+            label="Nama Lokasi *"
             value={formData.nama}
             onChange={(e) => handleInputChange('nama', e.target.value)}
             placeholder="Masukkan nama lokasi"
             required
           />
 
-          
-          <div className="flex space-x-3 mt-6">
+          {/* Actions */}
+          <div className="flex flex-col md:flex-row gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1"
               disabled={loading}
+              className="flex-1"
             >
               Batal
             </Button>
