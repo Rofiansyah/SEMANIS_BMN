@@ -7,6 +7,7 @@ import {
   TambahBarangModal,
   TambahMerekModal,
   TambahLokasiModal,
+  TambahKategoriModal,
 } from "@/components/modals";
 import {
   Package,
@@ -42,6 +43,7 @@ export default function AdminDashboardPage() {
   const router = useRouter();
 
   const [isBarangModalOpen, setIsBarangModalOpen] = useState(false);
+  const [isKategoriModalOpen, setIsKategoriModalOpen] = useState(false);
   const [isMerekModalOpen, setIsMerekModalOpen] = useState(false);
   const [isLokasiModalOpen, setIsLokasiModalOpen] = useState(false);
 
@@ -301,7 +303,7 @@ export default function AdminDashboardPage() {
                 onClick={() => router.push("/admin/kategori")}
               >
                 <Tag size={20} />
-                <span>Kelola Kategori</span>
+                <span>Tambah Kategori</span>
               </Button>
 
               <Button
@@ -427,6 +429,12 @@ export default function AdminDashboardPage() {
         kategoriList={kategoriList}
         merekList={merekList}
         lokasiList={lokasiList}
+      />
+
+      <TambahKategoriModal
+        isOpen={isKategoriModalOpen}
+        onClose={() => setIsKategoriModalOpen(false)}
+        onSuccess={handleModalSuccess}
       />
 
       <TambahMerekModal

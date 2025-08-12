@@ -16,12 +16,14 @@ interface TambahMerekModalProps {
 interface MerekFormData {
   nama: string;
   deskripsi: string;
+  alamat: string;
 }
 
 export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModalProps) {
   const [formData, setFormData] = useState<MerekFormData>({
     nama: '',
-    deskripsi: ''
+    deskripsi: '',
+    alamat:''
   });
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +31,8 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
     if (isOpen) {
       setFormData({
         nama: '',
-        deskripsi: ''
+        deskripsi: '',
+        alamat:''
       });
     }
   }, [isOpen]);
