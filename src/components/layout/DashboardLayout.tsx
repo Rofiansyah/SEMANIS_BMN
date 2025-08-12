@@ -69,31 +69,26 @@ export function DashboardLayout({ children, title }: DashboardLayoutProps) {
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
 
-                {/* User Avatar + Dropdown */}
-                <div className="relative" ref={dropdownRef}>
-                  <div className="hidden sm:block text-right">
-                    <p className="text-sm font-medium text-gray-900">{user?.nama || 'User'}</p>
-                    <p className="text-xs text-gray-500">{user?.role}</p>
-                  </div>
+                {/* User Info + Avatar + Dropdown */}
+                <div className="relative flex items-center space-x-3 cursor-pointer" ref={dropdownRef} onClick={toggleDropdown}>
                   <div
-                    className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-400 transition-colors"
-                    onClick={toggleDropdown}
+                    className="w-9 h-9 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
                   >
                     <span className="text-gray-700 font-bold text-sm">
                       {user?.nama?.charAt(0) || 'U'}
                     </span>
                   </div>
+                  <div className="hidden sm:block text-left">
+                    <p className="text-sm font-medium text-gray-900">{user?.nama || 'User'}</p>
+                    <p className="text-xs text-gray-500">{user?.role}</p>
+                  </div>
 
                   {/* Dropdown */}
                   {dropdownOpen && (
                     <div
-                      className="absolute right-0 mt-2 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-2 animate-fadeIn"
+                      className="absolute right-0 top-full mt-2 w-44 bg-white border border-gray-100 rounded-xl shadow-lg py-2 animate-fadeIn"
                       style={{ animationDuration: '150ms' }}
                     >
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-sm font-medium text-gray-900 truncate">{user?.nama || 'User'}</p>
-                        <p className="text-xs text-gray-500 truncate">{user?.role || 'Role'}</p>
-                      </div>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center space-x-2 px-4 py-2 text-left hover:bg-red-50 transition-colors text-red-600"
