@@ -205,7 +205,7 @@ export default function AdminDashboardPage() {
           <Button
             onClick={handleExportStatistics}
             disabled={loadingStats || !statistics}
-            className="flex items-center gap-2 border border-blue-500 text-gray-600 hover:bg-blue-50"
+            className="flex items-center gap-2 border border-blue-0 text-gray-600 hover:bg-blue-50"
           >
             <FileText size={16} className="text-gray-600" />
             Export PDF Statistik
@@ -338,7 +338,7 @@ export default function AdminDashboardPage() {
               <Button
                 size="sm"
                 onClick={() => router.push("/admin/peminjaman/reports")}
-                className="border border-blue-500 text-gray-600 hover:bg-blue-50"
+                className="border border-blue-0 text-gray-600 hover:bg-blue-50"
               >
                 Lihat Semua
               </Button>
