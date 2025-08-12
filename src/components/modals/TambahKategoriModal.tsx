@@ -1,113 +1,96 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { kategoriApi } from '@/lib/api';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { Input } from '../ui/Input';
+import { Button } from '../ui/Button';
 import { CreateKategoriRequest } from '@/types/api';
 
 interface TambahKategoriModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSubmit: (data: CreateKategoriRequest) => Promise<void>;
+  loading?: boolean;
 }
 
-export function TambahKategoriModal({
+export default function TambahKategoriModal({
   isOpen,
   onClose,
-  onSuccess
+  onSubmit,
+  loading = false,
 }: TambahKategoriModalProps) {
-  const [formData, setFormData] = useState<CreateKategoriRequest>({
-    nama: ''
-  });
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setFormData({ nama: '' });
-    }
-  }, [isOpen]);
+  const [nama, setNama] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
 
-    if (!formData.nama.trim()) {
-      toast.error('Nama kategori harus diisi');
+    if (!nama.trim()) {
+      setError('Nama kategori wajib diisi');
       return;
     }
 
-    setLoading(true);
     try {
-      const response = await kategoriApi.create(formData);
-      if (response.success) {
-        toast.success('Kategori berhasil ditambahkan! 🎉');
-        onSuccess();
-        onClose();
-      }
-    } catch (error) {
-      console.error('Failed to create kategori:', error);
-      toast.error('Gagal menambahkan kategori. Silakan coba lagi.');
-    } finally {
-      setLoading(false);
+      await onSubmit({ nama: nama.trim() });
+      setNama('');
+      onClose();
+    } catch {
+      setError('Gagal menambahkan kategori');
     }
   };
 
-  const handleInputChange = (field: keyof CreateKategoriRequest, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleClose = () => {
+    setNama('');
+    setError('');
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
-    >
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border-0">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Tambah Kategori</h3>
+    <div className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Tambah Kategori
+          </h2>
           <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
             disabled={loading}
           >
-            <X className="w-5 h-5" />
+            <X size={20} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nama Kategori"
-            value={formData.nama}
-            onChange={(e) => handleInputChange('nama', e.target.value)}
-            placeholder="Masukkan nama kategori"
-            required
-            disabled={loading}
-          />
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="space-y-4">
+            <Input
+              label="Nama Kategori"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              placeholder="Masukkan nama kategori"
+              error={error}
+              disabled={loading}
+              required
+            />
+          </div>
 
-          <div className="flex space-x-3 mt-6">
+          <div className="flex justify-end space-x-3 mt-6">
             <Button
               type="button"
               variant="outline"
-              onClick={onClose}
-              className="flex-1"
+              onClick={handleClose}
               disabled={loading}
             >
               Batal
             </Button>
             <Button
               type="submit"
-              variant="primary"
-              disabled={loading}
-              className="flex-1"
+              loading={loading}
             >
-              {loading ? 'Menyimpan...' : 'Simpan'}
+              Simpan
             </Button>
           </div>
         </form>
