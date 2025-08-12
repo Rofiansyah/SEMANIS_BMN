@@ -16,24 +16,18 @@ interface TambahKategoriModalProps {
 
 interface KategoriFormData {
   nama: string;
-  deskripsi: string;
-  alamat: string;
 }
 
 export function TambahKategoriModal({ isOpen, onClose, onSuccess }: TambahKategoriModalProps) {
   const [formData, setFormData] = useState<KategoriFormData>({
-      nama: '',
-      deskripsi: '',
-      alamat: ''
+      nama: ''
     });
   const [loading, setLoading] = useState(false);
 
 useEffect(() => {
     if (isOpen) {
       setFormData({
-        nama: '',
-        deskripsi: '',
-        alamat: ''
+        nama: ''
       });
     }
   }, [isOpen]);

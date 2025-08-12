@@ -15,24 +15,18 @@ interface TambahLokasiModalProps {
 
 interface LokasiFormData {
   nama: string;
-  deskripsi: string;
-  alamat: string;
 }
 
 export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiModalProps) {
   const [formData, setFormData] = useState<LokasiFormData>({
-    nama: '',
-    deskripsi: '',
-    alamat: ''
+    nama: ''
   });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        nama: '',
-        deskripsi: '',
-        alamat: ''
+        nama: ''
       });
     }
   }, [isOpen]);
