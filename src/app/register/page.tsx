@@ -180,7 +180,7 @@ export default function RegisterPage() {
             value={formData.password}
             onChange={handleInputChange}
             required
-            placeholder="Minimum 8 characters"
+            placeholder="Enter your password"
             className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
