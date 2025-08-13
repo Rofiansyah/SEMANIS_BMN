@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { merekApi } from '@/lib/api';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -76,13 +75,19 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <Input
-            label="Nama Merek *"
-            value={formData.nama}
-            onChange={(e) => handleInputChange('nama', e.target.value)}
-            placeholder="Masukkan nama merek"
-            required
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nama Merek <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.nama}
+              onChange={(e) => handleInputChange('nama', e.target.value)}
+              placeholder="Masukkan nama merek"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+              required
+            />
+          </div>
 
           {/* Actions */}
           <div className="flex flex-col md:flex-row gap-3 pt-4">

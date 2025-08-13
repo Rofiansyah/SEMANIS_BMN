@@ -78,13 +78,18 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          <Input
-            label="Nama Lokasi *"
-            value={formData.nama}
-            onChange={(e) => handleInputChange('nama', e.target.value)}
-            placeholder="Masukkan nama lokasi"
-            required
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nama Lokasi <span className="text-red-500">*</span>
+            </label>
+            <Input
+              value={formData.nama}
+              onChange={(e) => handleInputChange('nama', e.target.value)}
+              placeholder="Masukkan nama lokasi"
+              required
+              className="placeholder-gray-400"
+            />
+          </div>
 
           {/* Actions */}
           <div className="flex flex-col md:flex-row gap-3 pt-4">
