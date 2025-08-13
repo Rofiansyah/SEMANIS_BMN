@@ -73,6 +73,7 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
         {/* Form Scrollable */}
         <div className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Nama Merek */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nama Merek <span className="text-red-500">*</span>

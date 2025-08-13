@@ -118,7 +118,7 @@ return (
               value={formData.nama}
               onChange={(e) => handleInputChange('nama', e.target.value)}
               placeholder="Masukkan nama barang"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
               required
             />
           </div>
