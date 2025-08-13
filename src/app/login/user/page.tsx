@@ -117,7 +117,7 @@ export default function UserLoginPage() {
             onChange={handleInputChange}
             required
             placeholder="Enter your email"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+            className="w-full"
           />
         </div>
 
@@ -133,7 +133,7 @@ export default function UserLoginPage() {
             onChange={handleInputChange}
             required
             placeholder="Enter your password"
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+            className="w-full"
           />
         </div>
 
