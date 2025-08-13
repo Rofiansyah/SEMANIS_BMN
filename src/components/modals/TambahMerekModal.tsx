@@ -61,55 +61,54 @@ export function TambahMerekModal({ isOpen, onClose, onSuccess }: TambahMerekModa
       className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-xl max-w-md w-full p-6 shadow-lg border border-gray-100 animate-fadeIn">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-5">
-          <h3 className="text-lg font-semibold text-gray-800">Tambah Merek</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition"
-          >
+      <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col animate-fadeIn">
+        {/* Header Fixed */}
+        <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
+          <h3 className="text-lg font-semibold text-white">Tambah Kategori</h3>
+          <button onClick={onClose} className="text-white hover:text-gray-200 transition">
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nama Merek <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.nama}
-              onChange={(e) => handleInputChange('nama', e.target.value)}
-              placeholder="Masukkan nama merek"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
-              required
-            />
-          </div>
+        {/* Form Scrollable */}
+        <div className="p-6 overflow-y-auto flex-1">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nama Merek <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.nama}
+                onChange={(e) => handleInputChange('nama', e.target.value)}
+                placeholder="Masukkan nama merek"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+                required
+              />
+            </div>
 
-          {/* Actions */}
-          <div className="flex flex-col md:flex-row gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={loading}
-              className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-            >
-              Batal
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={loading}
-              className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-            >
-              {loading ? 'Menyimpan...' : 'Simpan'}
-            </Button>
-          </div>
-        </form>
+            {/* Actions */}
+            <div className="flex flex-col md:flex-row gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                disabled={loading}
+                className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+              >
+                Batal
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={loading}
+                className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+              >
+                {loading ? 'Menyimpan...' : 'Simpan'}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
