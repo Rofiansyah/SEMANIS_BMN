@@ -104,7 +104,7 @@ export default function RegisterPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
-              First name
+              First name <span className="text-red-500">*</span>
             </label>
             <Input
               id="firstName"
@@ -114,12 +114,12 @@ export default function RegisterPage() {
               onChange={handleInputChange}
               required
               placeholder="Enter your first name"
-              className="w-full"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
             />
           </div>
           <div>
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
-              Last name
+              Last name <span className="text-red-500">*</span>
             </label>
             <Input
               id="lastName"
@@ -129,7 +129,7 @@ export default function RegisterPage() {
               onChange={handleInputChange}
               required
               placeholder="Enter your last name"
-              className="w-full"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
             />
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function RegisterPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+              Email <span className="text-red-500">*</span>
             </label>
             <Input
               id="email"
@@ -148,12 +148,12 @@ export default function RegisterPage() {
               onChange={handleInputChange}
               required
               placeholder="Enter your email"
-              className="w-full"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
             />
           </div>
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-              Phone no.
+              Phone no. <span className="text-red-500">*</span>
             </label>
             <Input
               id="phone"
@@ -163,7 +163,7 @@ export default function RegisterPage() {
               onChange={handleInputChange}
               required
               placeholder="Enter your phone"
-              className="w-full"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
             />
           </div>
         </div>
@@ -171,7 +171,7 @@ export default function RegisterPage() {
         {/* Password */}
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
+            Password <span className="text-red-500">*</span>
           </label>
           <Input
             id="password"
@@ -181,7 +181,7 @@ export default function RegisterPage() {
             onChange={handleInputChange}
             required
             placeholder="Minimum 8 characters"
-            className="w-full"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
 
@@ -193,7 +193,7 @@ export default function RegisterPage() {
             type="checkbox"
             checked={formData.agreeTerms}
             onChange={handleInputChange}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            className="h-4 w-4 text-blue-950 focus:ring-blue-800 border-gray-300 rounded"
           />
           <label htmlFor="agreeTerms" className="ml-2 block text-sm text-gray-900">
             I agree to all terms, privacy policies, and fees
@@ -215,7 +215,7 @@ export default function RegisterPage() {
         {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white transition-colors duration-200"
+          className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
           loading={loading}
           disabled={
             !formData.email ||
@@ -236,7 +236,7 @@ export default function RegisterPage() {
           Already have an account?{' '}
           <Link
             href="/login/user"
-            className="text-blue-600 hover:text-blue-800 underline font-medium"
+            className="text-blue-900 hover:text-blue-950 underline font-medium"
           >
             Log in
           </Link>

@@ -131,7 +131,7 @@ export default function ForgotPasswordPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email*
+              Email <span className="text-red-500">*</span>
             </label>
             <Input
               id="email"
@@ -141,14 +141,14 @@ export default function ForgotPasswordPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="Enter your email"
-              className="w-full"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
               icon={<Mail />}
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white rounded-lg"
+            className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white rounded-lg"
             loading={loading}
             disabled={!email}
           >
@@ -159,7 +159,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center">
           <p className="text-sm text-gray-600">
             Ingat password Anda?{' '}
-            <Link href="/login/user" className="text-blue-600 hover:text-blue-800 underline">
+            <Link href="/login/user" className="text-blue-900 hover:text-blue-950 underline">
               Kembali ke login
             </Link>
           </p>
