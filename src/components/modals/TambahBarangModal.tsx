@@ -88,21 +88,25 @@ export function TambahBarangModal({
 
   if (!isOpen) return null;
 
-  return (
-    <div
-      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="bg-white rounded-xl max-w-2xl w-full p-6 shadow-lg border border-gray-100 overflow-y-auto max-h-[90vh]">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-5">
-          <h3 className="text-lg font-semibold text-gray-800">Tambah Barang</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+return (
+  <div
+    className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+    onClick={(e) => e.target === e.currentTarget && onClose()}
+  >
+    <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
+      {/* Header Fixed */}
+      <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
+        <h3 className="text-lg font-semibold text-white">Tambah Barang</h3>
+        <button
+          onClick={onClose}
+          className="text-white hover:text-gray-200 transition"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
-        {/* Form */}
+      {/* Form Scrollable */}
+      <div className="p-6 overflow-y-auto flex-1">
         <form onSubmit={handleSubmit} className="space-y-5">
           <Input
             label="Nama Barang *"
@@ -110,6 +114,7 @@ export function TambahBarangModal({
             onChange={(e) => handleInputChange('nama', e.target.value)}
             placeholder="Masukkan nama barang"
             required
+            className="focus:ring-2 focus:ring-blue-950 focus:border-blue-950"
           />
 
           {/* Deskripsi */}
@@ -119,7 +124,7 @@ export function TambahBarangModal({
               value={formData.deskripsi}
               onChange={(e) => handleInputChange('deskripsi', e.target.value)}
               placeholder="Masukkan deskripsi barang"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white text-gray-900 placeholder-gray-400"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-400"
               rows={3}
             />
           </div>
@@ -132,7 +137,7 @@ export function TambahBarangModal({
               <select
                 value={formData.kategoriId}
                 onChange={(e) => handleInputChange('kategoriId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
                 required
               >
                 <option value="">Pilih Kategori</option>
@@ -150,7 +155,7 @@ export function TambahBarangModal({
               <select
                 value={formData.merekId}
                 onChange={(e) => handleInputChange('merekId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
                 required
               >
                 <option value="">Pilih Merek</option>
@@ -168,7 +173,7 @@ export function TambahBarangModal({
               <select
                 value={formData.lokasiId}
                 onChange={(e) => handleInputChange('lokasiId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
                 required
               >
                 <option value="">Pilih Lokasi</option>
@@ -185,8 +190,10 @@ export function TambahBarangModal({
               <label className="block text-sm font-medium text-gray-700 mb-1">Kondisi *</label>
               <select
                 value={formData.kondisi}
-                onChange={(e) => handleInputChange('kondisi', e.target.value as BarangFormData['kondisi'])}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white"
+                onChange={(e) =>
+                  handleInputChange('kondisi', e.target.value as BarangFormData['kondisi'])
+                }
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
                 required
               >
                 <option value="BAIK">Baik</option>
@@ -199,7 +206,7 @@ export function TambahBarangModal({
           {/* Upload Foto */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Foto (Opsional)</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-yellow-500 transition">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition">
               <input
                 type="file"
                 accept="image/*"
@@ -250,5 +257,7 @@ export function TambahBarangModal({
         </form>
       </div>
     </div>
-  );
+  </div>
+);
+
 }
