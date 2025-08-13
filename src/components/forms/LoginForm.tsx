@@ -63,7 +63,7 @@ export function LoginForm({
             onChange={handleInputChange}
             required
             placeholder={emailPlaceholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 bg-white"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
 
@@ -79,7 +79,7 @@ export function LoginForm({
             onChange={handleInputChange}
             required
             placeholder={passwordPlaceholder}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-500 bg-white"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
 
@@ -91,7 +91,7 @@ export function LoginForm({
 
         <Button
           type="submit"
-          className="w-full h-12 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-md transition-colors duration-200"
+          className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
           loading={loading}
           disabled={!formData.email || !formData.password}
         >
