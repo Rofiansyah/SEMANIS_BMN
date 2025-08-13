@@ -108,14 +108,20 @@ return (
       {/* Form Scrollable */}
       <div className="p-6 overflow-y-auto flex-1">
         <form onSubmit={handleSubmit} className="space-y-5">
-          <Input
-            label="Nama Barang *"
-            value={formData.nama}
-            onChange={(e) => handleInputChange('nama', e.target.value)}
-            placeholder="Masukkan nama barang"
-            required
-            className="focus:ring-2 focus:ring-blue-950 focus:border-blue-950"
-          />
+          {/* Nama Barang */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nama Barang <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.nama}
+              onChange={(e) => handleInputChange('nama', e.target.value)}
+              placeholder="Masukkan nama barang"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-900"
+              required
+            />
+          </div>
 
           {/* Deskripsi */}
           <div>
@@ -124,7 +130,7 @@ return (
               value={formData.deskripsi}
               onChange={(e) => handleInputChange('deskripsi', e.target.value)}
               placeholder="Masukkan deskripsi barang"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-900"
               rows={3}
             />
           </div>
@@ -133,11 +139,13 @@ return (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Kategori */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kategori *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kategori <span className="text-red-500">*</span>
+              </label>
               <select
                 value={formData.kategoriId}
                 onChange={(e) => handleInputChange('kategoriId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Kategori</option>
@@ -151,11 +159,13 @@ return (
 
             {/* Merek */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Merek *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Merek <span className="text-red-500">*</span>
+              </label>
               <select
                 value={formData.merekId}
                 onChange={(e) => handleInputChange('merekId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Merek</option>
@@ -169,11 +179,13 @@ return (
 
             {/* Lokasi */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Lokasi *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lokasi <span className="text-red-500">*</span>
+              </label>
               <select
                 value={formData.lokasiId}
                 onChange={(e) => handleInputChange('lokasiId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Lokasi</option>
@@ -187,13 +199,15 @@ return (
 
             {/* Kondisi */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kondisi *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kondisi <span className="text-red-500">*</span>
+              </label>
               <select
                 value={formData.kondisi}
                 onChange={(e) =>
                   handleInputChange('kondisi', e.target.value as BarangFormData['kondisi'])
                 }
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="BAIK">Baik</option>
@@ -259,5 +273,6 @@ return (
     </div>
   </div>
 );
+
 
 }
