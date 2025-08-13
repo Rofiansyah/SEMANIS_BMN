@@ -130,7 +130,7 @@ return (
               value={formData.deskripsi}
               onChange={(e) => handleInputChange('deskripsi', e.target.value)}
               placeholder="Masukkan deskripsi barang"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
               rows={3}
             />
           </div>
@@ -145,7 +145,7 @@ return (
               <select
                 value={formData.kategoriId}
                 onChange={(e) => handleInputChange('kategoriId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Kategori</option>
@@ -165,7 +165,7 @@ return (
               <select
                 value={formData.merekId}
                 onChange={(e) => handleInputChange('merekId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Merek</option>
@@ -185,7 +185,7 @@ return (
               <select
                 value={formData.lokasiId}
                 onChange={(e) => handleInputChange('lokasiId', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="">Pilih Lokasi</option>
@@ -207,7 +207,7 @@ return (
                 onChange={(e) =>
                   handleInputChange('kondisi', e.target.value as BarangFormData['kondisi'])
                 }
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-950 focus:border-blue-950 bg-white text-gray-900"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
                 required
               >
                 <option value="BAIK">Baik</option>
