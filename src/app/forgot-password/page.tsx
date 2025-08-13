@@ -142,7 +142,6 @@ export default function ForgotPasswordPage() {
               required
               placeholder="Enter your email"
               className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
-              icon={<Mail />}
             />
           </div>
 
