@@ -155,12 +155,6 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
               className="w-100 sm:w-104 h-auto max-h-28 object-contain"
             />
           </div>
-          <button
-            onClick={onToggle}
-            className="xl:hidden p-2 rounded-md hover:bg-gray-100"
-          >
-            ✕
-          </button>
         </div>
 
         {/* Menu */}
