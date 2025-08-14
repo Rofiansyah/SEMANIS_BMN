@@ -136,45 +136,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-
-        {/* User Actions */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">
-              Menu Utama
-            </h3>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Button 
-                onClick={() => router.push('/user/search')}
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <Search size={20} />
-                <span>Cari Barang</span>
-              </Button>
-              
-              <Button 
-                onClick={() => router.push('/user/status')}
-                variant="secondary" 
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <Package size={20} />
-                <span>Status Peminjaman</span>
-              </Button>
-              
-              <Button 
-                onClick={() => router.push('/user/history')}
-                variant="secondary" 
-                className="flex items-center justify-center gap-2 h-24"
-              >
-                <History size={20} />
-                <span>Riwayat Peminjaman</span>
-              </Button>
-            </div>
-          </div>
-        </div>
-        
       </div>
     </DashboardLayout>
   );
