@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { UpdateLokasiRequest, Lokasi } from '@/types/api';
 
