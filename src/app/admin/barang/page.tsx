@@ -141,12 +141,12 @@ export default function AdminBarangPage() {
             <p className="text-gray-600 mt-1">Tambah, edit, dan hapus barang inventaris</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={handleExportPDF} disabled={loading || barangList.length === 0}>
-              <FileText className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200" />
+            <Button variant="outline" onClick={handleExportPDF} disabled={loading || barangList.length === 0} className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200">
+              <FileText className="w-4 h-4 mr-2" />
               Export PDF
             </Button>
-            <Button variant="primary" onClick={openCreateModal}>
-              <Plus className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200" />
+            <Button variant="primary" onClick={openCreateModal} className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
+              <Plus className="w-4 h-4 mr-2" />
               Tambah Barang
             </Button>
           </div>
@@ -160,7 +160,7 @@ export default function AdminBarangPage() {
             placeholder="Cari barang..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
 
@@ -295,6 +295,7 @@ export default function AdminBarangPage() {
                           <Button
                             size="sm"
                             variant="outline"
+                            className="flex items-center"
                             onClick={() => router.push(`/admin/barang/${barang.id}`)}
                           >
                             <Eye className="w-3 h-3 mr-1" />
@@ -303,6 +304,7 @@ export default function AdminBarangPage() {
                           <Button
                             size="sm"
                             variant="outline"
+                            className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                             onClick={() => openEditModal(barang)}
                           >
                             <Edit className="w-3 h-3 mr-1" />
@@ -311,6 +313,7 @@ export default function AdminBarangPage() {
                           <Button
                             size="sm"
                             variant="danger"
+                            className="flex items-center"
                             onClick={() => handleDeleteBarang(barang.id)}
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
