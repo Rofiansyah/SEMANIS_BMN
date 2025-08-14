@@ -295,7 +295,7 @@ export default function AdminBarangPage() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="flex items-center"
+                            className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                             onClick={() => router.push(`/admin/barang/${barang.id}`)}
                           >
                             <Eye className="w-3 h-3 mr-1" />
