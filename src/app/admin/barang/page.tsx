@@ -142,11 +142,11 @@ export default function AdminBarangPage() {
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" onClick={handleExportPDF} disabled={loading || barangList.length === 0}>
-              <FileText className="w-4 h-4 mr-2" />
+              <FileText className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200" />
               Export PDF
             </Button>
             <Button variant="primary" onClick={openCreateModal}>
-              <Plus className="w-4 h-4 mr-2" />
+              <Plus className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200" />
               Tambah Barang
             </Button>
           </div>
@@ -160,7 +160,7 @@ export default function AdminBarangPage() {
             placeholder="Cari barang..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           />
         </div>
 

@@ -142,8 +142,7 @@ return (
           placeholder="Cari kategori..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg 
-            focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
         />
       </div>
 
