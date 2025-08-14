@@ -70,7 +70,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   const userMenuItems: SidebarItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-    { label: 'Cari Barang', href: '/user/search', icon: <Search size={20} /> },
+    // { label: 'Cari Barang', href: '/user/search', icon: <Search size={20} /> },
     {
       label: 'Peminjaman',
       icon: <ClipboardList size={20} />,
