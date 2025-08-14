@@ -1,117 +1,109 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
-import { kategoriApi } from '@/lib/api';
 import { X } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { Kategori } from '@/types/api';
+import { Input } from '../ui/Input';
+import { Button } from '../ui/Button';
+import { UpdateKategoriRequest, Kategori } from '@/types/api';
 
 interface EditKategoriModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSubmit: (id: string, data: UpdateKategoriRequest) => Promise<void>;
   kategori: Kategori | null;
+  loading?: boolean;
 }
 
-interface KategoriFormData {
-  nama: string;
-}
-
-export function EditKategoriModal({ isOpen, onClose, onSuccess, kategori }: EditKategoriModalProps) {
-  const [formData, setFormData] = useState<KategoriFormData>({ nama: '' });
-  const [loading, setLoading] = useState(false);
+export default function EditKategoriModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  kategori,
+  loading = false,
+}: EditKategoriModalProps) {
+  const [nama, setNama] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (isOpen && kategori) {
-      setFormData({ nama: kategori.nama });
+      setNama(kategori.nama);
+      setError('');
     }
   }, [isOpen, kategori]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!formData.nama.trim()) {
-      toast.error('Nama kategori harus diisi');
-      return;
-    }
+    setError('');
 
     if (!kategori) return;
 
-    setLoading(true);
+    if (!nama.trim()) {
+      setError('Nama kategori wajib diisi');
+      return;
+    }
+
     try {
-      const response = await kategoriApi.update(kategori.id, formData);
-      if (response.success) {
-        toast.success('Kategori berhasil diperbarui! 🎉');
-        onSuccess();
-        onClose();
-      }
-    } catch (error) {
-      console.error('Failed to update kategori:', error);
-      toast.error('Gagal memperbarui kategori. Silakan coba lagi.');
-    } finally {
-      setLoading(false);
+      await onSubmit(kategori.id, { nama: nama.trim() });
+      onClose();
+    } catch {
+      setError('Gagal memperbarui kategori');
     }
   };
 
-  const handleInputChange = (field: keyof KategoriFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleClose = () => {
+    setNama('');
+    setError('');
+    onClose();
   };
 
   if (!isOpen || !kategori) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col animate-fadeIn">
-        {/* Header */}
-        <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
-          <h3 className="text-lg font-semibold text-white">Edit Kategori</h3>
-          <button onClick={onClose} className="text-white hover:text-gray-200 transition">
-            <X className="w-5 h-5" />
+    <div className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h2 className="text-lg font-semibold text-gray-900">
+            Edit Kategori
+          </h2>
+          <button
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+            disabled={loading}
+          >
+            <X size={20} />
           </button>
         </div>
 
-        {/* Form */}
-        <div className="p-6 overflow-y-auto flex-1">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Nama Kategori <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.nama}
-                onChange={(e) => handleInputChange('nama', e.target.value)}
-                placeholder="Masukkan nama kategori"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="space-y-4">
+            <Input
+              label="Nama Kategori"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              placeholder="Masukkan nama kategori"
+              error={error}
+              disabled={loading}
+              required
+            />
+          </div>
 
-            <div className="flex flex-col md:flex-row gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                disabled={loading}
-                className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-              >
-                Batal
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={loading}
-                className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-              >
-                {loading ? 'Menyimpan...' : 'Simpan Perubahan'}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="flex justify-end space-x-3 mt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={loading}
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              loading={loading}
+            >
+              Simpan Perubahan
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
