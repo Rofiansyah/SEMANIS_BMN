@@ -134,6 +134,7 @@ export default function UserHistoryPage() {
         item.barang.kodeBarang,
         item.barang.kategori?.nama || "",
         item.barang.merek?.nama || "",
+        item.barang.lokasi?.nama || "",
         "", // lokasi not available in API response
         item.status === "DIKEMBALIKAN" ? "Dikembalikan" : "Ditolak",
         new Date(item.tanggalPengajuan).toLocaleDateString("id-ID"),
@@ -284,7 +285,7 @@ export default function UserHistoryPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 text-black">
+                  <label className="block text-sm font-medium mb-1 text-black">
                     Bulan
                   </label>
                   <input
