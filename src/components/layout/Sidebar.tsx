@@ -71,8 +71,14 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   const userMenuItems: SidebarItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
     { label: 'Cari Barang', href: '/user/search', icon: <Search size={20} /> },
-    { label: 'Status Peminjaman', href: '/user/status', icon: <ClipboardList size={20} /> },
-    { label: 'Riwayat Peminjaman', href: '/user/history', icon: <History size={20} /> }
+    {
+      label: 'Peminjaman',
+      icon: <ClipboardList size={20} />,
+      children: [
+        { label: 'Status Peminjaman', href: '/user/status', icon: <ClipboardList size={16} /> },
+        { label: 'Riwayat Peminjaman', href: '/user/history', icon: <History size={16} /> }
+      ]
+    }
   ];
 
   const menuItems = isAdmin ? adminMenuItems : userMenuItems;
