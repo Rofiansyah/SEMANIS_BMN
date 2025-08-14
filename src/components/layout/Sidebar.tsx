@@ -147,20 +147,14 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} xl:translate-x-0`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/logo_semantis.png"
-              alt="SEMANTIS BMN Logo"
-              width={32}
-              height={32}
-              className="object-contain"
-            />
-            <div>
-              <h1 className="text-sm font-bold text-gray-900">SEMANIS BMN</h1>
-              <p className="text-xs text-gray-500">Sistem Inventaris</p>
-            </div>
-          </div>
+        <div className="flex items-center justify-center p-4 border-b border-gray-200">
+          <Image
+            src="/logo_semantis.png"
+            alt="SEMANTIS BMN Logo"
+            width={80} // bisa dibesarkan sesuai kebutuhan
+            height={80}
+            className="object-contain"
+          />
           <button
             onClick={onToggle}
             className="xl:hidden p-2 rounded-md hover:bg-gray-100"

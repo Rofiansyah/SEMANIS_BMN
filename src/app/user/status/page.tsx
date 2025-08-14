@@ -177,7 +177,7 @@ export default function UserStatusPage() {
                     : 'Anda belum meminjam barang apapun saat ini'
                   }
                 </p>
-                <Link href="/user/search">
+                <Link href="/dashboard">
                   <Button>Cari Barang untuk Dipinjam</Button>
                 </Link>
               </div>
