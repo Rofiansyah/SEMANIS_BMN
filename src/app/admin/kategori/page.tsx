@@ -128,7 +128,7 @@ return (
           <h1 className="text-2xl font-bold text-gray-900">Kelola Kategori</h1>
           <p className="text-gray-600 mt-1">Tambah, edit, dan hapus kategori barang</p>
         </div>
-        <Button variant="primary" onClick={openCreateModal} className="w-full sm:w-auto">
+        <Button variant="primary" onClick={openCreateModal} className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
           <Plus className="w-4 h-4 mr-2" />
           Tambah Kategori
         </Button>
@@ -210,7 +210,7 @@ return (
                           size="sm"
                           variant="outline"
                           onClick={() => openEditModal(kategori)}
-                          className="flex items-center"
+                          className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                         >
                           <Edit className="w-3 h-3 mr-1" />
                           Edit
