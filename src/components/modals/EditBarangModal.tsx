@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { barangApi } from '@/lib/api';
 import type { Barang, Kategori, Merek, Lokasi, UpdateBarangRequest } from '@/types/api';
 import { Camera, X } from 'lucide-react';

@@ -9,8 +9,8 @@ import type { Merek } from '@/types/api';
 import { 
   Plus, 
   Edit, 
-  Trash2, 
-  Building,
+  Trash2,
+  Tag, 
   Search,
   AlertCircle
 } from 'lucide-react';
@@ -136,7 +136,7 @@ export default function AdminMerekPage() {
                 <p className="text-sm text-gray-600">Total Merek</p>
                 <p className="text-2xl font-bold text-gray-900">{merekList.length}</p>
               </div>
-              <Building className="w-8 h-8 text-gray-400" />
+              <Tag className="w-8 h-8 text-gray-400" />
             </div>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function AdminMerekPage() {
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-3">
                           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <Building className="w-4 h-4 text-blue-600" />
+                            <Tag className="w-4 h-4 text-blue-600" />
                           </div>
                           <span className="font-medium text-gray-900">{merek.nama}</span>
                         </div>
