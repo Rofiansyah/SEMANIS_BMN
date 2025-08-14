@@ -207,7 +207,7 @@ return (
                       <div className="flex flex-wrap justify-center gap-2">
                         <Button
                           size="sm"
-                          variant="outline"
+                          variant="outlinesecond"
                           onClick={() => openEditModal(kategori)}
                           className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                         >

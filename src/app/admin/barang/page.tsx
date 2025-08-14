@@ -141,7 +141,7 @@ export default function AdminBarangPage() {
             <p className="text-gray-600 mt-1">Tambah, edit, dan hapus barang inventaris</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={handleExportPDF} disabled={loading || barangList.length === 0} className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200">
+            <Button variant="outlinesecond" onClick={handleExportPDF} disabled={loading || barangList.length === 0} className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200">
               <FileText className="w-4 h-4 mr-2" />
               Export PDF
             </Button>
@@ -303,7 +303,7 @@ export default function AdminBarangPage() {
                           </Button>
                           <Button
                             size="sm"
-                            variant="outline"
+                            variant="outlinesecond"
                             className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                             onClick={() => openEditModal(barang)}
                           >
