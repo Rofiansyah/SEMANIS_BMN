@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -55,7 +54,7 @@ export function LoginForm({
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email <span className="text-red-500">*</span>
           </label>
-          <Input
+          <input
             id="email"
             name="email"
             type="email"
@@ -71,7 +70,7 @@ export function LoginForm({
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password <span className="text-red-500">*</span>
           </label>
-          <Input
+          <input
             id="password"
             name="password"
             type="password"

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { ArrowLeft, Mail, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { authApi } from '@/lib/api';
@@ -133,7 +132,7 @@ export default function ForgotPasswordPage() {
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email <span className="text-red-500">*</span>
             </label>
-            <Input
+            <input
               id="email"
               name="email"
               type="email"

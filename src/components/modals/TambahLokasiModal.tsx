@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { lokasiApi } from '@/lib/api';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -79,7 +78,7 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nama Lokasi <span className="text-red-500">*</span>
               </label>
-              <Input
+              <input
                 type="text"
                 value={formData.nama}
                 onChange={(e) => handleInputChange('nama', e.target.value)}

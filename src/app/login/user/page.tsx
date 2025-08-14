@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import logoSemantis from './logo_semantis.png';
@@ -109,7 +108,7 @@ export default function UserLoginPage() {
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email <span className="text-red-500">*</span>
           </label>
-          <Input
+          <input
             id="email"
             name="email"
             type="email"
@@ -125,7 +124,7 @@ export default function UserLoginPage() {
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password <span className="text-red-500">*</span>
           </label>
-          <Input
+          <input
             id="password"
             name="password"
             type="password"

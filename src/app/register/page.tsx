@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import logoSemantis from './logo_semantis.png';
@@ -106,7 +105,7 @@ export default function RegisterPage() {
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
               First name <span className="text-red-500">*</span>
             </label>
-            <Input
+            <input
               id="firstName"
               name="firstName"
               type="text"
@@ -121,7 +120,7 @@ export default function RegisterPage() {
             <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
               Last name <span className="text-red-500">*</span>
             </label>
-            <Input
+            <input
               id="lastName"
               name="lastName"
               type="text"
@@ -140,7 +139,7 @@ export default function RegisterPage() {
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email <span className="text-red-500">*</span>
             </label>
-            <Input
+            <input
               id="email"
               name="email"
               type="email"
@@ -155,7 +154,7 @@ export default function RegisterPage() {
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
               Phone no. <span className="text-red-500">*</span>
             </label>
-            <Input
+            <input
               id="phone"
               name="phone"
               type="tel"
@@ -173,7 +172,7 @@ export default function RegisterPage() {
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Password <span className="text-red-500">*</span>
           </label>
-          <Input
+          <input
             id="password"
             name="password"
             type="password"
