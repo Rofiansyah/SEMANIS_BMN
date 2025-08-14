@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { UpdateMerekRequest, Merek } from '@/types/api';
 
@@ -58,53 +57,68 @@ export default function EditMerekModal({
 
   if (!isOpen || !merek) return null;
 
-  return (
-    <div className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">
-            Edit Merek
-          </h2>
-          <button
-            onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            disabled={loading}
-          >
-            <X size={20} />
-          </button>
-        </div>
+return (
+  <div
+    className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+    onClick={(e) => e.target === e.currentTarget && handleClose()}
+  >
+    <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col animate-fadeIn">
+      {/* Header Fixed */}
+      <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
+        <h3 className="text-lg font-semibold text-white">Edit Merek</h3>
+        <button
+          onClick={handleClose}
+          className="text-white hover:text-gray-200 transition"
+          disabled={loading}
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
-        <form onSubmit={handleSubmit} className="p-6">
-          <div className="space-y-4">
-            <Input
-              label="Nama Merek"
+      {/* Form Scrollable */}
+      <div className="p-6 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Nama Merek */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nama Merek <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               placeholder="Masukkan nama merek"
-              error={error}
-              disabled={loading}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
               required
+              disabled={loading}
             />
+            {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
           </div>
 
-          <div className="flex justify-end space-x-3 mt-6">
+          {/* Actions */}
+          <div className="flex flex-col md:flex-row gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={handleClose}
               disabled={loading}
+              className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
             >
               Batal
             </Button>
             <Button
               type="submit"
-              loading={loading}
+              variant="primary"
+              disabled={loading}
+              className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
             >
-              Simpan Perubahan
+              {loading ? 'Menyimpan...' : 'Simpan Perubahan'}
             </Button>
           </div>
         </form>
       </div>
     </div>
-  );
+  </div>
+);
+
 }

@@ -117,169 +117,192 @@ export function EditBarangModal({
 
   if (!isOpen || !barang) return null;
 
-  return (
-    <div 
-      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
-    >
-      <div className="bg-white rounded-lg max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto shadow-2xl">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Edit Barang</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-            disabled={loading}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Nama Barang"
-            value={formData.nama}
-            onChange={(e) => handleInputChange('nama', e.target.value)}
-            placeholder="Masukkan nama barang"
-            disabled={loading}
-            required
-          />
+return (
+  <div
+    className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+    onClick={(e) => e.target === e.currentTarget && onClose()}
+  >
+    <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
+      {/* Header Fixed */}
+      <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
+        <h3 className="text-lg font-semibold text-white">Edit Barang</h3>
+        <button
+          onClick={onClose}
+          className="text-white hover:text-gray-200 transition"
+          disabled={loading}
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
+      {/* Form Scrollable */}
+      <div className="p-6 overflow-y-auto flex-1">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Nama Barang */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nama Barang <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={formData.nama}
+              onChange={(e) => handleInputChange('nama', e.target.value)}
+              placeholder="Masukkan nama barang"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          {/* Deskripsi */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Deskripsi
             </label>
             <textarea
               value={formData.deskripsi}
               onChange={(e) => handleInputChange('deskripsi', e.target.value)}
               placeholder="Masukkan deskripsi barang"
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
               rows={3}
               disabled={loading}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Kategori *
-            </label>
-            <select
-              value={formData.kategoriId}
-              onChange={(e) => handleInputChange('kategoriId', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
-              required
-              disabled={loading}
-            >
-              <option value="" className="bg-white text-gray-900">Pilih Kategori</option>
-              {kategoriList.map((kategori) => (
-                <option key={kategori.id} value={kategori.id} className="bg-white text-gray-900">
-                  {kategori.nama}
-                </option>
-              ))}
-            </select>
+          {/* Grid untuk select */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Kategori */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kategori <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.kategoriId}
+                onChange={(e) => handleInputChange('kategoriId', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                required
+                disabled={loading}
+              >
+                <option value="">Pilih Kategori</option>
+                {kategoriList.map((kategori) => (
+                  <option key={kategori.id} value={kategori.id}>
+                    {kategori.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Merek */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Merek <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.merekId}
+                onChange={(e) => handleInputChange('merekId', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                required
+                disabled={loading}
+              >
+                <option value="">Pilih Merek</option>
+                {merekList.map((merek) => (
+                  <option key={merek.id} value={merek.id}>
+                    {merek.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Lokasi */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lokasi <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.lokasiId}
+                onChange={(e) => handleInputChange('lokasiId', e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                required
+                disabled={loading}
+              >
+                <option value="">Pilih Lokasi</option>
+                {lokasiList.map((lokasi) => (
+                  <option key={lokasi.id} value={lokasi.id}>
+                    {lokasi.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Kondisi */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kondisi <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.kondisi}
+                onChange={(e) =>
+                  handleInputChange('kondisi', e.target.value as BarangFormData['kondisi'])
+                }
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                required
+                disabled={loading}
+              >
+                <option value="BAIK">Baik</option>
+                <option value="RUSAK_RINGAN">Rusak Ringan</option>
+                <option value="RUSAK_BERAT">Rusak Berat</option>
+              </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Merek *
-            </label>
-            <select
-              value={formData.merekId}
-              onChange={(e) => handleInputChange('merekId', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
-              required
-              disabled={loading}
-            >
-              <option value="" className="bg-white text-gray-900">Pilih Merek</option>
-              {merekList.map((merek) => (
-                <option key={merek.id} value={merek.id} className="bg-white text-gray-900">
-                  {merek.nama}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Lokasi *
-            </label>
-            <select
-              value={formData.lokasiId}
-              onChange={(e) => handleInputChange('lokasiId', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
-              required
-              disabled={loading}
-            >
-              <option value="" className="bg-white text-gray-900">Pilih Lokasi</option>
-              {lokasiList.map((lokasi) => (
-                <option key={lokasi.id} value={lokasi.id} className="bg-white text-gray-900">
-                  {lokasi.nama}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Kondisi *
-            </label>
-            <select
-              value={formData.kondisi}
-              onChange={(e) => handleInputChange('kondisi', e.target.value as 'BAIK' | 'RUSAK_RINGAN' | 'RUSAK_BERAT')}
-              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
-              required
-              disabled={loading}
-            >
-              <option value="BAIK" className="bg-white text-gray-900">Baik</option>
-              <option value="RUSAK_RINGAN" className="bg-white text-gray-900">Rusak Ringan</option>
-              <option value="RUSAK_BERAT" className="bg-white text-gray-900">Rusak Berat</option>
-            </select>
-          </div>
-
+          {/* Upload Foto */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Foto (Opsional)
             </label>
-            <div className="space-y-2">
-              {barang.foto && (
-                <div className="relative">
-                  <img 
-                    src={barang.foto} 
-                    alt={barang.nama}
-                    className="w-full h-32 object-cover rounded-lg border"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Foto saat ini</p>
-                </div>
-              )}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleInputChange('foto', e.target.files?.[0] as File)}
-                  className="hidden"
-                  id="foto-upload-edit"
-                  disabled={loading}
-                />
-                <label htmlFor="foto-upload-edit" className={`cursor-pointer flex flex-col items-center ${loading ? 'cursor-not-allowed opacity-50' : ''}`}>
-                  <Camera className="w-8 h-8 text-gray-400 mb-2" />
-                  <span className="text-sm text-gray-600">
-                    {formData.foto ? formData.foto.name : 'Klik untuk upload foto baru'}
-                  </span>
-                </label>
-              </div>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleInputChange('foto', e.target.files?.[0] as File)}
+                className="hidden"
+                id="foto-upload-edit"
+                disabled={loading}
+              />
+              <label htmlFor="foto-upload-edit" className="flex flex-col items-center gap-2">
+                {barang.foto || formData.foto ? (
+                  <>
+                    <img
+                      src={
+                        formData.foto
+                          ? URL.createObjectURL(formData.foto)
+                          : barang.foto
+                      }
+                      alt="Preview"
+                      className="h-20 w-20 object-cover rounded-md border"
+                    />
+                    <span className="text-sm text-gray-600">
+                      {formData.foto ? formData.foto.name : 'Foto saat ini'}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <Camera className="w-8 h-8 text-gray-400" />
+                    <span className="text-sm text-gray-500">Klik untuk upload foto</span>
+                  </>
+                )}
+              </label>
             </div>
           </div>
-          
-          <div className="flex space-x-3 mt-6">
+
+          {/* Actions */}
+          <div className="flex flex-col md:flex-row gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1"
               disabled={loading}
+              className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
             >
               Batal
             </Button>
@@ -287,14 +310,14 @@ export function EditBarangModal({
               type="submit"
               variant="primary"
               disabled={loading}
-              className="flex-1"
-              loading={loading}
+              className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
             >
-              Simpan Perubahan
+              {loading ? 'Menyimpan...' : 'Simpan Perubahan'}
             </Button>
           </div>
         </form>
       </div>
     </div>
-  );
+  </div>
+);
 }
