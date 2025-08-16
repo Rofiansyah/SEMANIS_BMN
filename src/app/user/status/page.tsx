@@ -13,6 +13,7 @@ import {
   Tag,
   Bookmark,
   Eye,
+  Filter,
   ClipboardList,
   AlertCircle
 } from 'lucide-react';
@@ -21,6 +22,13 @@ import { Peminjaman } from '@/types/api';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+
+// ✅ Label untuk tab
+const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM', string> = {
+  ALL: "Semua",
+  PENDING: "Pending",
+  DIPINJAM: "Dipinjam",
+};
 
 export default function UserStatusPage() {
   const { user } = useAuth();
@@ -84,14 +92,16 @@ export default function UserStatusPage() {
     };
   };
 
-  // ✅ Filter logic diperbaiki
+  // ✅ Filter logic
   const filteredPeminjaman =
     activeTab === 'ALL'
-      ? peminjaman
+      ? peminjaman.filter(item => item.status === 'PENDING' || item.status === 'DIPINJAM')
       : peminjaman.filter(item => item.status === activeTab);
 
-  // ✅ Count logic diperbaiki
-  const allCount = peminjaman.length;
+  // ✅ Count logic
+  const allCount = peminjaman.filter(item => 
+    item.status === 'PENDING' || item.status === 'DIPINJAM'
+  ).length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
 
@@ -109,7 +119,7 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -164,7 +174,20 @@ export default function UserStatusPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow border">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {activeTab === 'ALL'
+                  ? 'Semua Peminjaman'
+                  : `Peminjaman ${statusLabels[activeTab]}`}
+              </h2>
+              <div className="flex items-center space-x-2">
+                <Filter className="w-4 h-4 text-gray-400" />
+                <span className="text-sm text-gray-500">Filter: {activeTab}</span>
+              </div>
+            </div>
+          </div>
           <div className="p-6">
             {filteredPeminjaman.length === 0 ? (
               <div className="text-center py-12">
