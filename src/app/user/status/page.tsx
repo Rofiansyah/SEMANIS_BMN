@@ -108,18 +108,23 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="h-6 w-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Menunggu Persetujuan</p>
-                <p className="text-2xl font-bold text-gray-900">{pendingCount}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div
+              className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                activeTab === 'PENDING'
+                  ? 'border-yellow-600 bg-yellow-50'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+              onClick={() => setActiveTab('PENDING')}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">Menunggu Persetujuan</p>
+                  <p className="text-2xl font-bold text-gray-900">{pendingCount}</p>
+                </div>
+                <Clock className="w-8 h-8 text-yellow-600" />
               </div>
             </div>
-          </div>
 
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
