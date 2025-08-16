@@ -101,9 +101,7 @@ export default function UserStatusPage() {
       : peminjaman.filter(item => item.status === activeTab);
 
   // ✅ Count logic
-  const allCount = peminjaman.filter(item => 
-    item.status === 'PENDING' || item.status === 'DIPINJAM'
-  ).length;
+  const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
   const rejectedCount = peminjaman.filter(item => item.status === 'REJECTED').length;
