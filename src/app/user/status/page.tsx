@@ -23,7 +23,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-// ✅ Label untuk tab
 const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED', string> = {
   ALL: "Semua",
   PENDING: "Pending",
@@ -94,19 +93,16 @@ export default function UserStatusPage() {
     };
   };
 
-  // ✅ Filter logic
   const filteredPeminjaman =
     activeTab === 'ALL'
       ? peminjaman
       : peminjaman.filter(item => item.status === activeTab);
 
-  // ✅ Count logic
   const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
   const rejectedCount = peminjaman.filter(item => item.status === 'REJECTED').length;
   const returnedCount = peminjaman.filter(item => item.status === 'RETURNED').length;
-
 
   if (loading) {
     return (
@@ -123,7 +119,7 @@ export default function UserStatusPage() {
       <div className="space-y-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-
+          {/* Total */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeTab === 'ALL'
@@ -141,6 +137,7 @@ export default function UserStatusPage() {
             </div>
           </div>
 
+          {/* Pending */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeTab === 'PENDING'
@@ -158,6 +155,7 @@ export default function UserStatusPage() {
             </div>
           </div>
 
+          {/* Dipinjam */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeTab === 'DIPINJAM'
@@ -175,6 +173,7 @@ export default function UserStatusPage() {
             </div>
           </div>
 
+          {/* Ditolak */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeTab === 'REJECTED'
@@ -188,10 +187,11 @@ export default function UserStatusPage() {
                 <p className="text-sm text-gray-600">DITOLAK</p>
                 <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-red-600" />
+              <XCircle className="w-8 h-8 text-red-600" />
             </div>
           </div>   
 
+          {/* Dikembalikan */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
               activeTab === 'RETURNED'
@@ -205,59 +205,34 @@ export default function UserStatusPage() {
                 <p className="text-sm text-gray-600">DIKEMBALIKAN</p>
                 <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
               </div>
-              <XCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
           </div>  
-
         </div>
 
-        
-
-        {/* Tabs */}
+        {/* List */}
         <div className="bg-white rounded-lg shadow border">
           <div className="p-6 border-b border-gray-200">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-gray-900">
-                {activeTab === 'ALL'
-                  ? 'Semua Peminjaman'
-                  : `Peminjaman ${statusLabels[activeTab]}`}
-              </h2>
-              <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-gray-500">Filter: {activeTab}</span>
-              </div>
-            </div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              {activeTab === 'ALL'
+                ? 'Semua Peminjaman'
+                : `Peminjaman ${statusLabels[activeTab]}`}
+            </h2>
           </div>
           <div className="p-6">
             {filteredPeminjaman.length === 0 ? (
-    <div className="text-center py-12">
-      <Package size={48} className="mx-auto text-gray-400 mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          {activeTab === 'PENDING' 
-            ? 'Tidak ada permintaan pending'
-            : activeTab === 'DIPINJAM'
-              ? 'Tidak ada barang yang sedang dipinjam'
-              : activeTab === 'RETURNED'
-                ? 'Belum ada barang yang dikembalikan'
-                : activeTab === 'REJECTED'
-                  ? 'Tidak ada permintaan yang ditolak'
-                  : 'Belum ada permintaan peminjaman'}
-        </h3>
-        <p className="text-gray-600 mb-4">
-          {activeTab === 'PENDING'
-            ? 'Semua permintaan peminjaman Anda sudah diproses'
-            : activeTab === 'DIPINJAM'
-              ? 'Anda belum meminjam barang apapun saat ini'
-              : activeTab === 'RETURNED'
-                ? 'Belum ada riwayat barang yang telah Anda kembalikan'
-                : activeTab === 'REJECTED'
-                  ? 'Tidak ada riwayat permintaan peminjaman yang ditolak'
-                  : 'Silakan ajukan peminjaman barang terlebih dahulu'}
-        </p>
+              <div className="text-center py-12">
+                <Package size={48} className="mx-auto text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {activeTab === 'REJECTED'
+                    ? 'Tidak ada permintaan yang ditolak'
+                    : activeTab === 'RETURNED'
+                      ? 'Belum ada barang yang dikembalikan'
+                      : 'Belum ada permintaan peminjaman'}
+                </h3>
                 <Link href="/dashboard">
-                  <Button 
-                  className="bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                  >Cari Barang untuk Dipinjam
+                  <Button className="bg-blue-950 hover:bg-blue-900 text-white">
+                    Cari Barang untuk Dipinjam
                   </Button>
                 </Link>
               </div>
@@ -265,7 +240,7 @@ export default function UserStatusPage() {
               <div className="space-y-4">
                 {filteredPeminjaman.map((item) => {
                   const statusInfo = getStatusInfo(item.status);
-                  
+
                   return (
                     <div
                       key={item.id}
@@ -274,9 +249,7 @@ export default function UserStatusPage() {
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold text-gray-900">
-                              {item.barang.nama}
-                            </h3>
+                            <h3 className="font-semibold text-gray-900">{item.barang.nama}</h3>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}>
                               {statusInfo.icon}
                               {statusInfo.text}
@@ -286,65 +259,91 @@ export default function UserStatusPage() {
                             Kode: {item.barang.kodeBarang}
                           </p>
                         </div>
-                        <div className="text-right">
-                          <Link href={`/user/items/${item.barang.id}`}>
-                            <Button size="sm" variant="secondary" className="flex items-center gap-1">
-                              <Eye size={14} />
-                              Lihat
-                            </Button>
-                          </Link>
-                        </div>
+                        <Link href={`/user/items/${item.barang.id}`}>
+                          <Button size="sm" variant="secondary" className="flex items-center gap-1">
+                            <Eye size={14} />
+                            Lihat
+                          </Button>
+                        </Link>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Tag size={14} className="mr-2" />
-                          <span>{item.barang.kategori?.nama}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Bookmark size={14} className="mr-2" />
-                          <span>{item.barang.merek?.nama}</span>
-                        </div>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <MapPin size={14} className="mr-2" />
-                          <span>{item.barang.lokasi?.nama}</span>
-                        </div>
-                      </div>
-
+                      {/* Timeline */}
                       <div className="bg-white rounded-lg p-4 mb-4">
                         <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex items-center text-gray-600">
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <div className="flex items-center">
                             <Calendar size={14} className="mr-2" />
                             <span>Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
                           </div>
                           {item.tanggalDisetujui && (
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center">
                               <Calendar size={14} className="mr-2" />
                               <span>Disetujui: {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
                             </div>
                           )}
                           {item.tanggalDipinjam && (
-                            <div className="flex items-center text-gray-600">
+                            <div className="flex items-center">
                               <Calendar size={14} className="mr-2" />
                               <span>Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
+                            </div>
+                          )}
+                          {item.tanggalDikembalikan && (
+                            <div className="flex items-center">
+                              <Calendar size={14} className="mr-2" />
+                              <span>Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
                             </div>
                           )}
                         </div>
                       </div>
 
+                      {/* Foto dokumentasi */}
+                      {(item.fotoPinjam || item.fotoKembali) && (
+                        <div className="bg-white rounded-lg p-4 mb-4">
+                          <h4 className="font-medium text-gray-900 mb-2">Dokumentasi</h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {item.fotoPinjam && (
+                              <div>
+                                <p className="text-sm font-medium mb-1">Foto Saat Dipinjam</p>
+                                <img
+                                  src={item.fotoPinjam}
+                                  alt="Foto saat dipinjam"
+                                  className="w-full h-40 object-cover rounded cursor-pointer"
+                                  onClick={() => window.open(item.fotoPinjam!, "_blank")}
+                                />
+                              </div>
+                            )}
+                            {item.fotoKembali && (
+                              <div>
+                                <p className="text-sm font-medium mb-1">Foto Saat Dikembalikan</p>
+                                <img
+                                  src={item.fotoKembali}
+                                  alt="Foto saat dikembalikan"
+                                  className="w-full h-40 object-cover rounded cursor-pointer"
+                                  onClick={() => window.open(item.fotoKembali!, "_blank")}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Catatan */}
                       {item.catatan && (
-                        <div className="bg-white rounded-lg p-4">
+                        <div className="bg-white rounded-lg p-4 mb-4">
                           <h4 className="font-medium text-gray-900 mb-2">Catatan</h4>
                           <p className="text-sm text-gray-600">{item.catatan}</p>
                         </div>
                       )}
 
-                      {item.penanggungJawab && (
-                        <div className="mt-4 pt-4 border-t border-gray-200">
-                          <p className="text-sm text-gray-600">
-                            <span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}
-                          </p>
+                      {/* Info Penanggung Jawab */}
+                      {(item.penanggungJawab || item.approvedByUser) && (
+                        <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
+                          {item.penanggungJawab && (
+                            <p><span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}</p>
+                          )}
+                          {item.approvedByUser && (
+                            <p><span className="font-medium">Diproses oleh:</span> {item.approvedByUser.nama}</p>
+                          )}
                         </div>
                       )}
                     </div>
