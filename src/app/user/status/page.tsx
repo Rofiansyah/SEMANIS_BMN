@@ -108,7 +108,7 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                 activeTab === 'PENDING'
@@ -163,7 +163,11 @@ export default function UserStatusPage() {
                   }
                 </p>
                 <Link href="/dashboard">
-                  <Button>Cari Barang untuk Dipinjam</Button>
+                  <Button 
+                  variant="outline"
+                  className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                  >Cari Barang untuk Dipinjam
+                  </Button>
                 </Link>
               </div>
             ) : (
