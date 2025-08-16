@@ -108,11 +108,11 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           <div
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                 activeTab === 'PENDING'
-                  ? 'border-yellow-600 bg-yellow-50'
+                  ? 'border-yellow-500 bg-yellow-50'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
               onClick={() => setActiveTab('PENDING')}
@@ -126,46 +126,26 @@ export default function UserStatusPage() {
               </div>
             </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Package className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-gray-900">{borrowedCount}</p>
-              </div>
+        <div
+          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            activeTab === 'DIPINJAM'
+              ? 'border-blue-500 bg-blue-50'
+              : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setActiveTab('DIPINJAM')}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Sedang Dipinjam</p>
+              <p className="text-2xl font-bold text-gray-900">{borrowedCount}</p>
             </div>
+            <Package className="w-8 h-8 text-blue-600" />
           </div>
         </div>
+      </div>
 
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex">
-              <button
-                onClick={() => setActiveTab('PENDING')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'PENDING'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Menunggu Persetujuan ({pendingCount})
-              </button>
-              <button
-                onClick={() => setActiveTab('DIPINJAM')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm ${
-                  activeTab === 'DIPINJAM'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                Sedang Dipinjam ({borrowedCount})
-              </button>
-            </nav>
-          </div>
-
           <div className="p-6">
             {filteredPeminjaman.length === 0 ? (
               <div className="text-center py-12">

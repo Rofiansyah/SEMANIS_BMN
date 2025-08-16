@@ -296,7 +296,7 @@ export default function AdminBorrowingRequestsPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'ALL' ? 'border-gray-700 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'ALL' ? 'border-gray-700 bg-gray-200' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedStatus('ALL')}>
             <div className="flex items-center justify-between">
