@@ -97,7 +97,7 @@ export default function UserStatusPage() {
   // ✅ Filter logic
   const filteredPeminjaman =
     activeTab === 'ALL'
-      ? peminjaman.filter(item => item.status === 'PENDING' || item.status === 'DIPINJAM')
+      ? peminjaman.filter(item => item.status === 'PENDING' || item.status === 'DIPINJAM' || item.status === 'REJECTED' || item.status === 'RETURNED')
       : peminjaman.filter(item => item.status === activeTab);
 
   // ✅ Count logic
