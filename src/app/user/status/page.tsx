@@ -13,6 +13,7 @@ import {
   Tag,
   Bookmark,
   Eye,
+  ClipboardList,
   AlertCircle
 } from 'lucide-react';
 import api from '@/lib/api';
@@ -25,7 +26,7 @@ export default function UserStatusPage() {
   const { user } = useAuth();
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'PENDING' | 'DIPINJAM'>('PENDING');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM'>('ALL');
 
   useEffect(() => {
     if (user) {
@@ -38,13 +39,7 @@ export default function UserStatusPage() {
       setLoading(true);
       const response = await api.get('/peminjaman/my-requests');
       const data = response.data.data || response.data || [];
-      
-      // Filter only PENDING and DIPINJAM status
-      const activePeminjaman = data.filter((item: Peminjaman) => 
-        item.status === 'PENDING' || item.status === 'DIPINJAM'
-      );
-      
-      setPeminjaman(activePeminjaman);
+      setPeminjaman(data);
     } catch (error) {
       console.error('Error fetching peminjaman:', error);
       toast.error('Gagal memuat status peminjaman');
@@ -89,8 +84,14 @@ export default function UserStatusPage() {
     };
   };
 
-  const filteredPeminjaman = peminjaman.filter(item => item.status === activeTab);
+  // ✅ Filter logic diperbaiki
+  const filteredPeminjaman =
+    activeTab === 'ALL'
+      ? peminjaman
+      : peminjaman.filter(item => item.status === activeTab);
 
+  // ✅ Count logic diperbaiki
+  const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
 
@@ -109,6 +110,24 @@ export default function UserStatusPage() {
       <div className="space-y-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'ALL'
+                ? 'border-gray-500 bg-gray-100'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('ALL')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Permintaan</p>
+                <p className="text-2xl font-bold text-gray-900">{allCount}</p>
+              </div>
+              <ClipboardList className="w-8 h-8 text-gray-500" />
+            </div>
+          </div>
+
           <div
               className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                 activeTab === 'PENDING'
@@ -124,25 +143,25 @@ export default function UserStatusPage() {
                 </div>
                 <Clock className="w-8 h-8 text-yellow-600" />
               </div>
-            </div>
+          </div>
 
-        <div
-          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            activeTab === 'DIPINJAM'
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:border-gray-300'
-          }`}
-          onClick={() => setActiveTab('DIPINJAM')}
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-              <p className="text-2xl font-bold text-gray-900">{borrowedCount}</p>
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'DIPINJAM'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('DIPINJAM')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Sedang Dipinjam</p>
+                <p className="text-2xl font-bold text-gray-900">{borrowedCount}</p>
+              </div>
+              <Package className="w-8 h-8 text-blue-600" />
             </div>
-            <Package className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-      </div>
 
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow">
@@ -153,19 +172,20 @@ export default function UserStatusPage() {
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   {activeTab === 'PENDING' 
                     ? 'Tidak ada permintaan pending'
-                    : 'Tidak ada barang yang sedang dipinjam'
-                  }
+                    : activeTab === 'DIPINJAM'
+                      ? 'Tidak ada barang yang sedang dipinjam'
+                      : 'Belum ada permintaan peminjaman'}
                 </h3>
                 <p className="text-gray-600 mb-4">
                   {activeTab === 'PENDING'
                     ? 'Semua permintaan peminjaman Anda sudah diproses'
-                    : 'Anda belum meminjam barang apapun saat ini'
-                  }
+                    : activeTab === 'DIPINJAM'
+                      ? 'Anda belum meminjam barang apapun saat ini'
+                      : 'Silakan ajukan peminjaman barang terlebih dahulu'}
                 </p>
                 <Link href="/dashboard">
                   <Button 
-                  variant="outline"
-                  className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                  className="bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                   >Cari Barang untuk Dipinjam
                   </Button>
                 </Link>
