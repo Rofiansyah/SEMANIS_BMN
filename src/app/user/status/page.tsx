@@ -230,22 +230,30 @@ export default function UserStatusPage() {
           </div>
           <div className="p-6">
             {filteredPeminjaman.length === 0 ? (
-              <div className="text-center py-12">
-                <Package size={48} className="mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {activeTab === 'PENDING' 
-                    ? 'Tidak ada permintaan pending'
-                    : activeTab === 'DIPINJAM'
-                      ? 'Tidak ada barang yang sedang dipinjam'
-                      : 'Belum ada permintaan peminjaman'}
-                </h3>
-                {/* <p className="text-gray-600 mb-4">
-                  {activeTab === 'PENDING'
-                    ? 'Semua permintaan peminjaman Anda sudah diproses'
-                    : activeTab === 'DIPINJAM'
-                      ? 'Anda belum meminjam barang apapun saat ini'
-                      : 'Silakan ajukan peminjaman barang terlebih dahulu'}
-                </p> */}
+    <div className="text-center py-12">
+      <Package size={48} className="mx-auto text-gray-400 mb-4" />
+        <h3 className="text-lg font-medium text-gray-900 mb-2">
+          {activeTab === 'PENDING' 
+            ? 'Tidak ada permintaan pending'
+            : activeTab === 'DIPINJAM'
+              ? 'Tidak ada barang yang sedang dipinjam'
+              : activeTab === 'RETURNED'
+                ? 'Belum ada barang yang dikembalikan'
+                : activeTab === 'REJECTED'
+                  ? 'Tidak ada permintaan yang ditolak'
+                  : 'Belum ada permintaan peminjaman'}
+        </h3>
+        <p className="text-gray-600 mb-4">
+          {activeTab === 'PENDING'
+            ? 'Semua permintaan peminjaman Anda sudah diproses'
+            : activeTab === 'DIPINJAM'
+              ? 'Anda belum meminjam barang apapun saat ini'
+              : activeTab === 'RETURNED'
+                ? 'Belum ada riwayat barang yang telah Anda kembalikan'
+                : activeTab === 'REJECTED'
+                  ? 'Tidak ada riwayat permintaan peminjaman yang ditolak'
+                  : 'Silakan ajukan peminjaman barang terlebih dahulu'}
+        </p>
                 <Link href="/dashboard">
                   <Button 
                   className="bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
