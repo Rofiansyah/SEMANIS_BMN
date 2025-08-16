@@ -25,17 +25,17 @@ import toast from 'react-hot-toast';
 const statusColors = {
   PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   DIPINJAM: 'bg-green-100 text-green-800 border-green-200',
-  DITOLAK: 'bg-red-100 text-red-800 border-red-200',
-  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200',
-  // DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
+  REJECTED: 'bg-red-100 text-red-800 border-red-200',
+  RETURNED: 'bg-blue-100 text-blue-800 border-blue-200',
+  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
 };
 
 const statusLabels = {
   PENDING: 'Menunggu',
   DIPINJAM: 'Sedang Dipinjam',
-  DITOLAK: 'Ditolak',
-  DIKEMBALIKAN: 'Dikembalikan',
-  // DIKEMBALIKAN: 'Dikembalikan'
+  REJECTED: 'Ditolak',
+  RETURNED: 'Dikembalikan',
+  DIKEMBALIKAN: 'Dikembalikan'
 };
 
 interface ReturnModalProps {
@@ -335,26 +335,26 @@ export default function AdminBorrowingRequestsPage() {
           </div>
 
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'DITOLAK' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'REJECTED' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'
           }`}
-          onClick={() => setSelectedStatus('DITOLAK')}>
+          onClick={() => setSelectedStatus('REJECTED')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Ditolak</p>
-                <p className="text-2xl font-bold text-red-600">{getRequestCount('DITOLAK')}</p>
+                <p className="text-2xl font-bold text-red-600">{getRequestCount('REJECTED')}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-400" />
             </div>
           </div>
 
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'DIKEMBALIKAN' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'RETURNED' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
           }`}
-          onClick={() => setSelectedStatus('DIKEMBALIKAN')}>
+          onClick={() => setSelectedStatus('RETURNED')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Dikembalikan</p>
-                <p className="text-2xl font-bold text-green-600">{getRequestCount('DIKEMBALIKAN')}</p>
+                <p className="text-2xl font-bold text-green-600">{getRequestCount('RETURNED')}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-400" />
             </div>

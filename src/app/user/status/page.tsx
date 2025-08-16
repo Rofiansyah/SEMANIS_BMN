@@ -24,19 +24,19 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 // ✅ Label untuk tab
-const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
+const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED', string> = {
   ALL: "Semua",
   PENDING: "Pending",
   DIPINJAM: "Dipinjam",
-  DITOLAK: "Ditolak",
-  DIKEMBALIKAN: 'Dikembalikan'
+  REJECTED: "Ditolak",
+  RETURNED: 'Dikembalikan'
 };
 
 export default function UserStatusPage() {
   const { user } = useAuth();
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED'>('ALL');
 
   useEffect(() => {
     if (user) {
@@ -72,13 +72,13 @@ export default function UserStatusPage() {
         color: 'bg-blue-100 text-blue-800',
         bgColor: 'bg-blue-50'
       },
-      'DIKEMBALIKAN': {
+      'RETURNED': {
         icon: <CheckCircle size={16} />,
         text: 'Dikembalikan',
         color: 'bg-green-100 text-green-800',
         bgColor: 'bg-green-50'
       },
-      'DITOLAK': {
+      'REJECTED': {
         icon: <XCircle size={16} />,
         text: 'Ditolak',
         color: 'bg-red-100 text-red-800',
@@ -106,8 +106,8 @@ export default function UserStatusPage() {
   ).length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
-  const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
-  const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
+  const rejectedCount = peminjaman.filter(item => item.status === 'REJECTED').length;
+  const returnedCount = peminjaman.filter(item => item.status === 'RETURNED').length;
 
 
   if (loading) {
@@ -179,11 +179,11 @@ export default function UserStatusPage() {
 
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DITOLAK'
+              activeTab === 'REJECTED'
                 ? 'border-red-500 bg-red-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => setActiveTab('DITOLAK')}
+            onClick={() => setActiveTab('REJECTED')}
           >
             <div className="flex items-center justify-between">
               <div>
@@ -196,11 +196,11 @@ export default function UserStatusPage() {
 
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIKEMBALIKAN'
+              activeTab === 'RETURNED'
                 ? 'border-green-500 bg-green-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => setActiveTab('DIKEMBALIKAN')}
+            onClick={() => setActiveTab('RETURNED')}
           >
             <div className="flex items-center justify-between">
               <div>
