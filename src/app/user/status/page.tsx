@@ -24,17 +24,19 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 // ✅ Label untuk tab
-const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM', string> = {
+const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
   ALL: "Semua",
   PENDING: "Pending",
   DIPINJAM: "Dipinjam",
+  DITOLAK: "Ditolak",
+  DIKEMBALIKAN: 'Dikembalikan'
 };
 
 export default function UserStatusPage() {
   const { user } = useAuth();
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
 
   useEffect(() => {
     if (user) {
@@ -70,13 +72,13 @@ export default function UserStatusPage() {
         color: 'bg-blue-100 text-blue-800',
         bgColor: 'bg-blue-50'
       },
-      'RETURNED': {
+      'DIKEMBALIKAN': {
         icon: <CheckCircle size={16} />,
         text: 'Dikembalikan',
         color: 'bg-green-100 text-green-800',
         bgColor: 'bg-green-50'
       },
-      'REJECTED': {
+      'DITOLAK': {
         icon: <XCircle size={16} />,
         text: 'Ditolak',
         color: 'bg-red-100 text-red-800',
@@ -104,6 +106,9 @@ export default function UserStatusPage() {
   ).length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
+  const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
+  const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
+
 
   if (loading) {
     return (
@@ -119,7 +124,7 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
 
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -134,25 +139,25 @@ export default function UserStatusPage() {
                 <p className="text-sm text-gray-600">Total Permintaan</p>
                 <p className="text-2xl font-bold text-gray-900">{allCount}</p>
               </div>
-              <ClipboardList className="w-8 h-8 text-gray-500" />
+              <ClipboardList className="w-8 h-8 text-gray-700" />
             </div>
           </div>
 
           <div
-              className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                activeTab === 'PENDING'
-                  ? 'border-yellow-500 bg-yellow-50'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-              onClick={() => setActiveTab('PENDING')}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600">Menunggu Persetujuan</p>
-                  <p className="text-2xl font-bold text-gray-900">{pendingCount}</p>
-                </div>
-                <Clock className="w-8 h-8 text-yellow-600" />
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'PENDING'
+                ? 'border-yellow-500 bg-yellow-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('PENDING')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Menunggu Persetujuan</p>
+                <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
               </div>
+              <Clock className="w-8 h-8 text-yellow-600" />
+            </div>
           </div>
 
           <div
@@ -166,12 +171,49 @@ export default function UserStatusPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-gray-900">{borrowedCount}</p>
+                <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
               </div>
               <Package className="w-8 h-8 text-blue-600" />
             </div>
           </div>
+
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'DITOLAK'
+                ? 'border-red-500 bg-red-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('DITOLAK')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">DITOLAK</p>
+                <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
+              </div>
+              <XCircle className="w-8 h-8 text-red-600" />
+            </div>
+          </div>   
+
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'DIKEMBALIKAN'
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('DIKEMBALIKAN')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">DITOLAK</p>
+                <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
+              </div>
+              <XCircle className="w-8 h-8 text-green-600" />
+            </div>
+          </div>  
+
         </div>
+
+        
 
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow border">

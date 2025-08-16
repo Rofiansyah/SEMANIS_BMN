@@ -25,17 +25,17 @@ import toast from 'react-hot-toast';
 const statusColors = {
   PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   DIPINJAM: 'bg-green-100 text-green-800 border-green-200',
-  REJECTED: 'bg-red-100 text-red-800 border-red-200',
-  RETURNED: 'bg-blue-100 text-blue-800 border-blue-200',
-  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
+  DITOLAK: 'bg-red-100 text-red-800 border-red-200',
+  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200',
+  // DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
 };
 
 const statusLabels = {
   PENDING: 'Menunggu',
   DIPINJAM: 'Sedang Dipinjam',
-  REJECTED: 'Ditolak',
-  RETURNED: 'Dikembalikan',
-  DIKEMBALIKAN: 'Dikembalikan'
+  DITOLAK: 'Ditolak',
+  DIKEMBALIKAN: 'Dikembalikan',
+  // DIKEMBALIKAN: 'Dikembalikan'
 };
 
 interface ReturnModalProps {
@@ -304,7 +304,7 @@ export default function AdminBorrowingRequestsPage() {
                 <p className="text-sm text-gray-600">Total Permintaan</p>
                 <p className="text-2xl font-bold text-gray-900">{getRequestCount('ALL')}</p>
               </div>
-              <ClipboardList className="w-8 h-8 text-gray-400" />
+              <ClipboardList className="w-8 h-8 text-gray-700" />
             </div>
           </div>
 
@@ -322,41 +322,41 @@ export default function AdminBorrowingRequestsPage() {
           </div>
 
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'DIPINJAM' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'DIPINJAM' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedStatus('DIPINJAM')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-green-600">{getRequestCount('DIPINJAM')}</p>
+                <p className="text-2xl font-bold text-blue-600">{getRequestCount('DIPINJAM')}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-400" />
+              <Package className="w-8 h-8 text-blue-400" />
             </div>
           </div>
 
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'REJECTED' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'DITOLAK' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'
           }`}
-          onClick={() => setSelectedStatus('REJECTED')}>
+          onClick={() => setSelectedStatus('DITOLAK')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Ditolak</p>
-                <p className="text-2xl font-bold text-red-600">{getRequestCount('REJECTED')}</p>
+                <p className="text-2xl font-bold text-red-600">{getRequestCount('DITOLAK')}</p>
               </div>
               <XCircle className="w-8 h-8 text-red-400" />
             </div>
           </div>
 
           <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-            selectedStatus === 'RETURNED' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+            selectedStatus === 'DIKEMBALIKAN' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
           }`}
-          onClick={() => setSelectedStatus('RETURNED')}>
+          onClick={() => setSelectedStatus('DIKEMBALIKAN')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Dikembalikan</p>
-                <p className="text-2xl font-bold text-blue-600">{getRequestCount('RETURNED')}</p>
+                <p className="text-2xl font-bold text-green-600">{getRequestCount('DIKEMBALIKAN')}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-blue-400" />
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </div>
           </div>
         </div>
