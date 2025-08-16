@@ -188,7 +188,7 @@ export default function UserStatusPage() {
                 <p className="text-sm text-gray-600">DITOLAK</p>
                 <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
               </div>
-              <XCircle className="w-8 h-8 text-red-600" />
+              <CheckCircle className="w-8 h-8 text-red-600" />
             </div>
           </div>   
 
@@ -202,7 +202,7 @@ export default function UserStatusPage() {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">DITOLAK</p>
+                <p className="text-sm text-gray-600">DIKEMBALIKAN</p>
                 <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
               </div>
               <XCircle className="w-8 h-8 text-green-600" />
@@ -239,13 +239,13 @@ export default function UserStatusPage() {
                       ? 'Tidak ada barang yang sedang dipinjam'
                       : 'Belum ada permintaan peminjaman'}
                 </h3>
-                <p className="text-gray-600 mb-4">
+                {/* <p className="text-gray-600 mb-4">
                   {activeTab === 'PENDING'
                     ? 'Semua permintaan peminjaman Anda sudah diproses'
                     : activeTab === 'DIPINJAM'
                       ? 'Anda belum meminjam barang apapun saat ini'
                       : 'Silakan ajukan peminjaman barang terlebih dahulu'}
-                </p>
+                </p> */}
                 <Link href="/dashboard">
                   <Button 
                   className="bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
