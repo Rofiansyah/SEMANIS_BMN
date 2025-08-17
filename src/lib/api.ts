@@ -26,9 +26,10 @@ import type {
   PeminjamanResponse,
   PeminjamanDetailResponse,
   StatisticsResponse,
+  Peminjaman,
 } from '@/types/api';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://inventaris-be-fawn.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -273,6 +274,15 @@ export const peminjamanApi = {
   getAllRequests: async (): Promise<PeminjamanResponse> => {
     const response = await api.get('/peminjaman/admin/all');
     return response.data;
+  },
+
+  getHistoryByBarangId: async (barangId: string): Promise<PeminjamanResponse> => {
+    const response = await api.get('/peminjaman/admin/all');
+    const filteredData = response.data.data.filter((item: Peminjaman) => item.barangId === barangId);
+    return {
+      status: response.data.status,
+      data: filteredData
+    };
   },
 
   getReports: async (): Promise<{status: string; data: PeminjamanReport}> => {

@@ -24,17 +24,17 @@ import toast from 'react-hot-toast';
 
 const statusColors = {
   PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  DIPINJAM: 'bg-green-100 text-green-800 border-green-200',
-  REJECTED: 'bg-red-100 text-red-800 border-red-200',
-  RETURNED: 'bg-blue-100 text-blue-800 border-blue-200',
-  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
+  DISETUJUI: 'bg-green-100 text-green-800 border-green-200',
+  DIPINJAM: 'bg-blue-100 text-blue-800 border-blue-200',
+  DITOLAK: 'bg-red-100 text-red-800 border-red-200',
+  DIKEMBALIKAN: 'bg-green-100 text-green-800 border-green-200'
 };
 
 const statusLabels = {
   PENDING: 'Menunggu',
+  DISETUJUI: 'Disetujui',
   DIPINJAM: 'Sedang Dipinjam',
-  REJECTED: 'Ditolak',
-  RETURNED: 'Dikembalikan',
+  DITOLAK: 'Ditolak',
   DIKEMBALIKAN: 'Dikembalikan'
 };
 

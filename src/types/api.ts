@@ -159,7 +159,7 @@ export interface Peminjaman {
   id: string;
   userId: string;
   barangId: string;
-  status: 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED' | 'DIKEMBALIKAN';
+  status: 'PENDING' | 'DISETUJUI' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN';
   tanggalPengajuan: string;
   tanggalDisetujui: string | null;
   tanggalDipinjam: string | null;

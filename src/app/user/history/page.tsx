@@ -26,7 +26,7 @@ export default function UserHistoryPage() {
   const [filteredHistory, setFilteredHistory] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<
-    "ALL" | "DIKEMBALIKAN" | "REJECTED"
+    "ALL" | "DIKEMBALIKAN" | "DITOLAK"
   >("ALL");
   const [dateFilter, setDateFilter] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -68,6 +68,7 @@ export default function UserHistoryPage() {
     try {
       setLoading(true);
       const response = await api.get("/peminjaman/my-history");
+      console.log('Full API response:', response.data);
       const data = response.data.data || [];
 
       // Sort by most recent first
@@ -76,6 +77,7 @@ export default function UserHistoryPage() {
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
       );
 
+      console.log('Processed data sample:', data[0]);
       setHistory(data);
     } catch (error) {
       console.error("Error fetching history:", error);
@@ -93,7 +95,7 @@ export default function UserHistoryPage() {
         color: "bg-green-100 text-green-800",
         bgColor: "bg-green-50",
       },
-      REJECTED: {
+      DITOLAK: {
         icon: <XCircle size={16} />,
         text: "Ditolak",
         color: "bg-red-100 text-red-800",
@@ -118,6 +120,9 @@ export default function UserHistoryPage() {
 
   const exportHistory = () => {
     try {
+      // Debug data structure
+      console.log('Export data sample:', filteredHistory[0]);
+      
       // Simple CSV export
       const headers = [
         "Nama Barang",
@@ -129,16 +134,20 @@ export default function UserHistoryPage() {
         "Tanggal Pengajuan",
         "Tanggal Selesai",
       ];
-      const csvData = filteredHistory.map((item) => [
-        item.barang.nama,
-        item.barang.kodeBarang,
-        item.barang.kategori?.nama || "",
-        item.barang.merek?.nama || "",
-        item.barang.lokasi?.nama || "",
-        item.status === "DIKEMBALIKAN" ? "Dikembalikan" : "Ditolak",
-        new Date(item.tanggalPengajuan).toLocaleDateString("id-ID"),
-        new Date(item.updatedAt).toLocaleDateString("id-ID"),
-      ]);
+      const csvData = filteredHistory.map((item) => {
+        const row = [
+          item.barang.nama,
+          item.barang.kodeBarang,
+          item.barang.kategori?.nama || "",
+          item.barang.merek?.nama || "",
+          item.barang.lokasi?.nama || "",
+          item.status === "DIKEMBALIKAN" ? "Dikembalikan" : item.status === "DITOLAK" ? "Ditolak" : item.status,
+          new Date(item.tanggalPengajuan).toLocaleDateString("id-ID"),
+          new Date(item.updatedAt).toLocaleDateString("id-ID"),
+        ];
+        console.log('CSV row:', row);
+        return row;
+      });
 
       const csvContent = [headers, ...csvData]
         .map((row) => row.map((field) => `"${field}"`).join(","))
@@ -168,7 +177,7 @@ export default function UserHistoryPage() {
     (item) => item.status === "DIKEMBALIKAN"
   ).length;
   const rejectedCount = history.filter(
-    (item) => item.status === "REJECTED"
+    (item) => item.status === "DITOLAK"
   ).length;
 
   if (loading) {
@@ -272,14 +281,14 @@ export default function UserHistoryPage() {
                     value={statusFilter}
                     onChange={(e) =>
                       setStatusFilter(
-                        e.target.value as "ALL" | "DIKEMBALIKAN" | "REJECTED"
+                        e.target.value as "ALL" | "DIKEMBALIKAN" | "DITOLAK"
                       )
                     }
                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black"
                   >
                     <option value="ALL">Semua Status</option>
                     <option value="DIKEMBALIKAN">Dikembalikan</option>
-                    <option value="REJECTED">Ditolak</option>
+                    <option value="DITOLAK">Ditolak</option>
                   </select>
                 </div>
 

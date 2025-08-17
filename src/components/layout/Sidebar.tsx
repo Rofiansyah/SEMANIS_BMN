@@ -10,7 +10,6 @@ import {
   Package,  
   Tag, 
   BarChart3, 
-  Search,
   MapPin,
   History,
   ChevronDown,
@@ -152,6 +151,8 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
             <Image
               src="/logo_semantis.png"
               alt="SEMANTIS BMN Logo"
+              width={200}
+              height={112}
               className="w-100 sm:w-104 h-auto max-h-28 object-contain"
             />
           </div>

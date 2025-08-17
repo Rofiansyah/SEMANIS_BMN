@@ -404,7 +404,7 @@ export default function AdminDashboardPage() {
                         ? "bg-yellow-100 text-yellow-800"
                         : activity.status === "DIPINJAM"
                         ? "bg-green-100 text-green-800"
-                        : activity.status === "REJECTED"
+                        : activity.status === "DITOLAK"
                         ? "bg-red-100 text-red-800"
                         : "bg-blue-100 text-blue-800"
                     }`}
@@ -413,7 +413,7 @@ export default function AdminDashboardPage() {
                       ? "Menunggu"
                       : activity.status === "DIPINJAM"
                       ? "Sedang Dipinjam"
-                      : activity.status === "REJECTED"
+                      : activity.status === "DITOLAK"
                       ? "Ditolak"
                       : "Dikembalikan"}
                   </span>
