@@ -15,7 +15,6 @@ import {
   XCircle,
   Clock,
   AlertCircle,
-  Camera,
   Download,
   Phone,
   Mail,
@@ -33,25 +32,25 @@ interface PeminjamanDetailPageProps {
 
 const statusColors = {
   PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  DIPINJAM: 'bg-green-100 text-green-800 border-green-200',
-  REJECTED: 'bg-red-100 text-red-800 border-red-200',
-  RETURNED: 'bg-blue-100 text-blue-800 border-blue-200',
-  DIKEMBALIKAN: 'bg-blue-100 text-blue-800 border-blue-200'
+  DISETUJUI: 'bg-green-100 text-green-800 border-green-200',
+  DIPINJAM: 'bg-blue-100 text-blue-800 border-blue-200',
+  DITOLAK: 'bg-red-100 text-red-800 border-red-200',
+  DIKEMBALIKAN: 'bg-green-100 text-green-800 border-green-200'
 };
 
 const statusIcons = {
   PENDING: <Clock className="w-4 h-4" />,
-  DIPINJAM: <CheckCircle className="w-4 h-4" />,
-  REJECTED: <XCircle className="w-4 h-4" />,
-  RETURNED: <RotateCcw className="w-4 h-4" />,
+  DISETUJUI: <CheckCircle className="w-4 h-4" />,
+  DIPINJAM: <Package className="w-4 h-4" />,
+  DITOLAK: <XCircle className="w-4 h-4" />,
   DIKEMBALIKAN: <RotateCcw className="w-4 h-4" />
 };
 
 const statusLabels = {
   PENDING: 'Menunggu Persetujuan',
+  DISETUJUI: 'Disetujui',
   DIPINJAM: 'Sedang Dipinjam',
-  REJECTED: 'Ditolak',
-  RETURNED: 'Dikembalikan',
+  DITOLAK: 'Ditolak',
   DIKEMBALIKAN: 'Dikembalikan'
 };
 
@@ -374,72 +373,8 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
               </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Statistik</h2>
-              </div>
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Tanggal Pengajuan</span>
-                  <span className="text-sm font-medium text-gray-900">
-                    {new Date(peminjaman.tanggalPengajuan).toLocaleDateString('id-ID')}
-                  </span>
-                </div>
-                
-                {peminjaman.tanggalDisetujui && (
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Waktu Persetujuan</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {getDaysBetween(peminjaman.tanggalPengajuan, peminjaman.tanggalDisetujui)} hari
-                    </span>
-                  </div>
-                )}
-
-                {peminjaman.status === 'DIPINJAM' && peminjaman.tanggalDipinjam && (
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Lama Dipinjam</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {getDaysBetween(peminjaman.tanggalDipinjam)} hari
-                    </span>
-                  </div>
-                )}
-
-                {peminjaman.tanggalDikembalikan && peminjaman.tanggalDipinjam && (
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Total Durasi</span>
-                    <span className="text-sm font-medium text-gray-900">
-                      {getDaysBetween(peminjaman.tanggalDipinjam, peminjaman.tanggalDikembalikan)} hari
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Aksi</h2>
-              </div>
-              <div className="p-6 space-y-3">
-                <Button variant="outline" className="w-full" onClick={() => router.push(`/admin/barang/${peminjaman.barang.id}`)}>
-                  <Package className="w-4 h-4 mr-2" />
-                  Lihat Detail Barang
-                </Button>
-                
-                {(peminjaman.fotoPinjam || peminjaman.fotoKembali) && (
-                  <Button variant="outline" className="w-full">
-                    <Camera className="w-4 h-4 mr-2" />
-                    Download Semua Foto
-                  </Button>
-                )}
-                
-                <Button variant="outline" className="w-full">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export PDF
-                </Button>
-              </div>
-            </div>
+        
+            
           </div>
         </div>
       </div>

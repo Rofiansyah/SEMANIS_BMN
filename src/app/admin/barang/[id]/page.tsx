@@ -4,8 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
-import { barangApi } from '@/lib/api';
-import type { Barang } from '@/types/api';
+import { barangApi, peminjamanApi } from '@/lib/api';
+import type { Barang, Peminjaman } from '@/types/api';
 import { 
   ArrowLeft,
   Package,
@@ -19,7 +19,10 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  History,
+  User,
+  FileText
 } from 'lucide-react';
 
 interface BarangDetailPageProps {
@@ -49,7 +52,9 @@ const kondisiLabels = {
 export default function BarangDetailPage({ params }: BarangDetailPageProps) {
   const router = useRouter();
   const [barang, setBarang] = useState<Barang | null>(null);
+  const [history, setHistory] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paramsId, setParamsId] = useState<string | null>(null);
 
@@ -79,9 +84,26 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
     }
   }, [paramsId]);
 
+  const loadHistory = useCallback(async () => {
+    if (!paramsId) return;
+    
+    setHistoryLoading(true);
+    try {
+      const response = await peminjamanApi.getHistoryByBarangId(paramsId);
+      if (response.status === 'success') {
+        setHistory(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to load history:', error);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [paramsId]);
+
   useEffect(() => {
     loadBarangDetail();
-  }, [loadBarangDetail]);
+    loadHistory();
+  }, [loadBarangDetail, loadHistory]);
 
   const handleBack = () => {
     router.push('/admin/barang');
@@ -111,6 +133,24 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
     } catch (error) {
       console.error('Error downloading QR code:', error);
     }
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusConfig = {
+      PENDING: { color: 'bg-yellow-100 text-yellow-800', label: 'Menunggu' },
+      DIPINJAM: { color: 'bg-blue-100 text-blue-800', label: 'Dipinjam' },
+      DIKEMBALIKAN: { color: 'bg-green-100 text-green-800', label: 'Dikembalikan' },
+      REJECTED: { color: 'bg-red-100 text-red-800', label: 'Ditolak' }
+    };
+    
+    const config = statusConfig[status as keyof typeof statusConfig] || 
+                  { color: 'bg-gray-100 text-gray-800', label: status };
+    
+    return (
+      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+        {config.label}
+      </span>
+    );
   };
 
   if (loading) {
@@ -245,7 +285,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
             {/* Timestamps */}
             <div className="bg-white rounded-lg shadow border">
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Riwayat</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Informasi Waktu</h2>
               </div>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -283,6 +323,97 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Riwayat Peminjaman */}
+            <div className="bg-white rounded-lg shadow border">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-2">
+                  <History className="w-5 h-5 text-gray-600" />
+                  <h2 className="text-lg font-semibold text-gray-900">Riwayat Peminjaman</h2>
+                </div>
+              </div>
+              <div className="p-6">
+                {historyLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="inline-flex items-center space-x-2">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-500"></div>
+                      <span className="text-gray-600">Memuat riwayat...</span>
+                    </div>
+                  </div>
+                ) : history.length === 0 ? (
+                  <div className="text-center py-8">
+                    <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">Belum ada riwayat peminjaman</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {history.map((item) => (
+                      <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <div className="flex-shrink-0">
+                              <User className="w-8 h-8 text-gray-400 bg-gray-100 rounded-full p-1.5" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium text-gray-900">{item.user.nama}</h4>
+                              <p className="text-sm text-gray-600">{item.user.email}</p>
+                            </div>
+                          </div>
+                          {getStatusBadge(item.status)}
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <span className="text-gray-600">Tanggal Pengajuan:</span>
+                            <p className="font-medium">{new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</p>
+                          </div>
+                          
+                          {item.tanggalDisetujui && (
+                            <div>
+                              <span className="text-gray-600">Tanggal Disetujui:</span>
+                              <p className="font-medium">{new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</p>
+                            </div>
+                          )}
+                          
+                          {item.tanggalDikembalikan && (
+                            <div>
+                              <span className="text-gray-600">Tanggal Dikembalikan:</span>
+                              <p className="font-medium">{new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</p>
+                            </div>
+                          )}
+                          
+                          {item.penanggungJawab && (
+                            <div>
+                              <span className="text-gray-600">Penanggung Jawab:</span>
+                              <p className="font-medium">{item.penanggungJawab}</p>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {item.catatan && (
+                          <div className="mt-3 pt-3 border-t border-gray-100">
+                            <div className="flex items-start space-x-2">
+                              <FileText className="w-4 h-4 text-gray-400 mt-0.5" />
+                              <div>
+                                <span className="text-sm text-gray-600">Catatan:</span>
+                                <p className="text-sm text-gray-900 mt-1">{item.catatan}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {item.approvedByUser && (
+                          <div className="mt-3 pt-3 border-t border-gray-100">
+                            <span className="text-sm text-gray-600">Disetujui oleh:</span>
+                            <p className="text-sm font-medium text-gray-900">{item.approvedByUser.nama}</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -337,28 +468,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
               </div>
             )}
 
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">Aksi Cepat</h2>
-              </div>
-              <div className="p-6 space-y-3">
-                <Button variant="primary" className="w-full" onClick={handleEdit}>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Barang
-                </Button>
-                <Button variant="outline" className="w-full">
-                  <Package className="w-4 h-4 mr-2" />
-                  Lihat Riwayat Peminjaman
-                </Button>
-                {barang.qrCodeUrl && (
-                  <Button variant="outline" className="w-full" onClick={handleDownloadQRCode}>
-                    <QrCode className="w-4 h-4 mr-2" />
-                    Download QR Code
-                  </Button>
-                )}
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>

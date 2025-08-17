@@ -287,13 +287,15 @@ export default function AdminBorrowingReportsPage() {
                 </div>
                 <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                   request.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                  request.status === 'DIPINJAM' ? 'bg-green-100 text-green-800' :
-                  request.status === 'REJECTED' ? 'bg-red-100 text-red-800' :
-                  'bg-blue-100 text-blue-800'
+                  request.status === 'DISETUJUI' ? 'bg-green-100 text-green-800' :
+                  request.status === 'DIPINJAM' ? 'bg-blue-100 text-blue-800' :
+                  request.status === 'DITOLAK' ? 'bg-red-100 text-red-800' :
+                  'bg-green-100 text-green-800'
                 }`}>
                   {request.status === 'PENDING' ? 'Menunggu' :
+                   request.status === 'DISETUJUI' ? 'Disetujui' :
                    request.status === 'DIPINJAM' ? 'Sedang Dipinjam' :
-                   request.status === 'REJECTED' ? 'Ditolak' :
+                   request.status === 'DITOLAK' ? 'Ditolak' :
                    'Dikembalikan'}
                 </span>
               </div>

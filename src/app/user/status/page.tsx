@@ -9,11 +9,7 @@ import {
   CheckCircle, 
   XCircle, 
   Calendar,
-  MapPin,
-  Tag,
-  Bookmark,
   Eye,
-  Filter,
   ClipboardList,
   AlertCircle
 } from 'lucide-react';
@@ -23,19 +19,20 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED', string> = {
+const statusLabels: Record<'ALL' | 'PENDING' | 'DISETUJUI' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
   ALL: "Semua",
-  PENDING: "Pending",
+  PENDING: "Menunggu",
+  DISETUJUI: "Disetujui",
   DIPINJAM: "Dipinjam",
-  REJECTED: "Ditolak",
-  RETURNED: 'Dikembalikan'
+  DITOLAK: "Ditolak",
+  DIKEMBALIKAN: 'Dikembalikan'
 };
 
 export default function UserStatusPage() {
   const { user } = useAuth();
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'REJECTED' | 'RETURNED'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DISETUJUI' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
 
   useEffect(() => {
     if (user) {
@@ -65,19 +62,25 @@ export default function UserStatusPage() {
         color: 'bg-yellow-100 text-yellow-800',
         bgColor: 'bg-yellow-50'
       },
+      'DISETUJUI': {
+        icon: <CheckCircle size={16} />,
+        text: 'Disetujui',
+        color: 'bg-green-100 text-green-800',
+        bgColor: 'bg-green-50'
+      },
       'DIPINJAM': {
         icon: <Package size={16} />,
         text: 'Sedang Dipinjam',
         color: 'bg-blue-100 text-blue-800',
         bgColor: 'bg-blue-50'
       },
-      'RETURNED': {
+      'DIKEMBALIKAN': {
         icon: <CheckCircle size={16} />,
         text: 'Dikembalikan',
         color: 'bg-green-100 text-green-800',
         bgColor: 'bg-green-50'
       },
-      'REJECTED': {
+      'DITOLAK': {
         icon: <XCircle size={16} />,
         text: 'Ditolak',
         color: 'bg-red-100 text-red-800',
@@ -100,9 +103,10 @@ export default function UserStatusPage() {
 
   const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
+  const approvedCount = peminjaman.filter(item => item.status === 'DISETUJUI').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
-  const rejectedCount = peminjaman.filter(item => item.status === 'REJECTED').length;
-  const returnedCount = peminjaman.filter(item => item.status === 'RETURNED').length;
+  const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
+  const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
 
   if (loading) {
     return (
@@ -118,7 +122,7 @@ export default function UserStatusPage() {
     <DashboardLayout title="Status Peminjaman">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
           {/* Total */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -155,6 +159,24 @@ export default function UserStatusPage() {
             </div>
           </div>
 
+          {/* Disetujui */}
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'DISETUJUI'
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('DISETUJUI')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Disetujui</p>
+                <p className="text-2xl font-bold text-green-800">{approvedCount}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+          </div>
+
           {/* Dipinjam */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -176,11 +198,11 @@ export default function UserStatusPage() {
           {/* Ditolak */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'REJECTED'
+              activeTab === 'DITOLAK'
                 ? 'border-red-500 bg-red-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => setActiveTab('REJECTED')}
+            onClick={() => setActiveTab('DITOLAK')}
           >
             <div className="flex items-center justify-between">
               <div>
@@ -194,11 +216,11 @@ export default function UserStatusPage() {
           {/* Dikembalikan */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'RETURNED'
+              activeTab === 'DIKEMBALIKAN'
                 ? 'border-green-500 bg-green-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => setActiveTab('RETURNED')}
+            onClick={() => setActiveTab('DIKEMBALIKAN')}
           >
             <div className="flex items-center justify-between">
               <div>
@@ -224,11 +246,13 @@ export default function UserStatusPage() {
               <div className="text-center py-12">
                 <Package size={48} className="mx-auto text-gray-400 mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {activeTab === 'REJECTED'
+                  {activeTab === 'DITOLAK'
                     ? 'Tidak ada permintaan yang ditolak'
-                    : activeTab === 'RETURNED'
+                    : activeTab === 'DIKEMBALIKAN'
                       ? 'Belum ada barang yang dikembalikan'
-                      : 'Belum ada permintaan peminjaman'}
+                      : activeTab === 'DISETUJUI'
+                        ? 'Belum ada permintaan yang disetujui'
+                        : 'Belum ada permintaan peminjaman'}
                 </h3>
                 <Link href="/dashboard">
                   <Button className="bg-blue-950 hover:bg-blue-900 text-white">
