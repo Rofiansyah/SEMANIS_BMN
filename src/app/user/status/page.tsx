@@ -58,69 +58,77 @@ export default function UserStatusPage() {
     }
   };
 
-      // Tambahkan fungsi exportHistory
-      const exportHistory = () => {
-        try {
-          // Debug data structure
-          console.log('Export data sample:', filteredPeminjaman[0]);
-          
-          // Simple CSV export
-          const headers = [
-            "Nama Barang",
-            "Kode Barang",
-            "Kategori",
-            "Merek",
-            "Lokasi",
-            "Status",
-            "Tanggal Pengajuan",
-            "Tanggal Selesai",
-          ];
-          const csvData = filteredPeminjaman.map((item) => {
-            const row = [
-              item.barang.nama,
-              item.barang.deskripsi,
-              item.barang.kodeBarang,
-              item.barang.kategori?.nama || "",
-              item.barang.merek?.nama || "",
-              item.barang.lokasi?.nama || "",
-              item.status === "DIKEMBALIKAN"
-                ? "Dikembalikan"
-                : item.status === "DITOLAK"
-                  ? "Ditolak"
-                  : item.status,
-              new Date(item.tanggalPengajuan).toLocaleDateString("id-ID"),
-              item.updatedAt
-                ? new Date(item.updatedAt).toLocaleDateString("id-ID")
-                : "",
-            ];
-            console.log("CSV row:", row);
-            return row;
-          });
-
-      const csvContent = [headers, ...csvData]
-        .map((row) => row.map((field) => `"${field}"`).join(","))
-        .join("\n");
-
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute(
-        "download",
-        `riwayat-peminjaman-${new Date().toISOString().split("T")[0]}.csv`
-      );
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success("Data riwayat berhasil diexport");
-    } catch (error) {
-      console.error("Error exporting history:", error);
-      toast.error("Gagal mengexport data riwayat");
+// Fungsi export history ke CSV
+const exportHistory = () => {
+  try {
+    if (!filteredPeminjaman || filteredPeminjaman.length === 0) {
+      toast.error("Tidak ada data untuk diexport");
+      return;
     }
-  };
 
+    // Header CSV
+    const headers = [
+      "Nama Barang",
+      "Deskripsi",
+      "Kode Barang",
+      "Kategori",
+      "Merek",
+      "Lokasi",
+      "Status",
+      "Tanggal Pengajuan",
+      "Tanggal Selesai",
+    ];
+
+    // Format tanggal (DD/MM/YYYY)
+    const formatDate = (dateString?: string) => {
+      if (!dateString) return "";
+      return new Date(dateString).toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    };
+
+    // Isi CSV
+    const csvData = filteredPeminjaman.map((item) => [
+      item.barang?.nama || "",
+      item.barang?.deskripsi || "",
+      item.barang?.kodeBarang || "",
+      item.barang?.kategori?.nama || "",
+      item.barang?.merek?.nama || "",
+      item.barang?.lokasi?.nama || "",
+      item.status === "DIKEMBALIKAN"
+        ? "Dikembalikan"
+        : item.status === "DITOLAK"
+        ? "Ditolak"
+        : item.status || "",
+      formatDate(item.tanggalPengajuan),
+      formatDate(item.updatedAt),
+    ]);
+
+    // Gabung header + data
+    const csvContent = [headers, ...csvData]
+      .map((row) => row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+
+    // Generate file CSV
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    // Buat link download
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `riwayat-peminjaman-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast.success("Data riwayat berhasil diexport");
+  } catch (error) {
+    console.error("Error exporting history:", error);
+    toast.error("Gagal mengexport data riwayat");
+  }
+};
 
   const getStatusInfo = (status: string) => {
     const statusMap = {
