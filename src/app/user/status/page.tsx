@@ -10,6 +10,7 @@ import {
   XCircle, 
   Calendar,
   Eye,
+  Download,
   ClipboardList,
   AlertCircle
 } from 'lucide-react';
@@ -297,7 +298,7 @@ export default function UserStatusPage() {
 
         {/* List */}
         <div className="bg-white rounded-lg shadow border">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
               {activeTab === 'ALL'
                 ? 'Semua Peminjaman'
@@ -309,6 +310,7 @@ export default function UserStatusPage() {
                 onClick={exportHistory}
                 className="bg-blue-950 hover:bg-blue-900 text-white"
               >
+                <Download size={16} />
                 Export CSV
               </Button>
 
