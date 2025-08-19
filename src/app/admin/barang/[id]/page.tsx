@@ -4,9 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
-import { TambahBarangModal, EditBarangModal } from '@/components/modals';
-import { barangApi, peminjamanApi, kategoriApi, merekApi, lokasiApi } from '@/lib/api';
-import type { Barang, Peminjaman, Kategori, Merek, Lokasi } from '@/types/api';
+import { barangApi, peminjamanApi } from '@/lib/api';
+import type { Barang, Peminjaman } from '@/types/api';
 import { 
   ArrowLeft,
   Package,
@@ -25,7 +24,6 @@ import {
   User,
   FileText
 } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 interface BarangDetailPageProps {
   params: Promise<{
@@ -59,67 +57,14 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [paramsId, setParamsId] = useState<string | null>(null);
-  const [barangList, setBarangList] = useState<Barang[]>([]);
-  const [kategoriList, setKategoriList] = useState<Kategori[]>([]);
-  const [merekList, setMerekList] = useState<Merek[]>([]);
-  const [lokasiList, setLokasiList] = useState<Lokasi[]>([]);
-  const [isTambahModalOpen, setIsTambahModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedBarang, setSelectedBarang] = useState<Barang | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');  
 
   useEffect(() => {
-    loadAllData();
     const getParams = async () => {
       const resolvedParams = await params;
       setParamsId(resolvedParams.id);
     };
     getParams();
   }, [params]);
-
-  const loadAllData = async () => {
-    try {
-      const [barangRes, kategoriRes, merekRes, lokasiRes] = await Promise.all([
-        barangApi.getAll(),
-        kategoriApi.getAll(),
-        merekApi.getAll(),
-        lokasiApi.getAll()
-      ]);
-
-      if (barangRes.success) setBarangList(barangRes.data);
-      if (kategoriRes.success) setKategoriList(kategoriRes.data);
-      if (merekRes.success) setMerekList(merekRes.data);
-      if (lokasiRes.success) setLokasiList(lokasiRes.data);
-    } catch (error) {
-      console.error('Failed to load data:', error);
-      toast.error('Gagal memuat data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleTambahBarangSuccess = () => {
-    loadAllData();
-  };
-
-  const openCreateModal = () => {
-    setIsTambahModalOpen(true);
-  };
-
-  const openEditModal = (barang: Barang) => {
-    setSelectedBarang(barang);
-    setIsEditModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedBarang(null);
-  };
-
-  const handleEditBarangSuccess = () => {
-    loadAllData();
-    closeEditModal();
-  };
 
   const loadBarangDetail = useCallback(async () => {
     if (!paramsId) return;
@@ -162,13 +107,6 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
 
   const handleBack = () => {
     router.push('/admin/barang');
-  };
-
-  const handleEdit = () => {
-    // Navigate to edit mode (you can implement this later)
-    if (paramsId) {
-      router.push(`/admin/barang/${paramsId}/edit`);
-    }
   };
 
   const handleDownloadQRCode = async () => {
@@ -255,10 +193,6 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
               <p className="text-gray-600 mt-1">Detail lengkap barang inventaris</p>
             </div>
           </div>
-          <Button variant="primary" onClick={() => openEditModal(barang)} className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
-            <Edit className="w-4 h-4 mr-2 " />
-            Edit Barang
-          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
