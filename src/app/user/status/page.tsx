@@ -432,24 +432,24 @@ export default function UserStatusPage() {
                     <div className="space-y-1.5 text-sm text-gray-700">
                       <div className="flex items-center gap-2">
                         <Calendar size={14} />
-                        <span>Diajukan t: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
+                        <span>Diajukan      : {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
                       </div>
                       {item.tanggalDisetujui && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Disetujui: {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
+                          <span>Disetujui   : {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                       {item.tanggalDipinjam && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
+                          <span>Dipinjam    : {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                       {item.tanggalDikembalikan && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
+                          <span>Dikembalikan  : {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                     </div>
