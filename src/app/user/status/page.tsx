@@ -427,29 +427,29 @@ export default function UserStatusPage() {
                   </div>
 
                   {/* Timeline */}
-                  <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                  <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
                     <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
                     <div className="space-y-1.5 text-sm text-gray-700">
                       <div className="flex items-center gap-2">
                         <Calendar size={14} />
-                        <span>Diajukan      : {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
+                        <span>Diajukan : {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
                       </div>
                       {item.tanggalDisetujui && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Disetujui   : {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
+                          <span>Disetujui : {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                       {item.tanggalDipinjam && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Dipinjam    : {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
+                          <span>Dipinjam : {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                       {item.tanggalDikembalikan && (
                         <div className="flex items-center gap-2">
                           <Calendar size={14} />
-                          <span>Dikembalikan  : {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
+                          <span>Dikembalikan : {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                     </div>
@@ -457,11 +457,11 @@ export default function UserStatusPage() {
 
                   {/* Dokumentasi */}
                   {(item.fotoPinjam || item.fotoKembali) && (
-                    <div className="mb-4">
+                    <div className="mb-4 border-b border-gray-200 pb-3">
                       <h4 className="font-medium text-gray-900 mb-2">Dokumentasi</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <ul className="list-disc pl-5 grid grid-cols-1 md:grid-cols-2 gap-3">
                         {item.fotoPinjam && (
-                          <div>
+                          <li>
                             <p className="text-sm text-gray-700 font-medium mb-1">Foto Saat Dipinjam</p>
                             <img
                               src={item.fotoPinjam}
@@ -469,10 +469,10 @@ export default function UserStatusPage() {
                               className="w-full h-40 object-cover rounded-lg cursor-pointer"
                               onClick={() => window.open(item.fotoPinjam!, "_blank")}
                             />
-                          </div>
+                          </li>
                         )}
                         {item.fotoKembali && (
-                          <div>
+                          <li>
                             <p className="text-sm text-gray-700 font-medium mb-1">Foto Saat Dikembalikan</p>
                             <img
                               src={item.fotoKembali}
@@ -480,15 +480,15 @@ export default function UserStatusPage() {
                               className="w-full h-40 object-cover rounded-lg cursor-pointer"
                               onClick={() => window.open(item.fotoKembali!, "_blank")}
                             />
-                          </div>
+                          </li>
                         )}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {/* Catatan */}
                   {item.catatan && (
-                    <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                    <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
                       <h4 className="font-medium text-gray-900 mb-1">Catatan</h4>
                       <p className="text-sm text-gray-700">{item.catatan}</p>
                     </div>
@@ -498,10 +498,10 @@ export default function UserStatusPage() {
                   {(item.penanggungJawab || item.approvedByUser) && (
                     <div className="pt-3 border-t border-gray-200 text-sm text-gray-700">
                       {item.penanggungJawab && (
-                        <p><span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}</p>
+                        <p><span className="font-medium">Penanggung Jawab :</span> {item.penanggungJawab}</p>
                       )}
                       {item.approvedByUser && (
-                        <p><span className="font-medium">Diproses oleh:</span> {item.approvedByUser.nama}</p>
+                        <p><span className="font-medium">Diproses oleh  :</span> {item.approvedByUser.nama}</p>
                       )}
                     </div>
                   )}
