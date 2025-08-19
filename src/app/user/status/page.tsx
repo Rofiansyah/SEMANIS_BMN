@@ -78,10 +78,11 @@ export default function UserStatusPage() {
           const csvData = filteredPeminjaman.map((item) => {
             const row = [
               item.barang.nama,
+              item.barang.deskripsi,
               item.barang.kodeBarang,
               item.barang.kategori?.nama || "",
               item.barang.merek?.nama || "",
-              item.barang.lokasi.nama || "",
+              item.barang.lokasi?.nama || "",
               item.status === "DIKEMBALIKAN"
                 ? "Dikembalikan"
                 : item.status === "DITOLAK"
