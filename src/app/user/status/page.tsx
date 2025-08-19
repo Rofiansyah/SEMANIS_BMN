@@ -432,7 +432,7 @@ export default function UserStatusPage() {
                     <div className="space-y-1.5 text-sm text-gray-700">
                       <div className="flex items-center gap-2">
                         <Calendar size={14} />
-                        <span>Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
+                        <span>Diajukan t: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
                       </div>
                       {item.tanggalDisetujui && (
                         <div className="flex items-center gap-2">
@@ -462,7 +462,7 @@ export default function UserStatusPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {item.fotoPinjam && (
                           <div>
-                            <p className="text-sm font-medium mb-1">Foto Saat Dipinjam</p>
+                            <p className="text-sm text-gray-700 font-medium mb-1">Foto Saat Dipinjam</p>
                             <img
                               src={item.fotoPinjam}
                               alt="Foto saat dipinjam"
@@ -473,7 +473,7 @@ export default function UserStatusPage() {
                         )}
                         {item.fotoKembali && (
                           <div>
-                            <p className="text-sm font-medium mb-1">Foto Saat Dikembalikan</p>
+                            <p className="text-sm text-gray-700 font-medium mb-1">Foto Saat Dikembalikan</p>
                             <img
                               src={item.fotoKembali}
                               alt="Foto saat dikembalikan"
