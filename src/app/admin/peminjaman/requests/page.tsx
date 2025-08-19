@@ -447,11 +447,20 @@ export default function AdminBorrowingRequestsPage() {
                         <div className="flex items-center justify-center space-x-2">
                           {request.status === 'PENDING' && (
                             <>
+                          <Button
+                            size="sm"
+                            variant="outlinesecond"
+                            className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                            onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                          >
+                            <Eye className="w-3 h-3 mr-1" />
+                            Detail
+                          </Button>
                               <Button
                                 size="sm"
-                                variant="primary"
+                                variant="outline"
+                                className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                                 onClick={() => handleApprove(request.id)}
-                                className="text-xs"
                               >
                                 <CheckCircle className="w-3 h-3 mr-1" />
                                 Setujui
@@ -470,23 +479,14 @@ export default function AdminBorrowingRequestsPage() {
                           {request.status === 'DIPINJAM' && (
                             <Button
                               size="sm"
-                              variant="primary"
+                              variant="outline"
+                              className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                               onClick={() => handleOpenReturnModal(request)}
-                              className="text-xs bg-blue-600 hover:bg-blue-700"
                             >
                               <RotateCcw className="w-3 h-3 mr-1" />
-                              Proses Pengembalian
+                              Pengembalian
                             </Button>
                           )}
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-xs"
-                            onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                          >
-                            <Eye className="w-3 h-3 mr-1" />
-                            Detail
-                          </Button>
                         </div>
                       </td>
                     </tr>
