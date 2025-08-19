@@ -266,7 +266,7 @@ const loadStatistics = async () => {
                   Barang Kondisi Rusak Ringan
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusakRingan}
+                  {loadingStats ? "..." : statistics?.barangRusakRingan || 0}
                 </p>
               </div>
             </div>
@@ -283,7 +283,7 @@ const loadStatistics = async () => {
                   Barang Kondisi Rusak Berat
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusakBerat}
+                  {loadingStats ? "..." : statistics?.barangRusakBerat || 0}
                 </p>
               </div>
             </div>
