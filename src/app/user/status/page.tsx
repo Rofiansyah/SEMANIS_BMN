@@ -410,15 +410,15 @@ export default function UserStatusPage() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Tag className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.kategori.nama}</span>
+                        <span className="text-sm text-gray-600">{item.barang.kategori?.nama}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Building className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.merek.nama}</span>
+                        <span className="text-sm text-gray-600">{item.barang.merek?.nama}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <MapPin className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.lokasi.nama}</span>
+                        <span className="text-sm text-gray-600">{item.barang.lokasi?.nama}</span>
                       </div>
                     </div>                   
 
