@@ -69,7 +69,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
 
   const userMenuItems: SidebarItem[] = [
     { label: 'Dashboard', href: '/dashboard', icon: <Home size={20} /> },
-    { label: 'Cari Barang', href: '/user/status', icon: <ClipboardList size={20} /> },
+    { label: 'Peminjaman Barang', href: '/user/status', icon: <ClipboardList size={20} /> },
     // {
     //   label: 'Peminjaman',
     //   icon: <ClipboardList size={20} />,

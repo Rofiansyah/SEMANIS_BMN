@@ -81,7 +81,7 @@ export default function UserStatusPage() {
               item.barang.kodeBarang,
               item.barang.kategori?.nama || "",
               item.barang.merek?.nama || "",
-              item.barang.lokasi?.nama || "",
+              item.barang.lokasi.nama || "",
               item.status === "DIKEMBALIKAN"
                 ? "Dikembalikan"
                 : item.status === "DITOLAK"
@@ -393,7 +393,7 @@ export default function UserStatusPage() {
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 line-clamp-2">
-                          {item.barang.deskripsi}
+                          {item.barang?.deskripsi}
                         </p>
                       </div>
                     </div>
