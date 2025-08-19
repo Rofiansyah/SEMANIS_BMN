@@ -12,6 +12,9 @@ import {
   Eye,
   Download,
   ClipboardList,
+  Tag,
+  Building,
+  MapPin,
   AlertCircle
 } from 'lucide-react';
 import api from '@/lib/api';
@@ -388,7 +391,7 @@ export default function UserStatusPage() {
                               </span>
                             </div>
                             <p className="text-sm text-gray-600 font-mono mb-2">
-                              Kode: {item.barang.kodeBarang}
+                              {item.barang.deskripsi}
                             </p>
                           </div>
                         </div>
@@ -399,6 +402,25 @@ export default function UserStatusPage() {
                           </Button>
                         </Link>
                       </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                      <div className="flex items-center space-x-2">
+                        <Package className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm text-gray-600">Kode: {item.barang.kodeBarang}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Tag className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm text-gray-600">{item.barang.kategori.nama}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Building className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm text-gray-600">{item.barang.merek.nama}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <MapPin className="w-4 h-4 text-gray-500" />
+                        <span className="text-sm text-gray-600">{item.barang.lokasi.nama}</span>
+                      </div>
+                    </div>                   
 
                       {/* Timeline */}
                       <div className="bg-white rounded-lg p-4 mb-4">
