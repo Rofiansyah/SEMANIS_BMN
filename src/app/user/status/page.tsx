@@ -23,10 +23,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-const statusLabels: Record<'ALL' | 'PENDING' | 'DISETUJUI' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
+const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
   ALL: "Semua",
   PENDING: "Menunggu",
-  DISETUJUI: "Disetujui",
   DIPINJAM: "Dipinjam",
   DITOLAK: "Ditolak",
   DIKEMBALIKAN: 'Dikembalikan'
@@ -36,7 +35,7 @@ export default function UserStatusPage() {
   const { user } = useAuth();
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DISETUJUI' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
+  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
 
   useEffect(() => {
     if (user) {
@@ -138,12 +137,6 @@ const exportHistory = () => {
         color: 'bg-yellow-100 text-yellow-800',
         bgColor: 'bg-yellow-50'
       },
-      'DISETUJUI': {
-        icon: <CheckCircle size={16} />,
-        text: 'Disetujui',
-        color: 'bg-green-100 text-green-800',
-        bgColor: 'bg-green-50'
-      },
       'DIPINJAM': {
         icon: <Package size={16} />,
         text: 'Sedang Dipinjam',
@@ -179,7 +172,6 @@ const exportHistory = () => {
 
   const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
-  const approvedCount = peminjaman.filter(item => item.status === 'DISETUJUI').length;
   const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
   const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
   const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
@@ -195,10 +187,10 @@ const exportHistory = () => {
   }
 
   return (
-    <DashboardLayout title="Status Peminjaman">
+    <DashboardLayout title="Peminjaman Barang">
       <div className="space-y-6">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -232,24 +224,6 @@ const exportHistory = () => {
                 <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-
-          {/* Disetujui */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DISETUJUI'
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DISETUJUI')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Disetujui</p>
-                <p className="text-2xl font-bold text-green-800">{approvedCount}</p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
           </div>
 
