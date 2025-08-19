@@ -307,10 +307,11 @@ export default function UserStatusPage() {
 
             {/* Tombol Export CSV */}
               <Button
+                variant="primary"
                 onClick={exportHistory}
-                className="bg-blue-950 hover:bg-blue-900 text-white"
+                className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
               >
-                <Download size={16} />
+                <Download className="w-4 h-4 mr-2" size={16} />
                 Export CSV
               </Button>
 
