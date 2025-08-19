@@ -359,7 +359,7 @@ export default function UserStatusPage() {
                       className={`rounded-lg border-2 p-6 ${statusInfo.bgColor} border-gray-200`}
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
+                        <div className="flex items-start gap-4 flex-1">
                           {/* Item Photo */}
                           <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                             {item.barang.fotoUrl ? (
@@ -373,17 +373,24 @@ export default function UserStatusPage() {
                                 <Package size={24} className="text-gray-400" />
                               </div>
                             )}
-                          </div>                        
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="font-semibold text-gray-900">{item.barang.nama}</h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}>
-                              {statusInfo.icon}
-                              {statusInfo.text}
-                            </span>
+                          </div>   
+
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="font-semibold text-gray-900">
+                                {item.barang.nama}
+                              </h3>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
+                              >
+                                {statusInfo.icon}
+                                {statusInfo.text}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 font-mono mb-2">
+                              Kode: {item.barang.kodeBarang}
+                            </p>
                           </div>
-                          <p className="text-sm text-gray-600 font-mono mb-2">
-                            Kode: {item.barang.kodeBarang}
-                          </p>
                         </div>
                         <Link href={`/user/items/${item.barang.id}`}>
                           <Button size="sm" variant="secondary" className="flex items-center gap-1">
