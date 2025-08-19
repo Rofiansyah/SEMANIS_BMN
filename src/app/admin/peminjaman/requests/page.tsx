@@ -1,362 +1,511 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
+import { peminjamanApi } from '@/lib/api';
+import type { Peminjaman } from '@/types/api';
 import { 
-  Clock, 
-  Package, 
+  ClipboardList, 
   CheckCircle, 
   XCircle, 
+  Eye,
   Calendar,
-  Download,
-  ClipboardList,
-  AlertCircle
+  User,
+  Package,
+  Clock,
+  AlertCircle,
+  Filter,
+  RotateCcw,
+  Camera
 } from 'lucide-react';
-import api from '@/lib/api';
-import { Peminjaman } from '@/types/api';
-import { useAuth } from '@/contexts/AuthContext';
-import Link from 'next/link';
 import toast from 'react-hot-toast';
 
-const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
-  ALL: "Semua",
-  PENDING: "Menunggu",
-  DIPINJAM: "Dipinjam",
-  DITOLAK: "Ditolak",
+const statusColors = {
+  PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  DISETUJUI: 'bg-green-100 text-green-800 border-green-200',
+  DIPINJAM: 'bg-blue-100 text-blue-800 border-blue-200',
+  DITOLAK: 'bg-red-100 text-red-800 border-red-200',
+  DIKEMBALIKAN: 'bg-green-100 text-green-800 border-green-200'
+};
+
+const statusLabels = {
+  PENDING: 'Menunggu',
+  DISETUJUI: 'Disetujui',
+  DIPINJAM: 'Sedang Dipinjam',
+  DITOLAK: 'Ditolak',
   DIKEMBALIKAN: 'Dikembalikan'
 };
 
-export default function UserStatusPage() {
-  const { user } = useAuth();
-  const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
+interface ReturnModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (penanggungJawab: string, catatan: string, foto?: File) => Promise<void>;
+  peminjaman?: Peminjaman | null;
+  loading?: boolean;
+}
+
+function ReturnModal({ isOpen, onClose, onSubmit, peminjaman, loading }: ReturnModalProps) {
+  const [penanggungJawab, setPenanggungJawab] = useState('');
+  const [catatan, setCatatan] = useState('');
+  const [foto, setFoto] = useState<File | null>(null);
 
   useEffect(() => {
-    if (user) {
-      fetchPeminjaman();
+    if (!isOpen) {
+      setPenanggungJawab('');
+      setCatatan('');
+      setFoto(null);
     }
-  }, [user]);
+  }, [isOpen]);
 
-  const fetchPeminjaman = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!penanggungJawab.trim()) {
+      toast.error('Nama penanggung jawab harus diisi');
+      return;
+    }
+    if (!catatan.trim()) {
+      toast.error('Catatan pengembalian harus diisi');
+      return;
+    }
+
+    await onSubmit(penanggungJawab.trim(), catatan.trim(), foto || undefined);
+  };
+
+  if (!isOpen || !peminjaman) return null;
+
+  return (
+    <div 
+      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border-0">
+        <h3 className="text-lg font-semibold mb-4">Proses Pengembalian</h3>
+        
+        {/* Request Info */}
+        <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="flex items-center space-x-3 mb-2">
+            <User className="w-4 h-4 text-gray-500" />
+            <span className="text-sm font-medium">{peminjaman.user.nama}</span>
+          </div>
+          <div className="flex items-center space-x-3 mb-2">
+            <Package className="w-4 h-4 text-gray-500" />
+            <span className="text-sm">{peminjaman.barang.nama}</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Calendar className="w-4 h-4 text-gray-500" />
+            <span className="text-sm text-gray-600">
+              Dipinjam: {peminjaman.tanggalDipinjam ? new Date(peminjaman.tanggalDipinjam).toLocaleDateString('id-ID') : '-'}
+            </span>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Nama Penanggung Jawab *
+            </label>
+            <input
+              type="text"
+              value={penanggungJawab}
+              onChange={(e) => setPenanggungJawab(e.target.value)}
+              placeholder="Nama lengkap penanggung jawab"
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Catatan Pengembalian *
+            </label>
+            <textarea
+              value={catatan}
+              onChange={(e) => setCatatan(e.target.value)}
+              placeholder="Kondisi barang saat dikembalikan, catatan khusus, dll..."
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500"
+              rows={3}
+              required
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Foto Dokumentasi (Opsional)
+            </label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFoto(e.target.files?.[0] || null)}
+                className="hidden"
+                id="foto-return-upload"
+              />
+              <label htmlFor="foto-return-upload" className="cursor-pointer flex flex-col items-center">
+                <Camera className="w-8 h-8 text-gray-400 mb-2" />
+                <span className="text-sm text-gray-600">
+                  {foto ? foto.name : 'Klik untuk upload foto'}
+                </span>
+              </label>
+            </div>
+          </div>
+          
+          <div className="flex space-x-3 mt-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="flex-1"
+              disabled={loading}
+            >
+              Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={loading}
+              className="flex-1"
+            >
+              {loading ? 'Memproses...' : 'Proses Pengembalian'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default function AdminBorrowingRequestsPage() {
+  const router = useRouter();
+  const [requests, setRequests] = useState<Peminjaman[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [selectedPeminjamanForReturn, setSelectedPeminjamanForReturn] = useState<Peminjaman | null>(null);
+  const [returnLoading, setReturnLoading] = useState(false);
+
+  useEffect(() => {
+    loadRequests();
+  }, []);
+
+  const loadRequests = async () => {
     try {
-      setLoading(true);
-      const response = await api.get('/peminjaman/my-requests');
-      const data = response.data.data || response.data || [];
-      setPeminjaman(data);
+      const response = await peminjamanApi.getAllRequests();
+      if (response.status === 'success') {
+        setRequests(response.data);
+      }
     } catch (error) {
-      console.error('Error fetching peminjaman:', error);
-      toast.error('Gagal memuat status peminjaman');
+      console.error('Failed to load borrowing requests:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Fungsi export history ke CSV
-  const exportHistory = () => {
+  const handleApprove = async (id: string) => {
     try {
-      const filtered =
-        activeTab === 'ALL'
-          ? peminjaman
-          : peminjaman.filter(item => item.status === activeTab);
+      const penanggungJawab = prompt('Masukkan nama penanggung jawab:');
+      if (!penanggungJawab) return;
 
-      if (!filtered || filtered.length === 0) {
-        toast.error("Tidak ada data untuk diexport");
-        return;
+      const response = await peminjamanApi.approve(id, { penanggungJawab });
+      if (response.status === 'success') {
+        toast.success('Permintaan berhasil disetujui! ✅');
+        loadRequests();
       }
-
-      const headers = [
-        "Nama Barang",
-        "Deskripsi",
-        "Kode Barang",
-        "Kategori",
-        "Merek",
-        "Lokasi",
-        "Status",
-        "Tanggal Pengajuan",
-        "Tanggal Selesai",
-      ];
-
-      const formatDate = (dateString?: string) => {
-        if (!dateString) return "";
-        return new Date(dateString).toLocaleDateString("id-ID", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-      };
-
-      const csvData = filtered.map((item) => [
-        item.barang?.nama || "",
-        item.barang?.deskripsi || "",
-        item.barang?.kodeBarang || "",
-        item.barang?.kategori?.nama || "",
-        item.barang?.merek?.nama || "",
-        item.barang?.lokasi?.nama || "",
-        item.status === "DIKEMBALIKAN"
-          ? "Dikembalikan"
-          : item.status === "DITOLAK"
-          ? "Ditolak"
-          : item.status || "",
-        formatDate(item.tanggalPengajuan),
-        formatDate(item.updatedAt),
-      ]);
-
-      const csvContent = [headers, ...csvData]
-        .map((row) => row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(","))
-        .join("\n");
-
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `riwayat-peminjaman-${new Date().toISOString().split("T")[0]}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success("Data riwayat berhasil diexport");
     } catch (error) {
-      console.error("Error exporting history:", error);
-      toast.error("Gagal mengexport data riwayat");
+      console.error('Failed to approve request:', error);
+      toast.error('Gagal menyetujui permintaan');
     }
   };
 
-  const getStatusInfo = (status: string) => {
-    const statusMap = {
-      'PENDING': {
-        icon: <Clock size={16} />,
-        text: 'Menunggu Persetujuan',
-        color: 'bg-yellow-100 text-yellow-800',
-        bgColor: 'bg-yellow-50'
-      },
-      'DIPINJAM': {
-        icon: <Package size={16} />,
-        text: 'Sedang Dipinjam',
-        color: 'bg-blue-100 text-blue-800',
-        bgColor: 'bg-blue-50'
-      },
-      'DIKEMBALIKAN': {
-        icon: <CheckCircle size={16} />,
-        text: 'Dikembalikan',
-        color: 'bg-green-100 text-green-800',
-        bgColor: 'bg-green-50'
-      },
-      'DITOLAK': {
-        icon: <XCircle size={16} />,
-        text: 'Ditolak',
-        color: 'bg-red-100 text-red-800',
-        bgColor: 'bg-red-50'
-      }
-    };
+  const handleReject = async (id: string) => {
+    try {
+      const catatan = prompt('Masukkan alasan penolakan:');
+      if (!catatan) return;
 
-    return statusMap[status as keyof typeof statusMap] || {
-      icon: <AlertCircle size={16} />,
-      text: status,
-      color: 'bg-gray-100 text-gray-800',
-      bgColor: 'bg-gray-50'
-    };
+      const response = await peminjamanApi.reject(id, { catatan });
+      if (response.status === 'success') {
+        toast.success('Permintaan berhasil ditolak! ❌');
+        loadRequests();
+      }
+    } catch (error) {
+      console.error('Failed to reject request:', error);
+      toast.error('Gagal menolak permintaan');
+    }
   };
 
-  const filteredPeminjaman =
-    activeTab === 'ALL'
-      ? peminjaman
-      : peminjaman.filter(item => item.status === activeTab);
+  const handleOpenReturnModal = (peminjaman: Peminjaman) => {
+    setSelectedPeminjamanForReturn(peminjaman);
+    setIsReturnModalOpen(true);
+  };
 
-  const allCount = peminjaman.length;
-  const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
-  const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
-  const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
-  const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
+  const handleCloseReturnModal = () => {
+    setSelectedPeminjamanForReturn(null);
+    setIsReturnModalOpen(false);
+  };
 
-  if (loading) {
-    return (
-      <DashboardLayout title="Status Peminjaman">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+  const handleProcessReturn = async (penanggungJawab: string, catatan: string, foto?: File) => {
+    if (!selectedPeminjamanForReturn) return;
+    
+    setReturnLoading(true);
+    try {
+      const response = await peminjamanApi.processReturn(selectedPeminjamanForReturn.id, {
+        penanggungJawab,
+        catatan,
+        fotoKembali: foto
+      });
+
+      if (response.status === 'success') {
+        toast.success('Pengembalian berhasil diproses! 📦');
+        handleCloseReturnModal();
+        loadRequests();
+      }
+    } catch (error) {
+      console.error('Failed to process return:', error);
+      toast.error('Gagal memproses pengembalian');
+    } finally {
+      setReturnLoading(false);
+    }
+  };
+
+  const filteredRequests = requests.filter(request => 
+    selectedStatus === 'ALL' || request.status === selectedStatus
+  );
+
+  const getRequestCount = (status: string) => {
+    if (status === 'ALL') return requests.length;
+    return requests.filter(req => req.status === status).length;
+  };
 
   return (
-    <DashboardLayout title="Peminjaman Barang">
+    <DashboardLayout title="Kelola Peminjaman">
       <div className="space-y-6">
-        {/* Statistics Cards */}
+        {/* Header Section */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Kelola Peminjaman</h1>
+            <p className="text-gray-600 mt-1">Kelola semua peminjaman barang - dari pengajuan hingga pengembalian</p>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Total */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'ALL'
-                ? 'border-gray-500 bg-gray-100'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('ALL')}
-          >
+          <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            selectedStatus === 'ALL' ? 'border-gray-700 bg-gray-200' : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setSelectedStatus('ALL')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Permintaan</p>
-                <p className="text-2xl font-bold text-gray-900">{allCount}</p>
+                <p className="text-2xl font-bold text-gray-900">{getRequestCount('ALL')}</p>
               </div>
               <ClipboardList className="w-8 h-8 text-gray-700" />
             </div>
           </div>
 
-          {/* Pending */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'PENDING'
-                ? 'border-yellow-500 bg-yellow-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('PENDING')}
-          >
+          <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            selectedStatus === 'PENDING' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setSelectedStatus('PENDING')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Menunggu</p>
-                <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
+                <p className="text-2xl font-bold text-yellow-600">{getRequestCount('PENDING')}</p>
               </div>
-              <Clock className="w-8 h-8 text-yellow-600" />
+              <Clock className="w-8 h-8 text-yellow-400" />
             </div>
           </div>
 
-          {/* Dipinjam */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIPINJAM'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DIPINJAM')}
-          >
+          <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            selectedStatus === 'DIPINJAM' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setSelectedStatus('DIPINJAM')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
+                <p className="text-2xl font-bold text-blue-600">{getRequestCount('DIPINJAM')}</p>
               </div>
-              <Package className="w-8 h-8 text-blue-600" />
+              <Package className="w-8 h-8 text-blue-400" />
             </div>
           </div>
 
-          {/* Ditolak */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DITOLAK'
-                ? 'border-red-500 bg-red-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DITOLAK')}
-          >
+          <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            selectedStatus === 'REJECTED' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setSelectedStatus('REJECTED')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Ditolak</p>
-                <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
+                <p className="text-2xl font-bold text-red-600">{getRequestCount('REJECTED')}</p>
               </div>
-              <XCircle className="w-8 h-8 text-red-600" />
+              <XCircle className="w-8 h-8 text-red-400" />
             </div>
-          </div>   
+          </div>
 
-          {/* Dikembalikan */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIKEMBALIKAN'
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DIKEMBALIKAN')}
-          >
+          <div className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            selectedStatus === 'RETURNED' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-gray-300'
+          }`}
+          onClick={() => setSelectedStatus('RETURNED')}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Dikembalikan</p>
-                <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
+                <p className="text-2xl font-bold text-green-600">{getRequestCount('RETURNED')}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </div>
-          </div>  
+          </div>
         </div>
 
-        {/* Data Table / Card */}
-        <div className="bg-white rounded-xl shadow border">
-          {/* Header */}
-          <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {activeTab === 'ALL'
-                ? 'Semua Peminjaman'
-                : `Peminjaman ${statusLabels[activeTab]}`}
-            </h2>
-
-            <Button
-              variant="primary"
-              onClick={exportHistory}
-              className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white flex items-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              Export CSV
-            </Button>
+        {/* Requests Table */}
+        <div className="bg-white rounded-lg shadow border">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-900">
+                {selectedStatus === 'ALL' ? 'Semua Peminjaman' : `Peminjaman ${statusLabels[selectedStatus as keyof typeof statusLabels]}`}
+              </h2>
+              <div className="flex items-center space-x-2">
+                <Filter className="w-4 h-4 text-gray-400" />
+                <span className="text-sm text-gray-500">Filter: {selectedStatus}</span>
+              </div>
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="p-4 md:p-6">
-            {filteredPeminjaman.length === 0 ? (
-              <div className="text-center py-12">
-                <Package size={48} className="mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Tidak ada data {statusLabels[activeTab]}
-                </h3>
+          {loading ? (
+            <div className="p-8 text-center">
+              <div className="inline-flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
+                <span className="text-gray-600">Memuat data...</span>
               </div>
-            ) : (
-              <div className="space-y-6">
-                {filteredPeminjaman.map((item) => {
-                  const statusInfo = getStatusInfo(item.status);
-                  return (
-                    <div
-                      key={item.id}
-                      className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition ${statusInfo.bgColor}`}
-                    >
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                        <div className="flex items-start gap-4 flex-1">
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                            {item.barang.fotoUrl ? (
-                              <img
-                                src={item.barang.fotoUrl}
-                                alt={item.barang.nama}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                <Package size={24} className="text-gray-400" />
-                              </div>
-                            )}
+            </div>
+          ) : filteredRequests.length === 0 ? (
+            <div className="p-8 text-center">
+              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">Tidak ada permintaan ditemukan</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Peminjam</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Barang</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Tanggal Request</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Status</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-900">Catatan</th>
+                    <th className="text-center py-3 px-4 font-medium text-gray-900">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredRequests.map((request) => (
+                    <tr key={request.id} className="hover:bg-gray-50">
+                      <td className="py-4 px-4">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                            <User className="w-4 h-4 text-gray-600" />
                           </div>
-                          <div className="flex-1">
-                            <div className="flex flex-wrap items-center gap-2 mb-1">
-                              <h3 className="font-semibold text-gray-900">
-                                {item.barang.nama}
-                              </h3>
-                              <span className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}>
-                                {statusInfo.icon}
-                                {statusInfo.text}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-600 line-clamp-2">
-                              {item.barang?.deskripsi}
-                            </p>
+                          <div>
+                            <p className="font-medium text-gray-900">{request.user.nama}</p>
+                            <p className="text-sm text-gray-500">{request.user.email}</p>
                           </div>
                         </div>
-                        <Link href={`/user/items/${item.barang.id}`}>
-                          <Button size="sm" variant="outline">Detail</Button>
-                        </Link>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center space-x-3">
+                          <Package className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <p className="font-medium text-gray-900">{request.barang.nama}</p>
+                            <p className="text-sm text-gray-500">{request.barang.kodeBarang}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="w-4 h-4 text-gray-400" />
+                          <span className="text-sm text-gray-600">
+                            {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full border ${
+                          statusColors[request.status]
+                        }`}>
+                          {statusLabels[request.status]}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        <p className="text-sm text-gray-600 max-w-xs truncate" title={request.catatan}>
+                          {request.catatan}
+                        </p>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center justify-center space-x-2">
+                          {request.status === 'PENDING' && (
+                            <>
+                              <Button
+                                size="sm"
+                                variant="primary"
+                                onClick={() => handleApprove(request.id)}
+                                className="text-xs"
+                              >
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Setujui
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="danger"
+                                onClick={() => handleReject(request.id)}
+                                className="text-xs"
+                              >
+                                <XCircle className="w-3 h-3 mr-1" />
+                                Tolak
+                              </Button>
+                            </>
+                          )}
+                          {request.status === 'DIPINJAM' && (
+                            <Button
+                              size="sm"
+                              variant="primary"
+                              onClick={() => handleOpenReturnModal(request)}
+                              className="text-xs bg-blue-600 hover:bg-blue-700"
+                            >
+                              <RotateCcw className="w-3 h-3 mr-1" />
+                              Proses Pengembalian
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-xs"
+                            onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                          >
+                            <Eye className="w-3 h-3 mr-1" />
+                            Detail
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Return Modal */}
+      <ReturnModal
+        isOpen={isReturnModalOpen}
+        onClose={handleCloseReturnModal}
+        onSubmit={handleProcessReturn}
+        peminjaman={selectedPeminjamanForReturn}
+        loading={returnLoading}
+      />
     </DashboardLayout>
   );
 }
