@@ -249,8 +249,7 @@ export interface PeminjamanDetailResponse {
 export interface Statistics {
   totalBarang: number;
   totalUserRoleUsers: number;
-  barangRusakRingan: number;
-  barangRusakBerat: number;
+  barangRusak: number;
   barangBaik: number;
 }
 

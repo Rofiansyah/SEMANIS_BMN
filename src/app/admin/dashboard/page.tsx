@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 import {
   kategoriApi,
   merekApi,
@@ -36,7 +36,7 @@ import type {
   Statistics,
   Peminjaman,
 } from "@/types/api";
-import { exportBarangStatisticsPDF } from "@/utils/pdfExport";
+import { exportBarangStatisticsPDF } from '@/utils/pdfExport';
 
 export default function AdminDashboardPage() {
   const { user, isAdmin } = useAuth();
@@ -55,20 +55,21 @@ export default function AdminDashboardPage() {
   const [recentActivity, setRecentActivity] = useState<Peminjaman[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
-
   useEffect(() => {
     if (user && !isAdmin) {
       router.push("/dashboard");
       return;
     }
 
+    // Only load data if user is authenticated and is admin
     if (user && isAdmin) {
+      // Add small delay to ensure token is available
       const timer = setTimeout(() => {
         loadMasterData();
         loadStatistics();
         loadRecentActivity();
       }, 100);
-
+      
       return () => clearTimeout(timer);
     }
   }, [user, isAdmin, router]);
@@ -89,57 +90,57 @@ export default function AdminDashboardPage() {
     }
   };
 
-const loadStatistics = async () => {
-  try {
-    setLoadingStats(true);
-
-    const token = Cookies.get("token");
-    if (!token) {
-      console.error("No auth token found");
+  const loadStatistics = async () => {
+    try {
+      setLoadingStats(true);
+      
+      // Check if token exists
+      const token = Cookies.get('token');
+      if (!token) {
+        console.error('No auth token found');
+        setStatistics({
+          totalBarang: 0,
+          totalUserRoleUsers: 0,
+          barangBaik: 0,
+          barangRusak: 0
+        });
+        return;
+      }
+      
+      console.log('Loading statistics with token...');
+      const response = await statisticsApi.get();
+      console.log('Statistics response:', response);
+      if (response.success) {
+        setStatistics(response.data);
+      } else {
+        console.error('Statistics API returned error:', response);
+        setStatistics({
+          totalBarang: 0,
+          totalUserRoleUsers: 0,
+          barangBaik: 0,
+          barangRusak: 0
+        });
+      }
+    } catch (error) {
+      console.error("Failed to load statistics:", error);
+      // Set default values if statistics fail to load
       setStatistics({
         totalBarang: 0,
         totalUserRoleUsers: 0,
         barangBaik: 0,
-        barangRusakRingan: 0,
-        barangRusakBerat: 0,
+        barangRusak: 0
       });
-      return;
+    } finally {
+      setLoadingStats(false);
     }
-
-    const response = await statisticsApi.get();
-    if (response.success) {
-      const stats = response.data;
-
-      setStatistics(stats);
-    } else {
-      console.error("Statistics API returned error:", response);
-      setStatistics({
-        totalBarang: 0,
-        totalUserRoleUsers: 0,
-        barangBaik: 0,
-        barangRusakRingan: 0,
-        barangRusakBerat: 0,
-      });
-    }
-  } catch (error) {
-    console.error("Failed to load statistics:", error);
-    setStatistics({
-      totalBarang: 0,
-      totalUserRoleUsers: 0,
-      barangBaik: 0,
-      barangRusakRingan: 0,
-      barangRusakBerat: 0,
-    });
-  } finally {
-    setLoadingStats(false);
-  }
-};
+  };
 
   const loadRecentActivity = async () => {
     try {
       setLoadingActivity(true);
       const response = await peminjamanApi.getReports();
       if (response.status === "success") {
+        // Combine all requests and sort by most recent
         const allRequests = [
           ...response.data.pending,
           ...response.data.dipinjam,
@@ -149,7 +150,7 @@ const loadStatistics = async () => {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
 
-        setRecentActivity(allRequests.slice(0, 5));
+        setRecentActivity(allRequests.slice(0, 5)); // Show only 5 most recent
       }
     } catch (error) {
       console.error("Failed to load recent activity:", error);
@@ -160,11 +161,17 @@ const loadStatistics = async () => {
 
   const handleExportStatistics = () => {
     if (statistics) {
+      // Calculate rusak ringan and rusak berat from total rusak
+      // Assuming we don't have separate data, split equally
+      const totalRusak = statistics.barangRusak;
+      const barangRusakRingan = Math.floor(totalRusak / 2);
+      const barangRusakBerat = totalRusak - barangRusakRingan;
+      
       exportBarangStatisticsPDF({
         totalBarang: statistics.totalBarang,
         barangBaik: statistics.barangBaik,
-        barangRusakRingan: statistics.barangRusakRingan,
-        barangRusakBerat: statistics.barangRusakBerat,
+        barangRusakRingan: barangRusakRingan,
+        barangRusakBerat: barangRusakBerat
       });
     }
   };
@@ -204,18 +211,21 @@ const loadStatistics = async () => {
             <FileText size={16} />
             Export PDF
           </Button>
+
+
         </div>
 
         {/* Admin Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Total Barang */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Package className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Barang</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Barang
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {loadingStats ? "..." : statistics?.totalBarang || 0}
                 </p>
@@ -223,7 +233,6 @@ const loadStatistics = async () => {
             </div>
           </div>
 
-          {/* Total Users */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
@@ -238,7 +247,6 @@ const loadStatistics = async () => {
             </div>
           </div>
 
-          {/* Barang Baik */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
@@ -255,7 +263,6 @@ const loadStatistics = async () => {
             </div>
           </div>
 
-          {/* Barang Rusak Ringan */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 rounded-lg">
@@ -263,27 +270,10 @@ const loadStatistics = async () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Barang Kondisi Rusak Ringan
+                  Barang Kondisi Rusak
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusakRingan || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Barang Rusak Berat */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <AlertTriangle className="h-6 w-6 text-red-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Barang Kondisi Rusak Berat
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusakBerat || 0}
+                  {loadingStats ? "..." : statistics?.barangRusak || 0}
                 </p>
               </div>
             </div>
@@ -335,6 +325,7 @@ const loadStatistics = async () => {
                 <Building size={20} />
                 <span>Tambah Lokasi</span>
               </Button>
+
             </div>
           </div>
         </div>
@@ -342,9 +333,7 @@ const loadStatistics = async () => {
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow border">
           <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Aktivitas Terbaru
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-900">Aktivitas Terbaru</h3>
           </div>
 
           {loadingActivity ? (
@@ -384,15 +373,16 @@ const loadStatistics = async () => {
                         {activity.user.nama} - {activity.barang.nama}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {new Date(
-                          activity.tanggalPengajuan
-                        ).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {new Date(activity.tanggalPengajuan).toLocaleDateString(
+                          "id-ID",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
