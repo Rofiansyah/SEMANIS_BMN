@@ -55,9 +55,6 @@ export default function AdminDashboardPage() {
   const [recentActivity, setRecentActivity] = useState<Peminjaman[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
-  // Tambahan untuk pecah rusak ringan & berat
-  const [barangRusakRingan, setBarangRusakRingan] = useState(0);
-  const [barangRusakBerat, setBarangRusakBerat] = useState(0);
 
   useEffect(() => {
     if (user && !isAdmin) {
@@ -106,8 +103,6 @@ const loadStatistics = async () => {
         barangRusakRingan: 0,
         barangRusakBerat: 0,
       });
-      setBarangRusakRingan(0);
-      setBarangRusakBerat(0);
       return;
     }
 
@@ -116,10 +111,6 @@ const loadStatistics = async () => {
       const stats = response.data;
 
       setStatistics(stats);
-
-      // langsung ambil dari API
-      setBarangRusakRingan(stats.barangRusakRingan || 0);
-      setBarangRusakBerat(stats.barangRusakBerat || 0);
     } else {
       console.error("Statistics API returned error:", response);
       setStatistics({
@@ -129,8 +120,6 @@ const loadStatistics = async () => {
         barangRusakRingan: 0,
         barangRusakBerat: 0,
       });
-      setBarangRusakRingan(0);
-      setBarangRusakBerat(0);
     }
   } catch (error) {
     console.error("Failed to load statistics:", error);
@@ -141,8 +130,6 @@ const loadStatistics = async () => {
       barangRusakRingan: 0,
       barangRusakBerat: 0,
     });
-    setBarangRusakRingan(0);
-    setBarangRusakBerat(0);
   } finally {
     setLoadingStats(false);
   }
@@ -176,8 +163,8 @@ const loadStatistics = async () => {
       exportBarangStatisticsPDF({
         totalBarang: statistics.totalBarang,
         barangBaik: statistics.barangBaik,
-        barangRusakRingan: barangRusakRingan,
-        barangRusakBerat: barangRusakBerat,
+        barangRusakRingan: statistics.barangRusakRingan,
+        barangRusakBerat: statistics.barangRusakBerat,
       });
     }
   };
@@ -279,7 +266,7 @@ const loadStatistics = async () => {
                   Barang Kondisi Rusak Ringan
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : barangRusakRingan}
+                  {loadingStats ? "..." : statistics?.barangRusakRingan}
                 </p>
               </div>
             </div>
@@ -296,7 +283,7 @@ const loadStatistics = async () => {
                   Barang Kondisi Rusak Berat
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : barangRusakBerat}
+                  {loadingStats ? "..." : statistics?.barangRusakBerat}
                 </p>
               </div>
             </div>
