@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import {
   kategoriApi,
   merekApi,
@@ -36,7 +36,7 @@ import type {
   Statistics,
   Peminjaman,
 } from "@/types/api";
-import { exportBarangStatisticsPDF } from '@/utils/pdfExport';
+import { exportBarangStatisticsPDF } from "@/utils/pdfExport";
 
 export default function AdminDashboardPage() {
   const { user, isAdmin } = useAuth();
@@ -55,21 +55,23 @@ export default function AdminDashboardPage() {
   const [recentActivity, setRecentActivity] = useState<Peminjaman[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
+  // Tambahan untuk pecah rusak ringan & berat
+  const [barangRusakRingan, setBarangRusakRingan] = useState(0);
+  const [barangRusakBerat, setBarangRusakBerat] = useState(0);
+
   useEffect(() => {
     if (user && !isAdmin) {
       router.push("/dashboard");
       return;
     }
 
-    // Only load data if user is authenticated and is admin
     if (user && isAdmin) {
-      // Add small delay to ensure token is available
       const timer = setTimeout(() => {
         loadMasterData();
         loadStatistics();
         loadRecentActivity();
       }, 100);
-      
+
       return () => clearTimeout(timer);
     }
   }, [user, isAdmin, router]);
@@ -93,43 +95,52 @@ export default function AdminDashboardPage() {
   const loadStatistics = async () => {
     try {
       setLoadingStats(true);
-      
-      // Check if token exists
-      const token = Cookies.get('token');
+
+      const token = Cookies.get("token");
       if (!token) {
-        console.error('No auth token found');
+        console.error("No auth token found");
         setStatistics({
           totalBarang: 0,
           totalUserRoleUsers: 0,
           barangBaik: 0,
-          barangRusak: 0
+          barangRusak: 0,
         });
+        setBarangRusakRingan(0);
+        setBarangRusakBerat(0);
         return;
       }
-      
-      console.log('Loading statistics with token...');
+
       const response = await statisticsApi.get();
-      console.log('Statistics response:', response);
       if (response.success) {
-        setStatistics(response.data);
+        const stats = response.data;
+        setStatistics(stats);
+
+        // Bagi barang rusak menjadi ringan & berat (sementara sama rata)
+        const rusakRingan = Math.floor(stats.barangRusak / 2);
+        const rusakBerat = stats.barangRusak - rusakRingan;
+        setBarangRusakRingan(rusakRingan);
+        setBarangRusakBerat(rusakBerat);
       } else {
-        console.error('Statistics API returned error:', response);
+        console.error("Statistics API returned error:", response);
         setStatistics({
           totalBarang: 0,
           totalUserRoleUsers: 0,
           barangBaik: 0,
-          barangRusak: 0
+          barangRusak: 0,
         });
+        setBarangRusakRingan(0);
+        setBarangRusakBerat(0);
       }
     } catch (error) {
       console.error("Failed to load statistics:", error);
-      // Set default values if statistics fail to load
       setStatistics({
         totalBarang: 0,
         totalUserRoleUsers: 0,
         barangBaik: 0,
-        barangRusak: 0
+        barangRusak: 0,
       });
+      setBarangRusakRingan(0);
+      setBarangRusakBerat(0);
     } finally {
       setLoadingStats(false);
     }
@@ -140,7 +151,6 @@ export default function AdminDashboardPage() {
       setLoadingActivity(true);
       const response = await peminjamanApi.getReports();
       if (response.status === "success") {
-        // Combine all requests and sort by most recent
         const allRequests = [
           ...response.data.pending,
           ...response.data.dipinjam,
@@ -150,7 +160,7 @@ export default function AdminDashboardPage() {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
 
-        setRecentActivity(allRequests.slice(0, 5)); // Show only 5 most recent
+        setRecentActivity(allRequests.slice(0, 5));
       }
     } catch (error) {
       console.error("Failed to load recent activity:", error);
@@ -161,17 +171,11 @@ export default function AdminDashboardPage() {
 
   const handleExportStatistics = () => {
     if (statistics) {
-      // Calculate rusak ringan and rusak berat from total rusak
-      // Assuming we don't have separate data, split equally
-      const totalRusak = statistics.barangRusak;
-      const barangRusakRingan = Math.floor(totalRusak / 2);
-      const barangRusakBerat = totalRusak - barangRusakRingan;
-      
       exportBarangStatisticsPDF({
         totalBarang: statistics.totalBarang,
         barangBaik: statistics.barangBaik,
         barangRusakRingan: barangRusakRingan,
-        barangRusakBerat: barangRusakBerat
+        barangRusakBerat: barangRusakBerat,
       });
     }
   };
@@ -211,21 +215,18 @@ export default function AdminDashboardPage() {
             <FileText size={16} />
             Export PDF
           </Button>
-
-
         </div>
 
         {/* Admin Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Total Barang */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Package className="h-6 w-6 text-blue-600" />
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Total Barang
-                </p>
+                <p className="text-sm font-medium text-gray-600">Total Barang</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {loadingStats ? "..." : statistics?.totalBarang || 0}
                 </p>
@@ -233,6 +234,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
+          {/* Total Users */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
@@ -247,6 +249,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
+          {/* Barang Baik */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-green-100 rounded-lg">
@@ -263,6 +266,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
+          {/* Barang Rusak Ringan */}
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
               <div className="p-2 bg-orange-100 rounded-lg">
@@ -270,10 +274,27 @@ export default function AdminDashboardPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Barang Kondisi Rusak
+                  Barang Kondisi Rusak Ringan
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusak || 0}
+                  {loadingStats ? "..." : barangRusakRingan}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Barang Rusak Berat */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">
+                  Barang Kondisi Rusak Berat
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {loadingStats ? "..." : barangRusakBerat}
                 </p>
               </div>
             </div>
@@ -325,27 +346,16 @@ export default function AdminDashboardPage() {
                 <Building size={20} />
                 <span>Tambah Lokasi</span>
               </Button>
-
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-gray-900">
-                Aktivitas Terbaru (Admin View)
-              </h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => router.push("/admin/peminjaman/reports")}
-                className="text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-              >
-                Lihat Semua
-              </Button>
-            </div>
+        <div className="bg-white rounded-lg shadow border">
+          <div className="p-6 border-b border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Aktivitas Terbaru
+            </h3>
           </div>
 
           {loadingActivity ? (
@@ -385,16 +395,15 @@ export default function AdminDashboardPage() {
                         {activity.user.nama} - {activity.barang.nama}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {new Date(activity.tanggalPengajuan).toLocaleDateString(
-                          "id-ID",
-                          {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
+                        {new Date(
+                          activity.tanggalPengajuan
+                        ).toLocaleDateString("id-ID", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </p>
                     </div>
                   </div>
