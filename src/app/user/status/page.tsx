@@ -360,6 +360,20 @@ export default function UserStatusPage() {
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
+                          {/* Item Photo */}
+                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                            {item.barang.fotoUrl ? (
+                              <img
+                                src={item.barang.fotoUrl}
+                                alt={item.barang.nama}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                <Package size={24} className="text-gray-400" />
+                              </div>
+                            )}
+                          </div>                        
                           <div className="flex items-center gap-3 mb-2">
                             <h3 className="font-semibold text-gray-900">{item.barang.nama}</h3>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}>
