@@ -92,59 +92,61 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const loadStatistics = async () => {
-    try {
-      setLoadingStats(true);
+const loadStatistics = async () => {
+  try {
+    setLoadingStats(true);
 
-      const token = Cookies.get("token");
-      if (!token) {
-        console.error("No auth token found");
-        setStatistics({
-          totalBarang: 0,
-          totalUserRoleUsers: 0,
-          barangBaik: 0,
-          barangRusak: 0,
-        });
-        setBarangRusakRingan(0);
-        setBarangRusakBerat(0);
-        return;
-      }
-
-      const response = await statisticsApi.get();
-      if (response.success) {
-        const stats = response.data;
-        setStatistics(stats);
-
-        // Bagi barang rusak menjadi ringan & berat (sementara sama rata)
-        const rusakRingan = Math.floor(stats.barangRusak / 2);
-        const rusakBerat = stats.barangRusak - rusakRingan;
-        setBarangRusakRingan(rusakRingan);
-        setBarangRusakBerat(rusakBerat);
-      } else {
-        console.error("Statistics API returned error:", response);
-        setStatistics({
-          totalBarang: 0,
-          totalUserRoleUsers: 0,
-          barangBaik: 0,
-          barangRusak: 0,
-        });
-        setBarangRusakRingan(0);
-        setBarangRusakBerat(0);
-      }
-    } catch (error) {
-      console.error("Failed to load statistics:", error);
+    const token = Cookies.get("token");
+    if (!token) {
+      console.error("No auth token found");
       setStatistics({
         totalBarang: 0,
         totalUserRoleUsers: 0,
         barangBaik: 0,
-        barangRusak: 0,
+        barangRusakRingan: 0,
+        barangRusakBerat: 0,
       });
       setBarangRusakRingan(0);
       setBarangRusakBerat(0);
-    } finally {
-      setLoadingStats(false);
+      return;
     }
-  };
+
+    const response = await statisticsApi.get();
+    if (response.success) {
+      const stats = response.data;
+
+      setStatistics(stats);
+
+      // langsung ambil dari API
+      setBarangRusakRingan(stats.barangRusakRingan || 0);
+      setBarangRusakBerat(stats.barangRusakBerat || 0);
+    } else {
+      console.error("Statistics API returned error:", response);
+      setStatistics({
+        totalBarang: 0,
+        totalUserRoleUsers: 0,
+        barangBaik: 0,
+        barangRusakRingan: 0,
+        barangRusakBerat: 0,
+      });
+      setBarangRusakRingan(0);
+      setBarangRusakBerat(0);
+    }
+  } catch (error) {
+    console.error("Failed to load statistics:", error);
+    setStatistics({
+      totalBarang: 0,
+      totalUserRoleUsers: 0,
+      barangBaik: 0,
+      barangRusakRingan: 0,
+      barangRusakBerat: 0,
+    });
+    setBarangRusakRingan(0);
+    setBarangRusakBerat(0);
+  } finally {
+    setLoadingStats(false);
+  }
+};
 
   const loadRecentActivity = async () => {
     try {
