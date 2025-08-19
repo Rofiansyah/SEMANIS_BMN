@@ -299,215 +299,219 @@ export default function UserStatusPage() {
           </div>  
         </div>
 
-        {/* List */}
-        <div className="bg-white rounded-lg shadow border">
-          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {activeTab === 'ALL'
-                ? 'Semua Peminjaman'
-                : `Peminjaman ${statusLabels[activeTab]}`}
-            </h2>
+    <div className="bg-white rounded-xl shadow border">
+      {/* Header */}
+      <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h2 className="text-lg font-semibold text-gray-900">
+          {activeTab === 'ALL'
+            ? 'Semua Peminjaman'
+            : `Peminjaman ${statusLabels[activeTab]}`}
+        </h2>
 
-            {/* Tombol Export CSV */}
-              <Button
-                variant="primary"
-                onClick={exportHistory}
-                className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-              >
-                <Download className="w-4 h-4 mr-2" size={16} />
-                Export CSV
+        {/* Tombol Export */}
+        <Button
+          variant="primary"
+          onClick={exportHistory}
+          className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200 flex items-center gap-2"
+        >
+          <Download className="w-4 h-4" />
+          Export CSV
+        </Button>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 md:p-6">
+        {filteredPeminjaman.length === 0 ? (
+          <div className="text-center py-12">
+            <Package size={48} className="mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {activeTab === 'PENDING' 
+                ? 'Tidak ada permintaan pending'
+                : activeTab === 'DIPINJAM'
+                  ? 'Tidak ada barang yang sedang dipinjam'
+                  : activeTab === 'DIKEMBALIKAN'
+                    ? 'Belum ada barang yang dikembalikan'
+                    : activeTab === 'DITOLAK'
+                      ? 'Tidak ada permintaan yang ditolak'
+                      : 'Belum ada permintaan peminjaman'}
+            </h3>
+            <p className="text-gray-600 mb-4 text-sm">
+              {activeTab === 'PENDING'
+                ? 'Semua permintaan peminjaman Anda sudah diproses'
+                : activeTab === 'DIPINJAM'
+                  ? 'Anda belum meminjam barang apapun saat ini'
+                  : activeTab === 'DITOLAK'
+                    ? 'Belum ada riwayat barang yang telah Anda kembalikan'
+                    : activeTab === 'DIKEMBALIKAN'
+                      ? 'Tidak ada riwayat permintaan peminjaman yang ditolak'
+                      : 'Silakan ajukan peminjaman barang terlebih dahulu'}
+            </p>
+            <Link href="/dashboard">
+              <Button className="bg-blue-950 hover:bg-blue-900 text-white">
+                Cari Barang untuk Dipinjam
               </Button>
-
+            </Link>
           </div>
-          <div className="p-6">
-            {filteredPeminjaman.length === 0 ? (
-              <div className="text-center py-12">
-                <Package size={48} className="mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  {activeTab === 'PENDING' 
-                    ? 'Tidak ada permintaan pending'
-                    : activeTab === 'DIPINJAM'
-                      ? 'Tidak ada barang yang sedang dipinjam'
-                      : activeTab === 'DIKEMBALIKAN'
-                        ? 'Belum ada barang yang dikembalikan'
-                        : activeTab === 'DITOLAK'
-                          ? 'Tidak ada permintaan yang ditolak'
-                          : 'Belum ada permintaan peminjaman'}
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  {activeTab === 'PENDING'
-                    ? 'Semua permintaan peminjaman Anda sudah diproses'
-                    : activeTab === 'DIPINJAM'
-                      ? 'Anda belum meminjam barang apapun saat ini'
-                      : activeTab === 'DITOLAK'
-                        ? 'Belum ada riwayat barang yang telah Anda kembalikan'
-                        : activeTab === 'DIKEMBALIKAN'
-                          ? 'Tidak ada riwayat permintaan peminjaman yang ditolak'
-                          : 'Silakan ajukan peminjaman barang terlebih dahulu'}
-                </p>
-                <Link href="/dashboard">
-                  <Button className="bg-blue-950 hover:bg-blue-900 text-white">
-                    Cari Barang untuk Dipinjam
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {filteredPeminjaman.map((item) => {
-                  const statusInfo = getStatusInfo(item.status);
+        ) : (
+          <div className="space-y-6">
+            {filteredPeminjaman.map((item) => {
+              const statusInfo = getStatusInfo(item.status);
 
-                  return (
-                    <div
-                      key={item.id}
-                      className={`rounded-lg border-2 p-6 ${statusInfo.bgColor} border-gray-200`}
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-start gap-4 flex-1">
-                          {/* Item Photo */}
-                          <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                            {item.barang.fotoUrl ? (
-                              <img
-                                src={item.barang.fotoUrl}
-                                alt={item.barang.nama}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                <Package size={24} className="text-gray-400" />
-                              </div>
-                            )}
-                          </div>   
-
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-gray-900">
-                                {item.barang.nama}
-                              </h3>
-                              <span
-                                className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
-                              >
-                                {statusInfo.icon}
-                                {statusInfo.text}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-600 font-mono mb-2">
-                              {item.barang.deskripsi}
-                            </p>
+              return (
+                <div
+                  key={item.id}
+                  className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition ${statusInfo.bgColor}`}
+                >
+                  {/* Header Card */}
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                    <div className="flex items-start gap-4 flex-1">
+                      {/* Foto */}
+                      <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        {item.barang.fotoUrl ? (
+                          <img
+                            src={item.barang.fotoUrl}
+                            alt={item.barang.nama}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                            <Package size={24} className="text-gray-400" />
                           </div>
+                        )}
+                      </div>
+
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-gray-900">
+                            {item.barang.nama}
+                          </h3>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
+                          >
+                            {statusInfo.icon}
+                            {statusInfo.text}
+                          </span>
                         </div>
-                        <Link href={`/user/items/${item.barang.id}`}>
-                          <Button size="sm" variant="secondary" className="flex items-center gap-1">
-                            <Eye size={14} />
-                            Lihat
-                          </Button>
-                        </Link>
+                        <p className="text-sm text-gray-600 line-clamp-2">
+                          {item.barang.deskripsi}
+                        </p>
                       </div>
+                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                      <div className="flex items-center space-x-2">
-                        <Package className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">Kode: {item.barang.kodeBarang}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Tag className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.kategori?.nama}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Building className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.merek?.nama}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="w-4 h-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">{item.barang.lokasi?.nama}</span>
-                      </div>
-                    </div>                   
+                    <Link href={`/user/items/${item.barang.id}`}>
+                      <Button size="sm" variant="secondary" className="flex items-center gap-1">
+                        <Eye size={14} />
+                        Lihat
+                      </Button>
+                    </Link>
+                  </div>
 
-                      {/* Timeline */}
-                      <div className="bg-white rounded-lg p-4 mb-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
-                        <div className="space-y-2 text-sm text-gray-600">
-                          <div className="flex items-center">
-                            <Calendar size={14} className="mr-2" />
-                            <span>Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
-                          </div>
-                          {item.tanggalDisetujui && (
-                            <div className="flex items-center">
-                              <Calendar size={14} className="mr-2" />
-                              <span>Disetujui: {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
-                            </div>
-                          )}
-                          {item.tanggalDipinjam && (
-                            <div className="flex items-center">
-                              <Calendar size={14} className="mr-2" />
-                              <span>Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
-                            </div>
-                          )}
-                          {item.tanggalDikembalikan && (
-                            <div className="flex items-center">
-                              <Calendar size={14} className="mr-2" />
-                              <span>Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                  {/* Info Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-sm text-gray-600 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Package className="w-4 h-4 text-gray-500" />
+                      <span>Kode: {item.barang.kodeBarang}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-gray-500" />
+                      <span>{item.barang.kategori?.nama}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Building className="w-4 h-4 text-gray-500" />
+                      <span>{item.barang.merek?.nama}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      <span>{item.barang.lokasi?.nama}</span>
+                    </div>
+                  </div>
 
-                      {/* Foto dokumentasi */}
-                      {(item.fotoPinjam || item.fotoKembali) && (
-                        <div className="bg-white rounded-lg p-4 mb-4">
-                          <h4 className="font-medium text-gray-900 mb-2">Dokumentasi</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {item.fotoPinjam && (
-                              <div>
-                                <p className="text-sm font-medium mb-1">Foto Saat Dipinjam</p>
-                                <img
-                                  src={item.fotoPinjam}
-                                  alt="Foto saat dipinjam"
-                                  className="w-full h-40 object-cover rounded cursor-pointer"
-                                  onClick={() => window.open(item.fotoPinjam!, "_blank")}
-                                />
-                              </div>
-                            )}
-                            {item.fotoKembali && (
-                              <div>
-                                <p className="text-sm font-medium mb-1">Foto Saat Dikembalikan</p>
-                                <img
-                                  src={item.fotoKembali}
-                                  alt="Foto saat dikembalikan"
-                                  className="w-full h-40 object-cover rounded cursor-pointer"
-                                  onClick={() => window.open(item.fotoKembali!, "_blank")}
-                                />
-                              </div>
-                            )}
-                          </div>
+                  {/* Timeline */}
+                  <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                    <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
+                    <div className="space-y-1.5 text-sm text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} />
+                        <span>Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</span>
+                      </div>
+                      {item.tanggalDisetujui && (
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} />
+                          <span>Disetujui: {new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
-
-                      {/* Catatan */}
-                      {item.catatan && (
-                        <div className="bg-white rounded-lg p-4 mb-4">
-                          <h4 className="font-medium text-gray-900 mb-2">Catatan</h4>
-                          <p className="text-sm text-gray-600">{item.catatan}</p>
+                      {item.tanggalDipinjam && (
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} />
+                          <span>Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
-
-                      {/* Info Penanggung Jawab */}
-                      {(item.penanggungJawab || item.approvedByUser) && (
-                        <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
-                          {item.penanggungJawab && (
-                            <p><span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}</p>
-                          )}
-                          {item.approvedByUser && (
-                            <p><span className="font-medium">Diproses oleh:</span> {item.approvedByUser.nama}</p>
-                          )}
+                      {item.tanggalDikembalikan && (
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} />
+                          <span>Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</span>
                         </div>
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                  </div>
+
+                  {/* Dokumentasi */}
+                  {(item.fotoPinjam || item.fotoKembali) && (
+                    <div className="mb-4">
+                      <h4 className="font-medium text-gray-900 mb-2">Dokumentasi</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {item.fotoPinjam && (
+                          <div>
+                            <p className="text-sm font-medium mb-1">Foto Saat Dipinjam</p>
+                            <img
+                              src={item.fotoPinjam}
+                              alt="Foto saat dipinjam"
+                              className="w-full h-40 object-cover rounded-lg cursor-pointer"
+                              onClick={() => window.open(item.fotoPinjam!, "_blank")}
+                            />
+                          </div>
+                        )}
+                        {item.fotoKembali && (
+                          <div>
+                            <p className="text-sm font-medium mb-1">Foto Saat Dikembalikan</p>
+                            <img
+                              src={item.fotoKembali}
+                              alt="Foto saat dikembalikan"
+                              className="w-full h-40 object-cover rounded-lg cursor-pointer"
+                              onClick={() => window.open(item.fotoKembali!, "_blank")}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Catatan */}
+                  {item.catatan && (
+                    <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                      <h4 className="font-medium text-gray-900 mb-1">Catatan</h4>
+                      <p className="text-sm text-gray-700">{item.catatan}</p>
+                    </div>
+                  )}
+
+                  {/* Penanggung Jawab */}
+                  {(item.penanggungJawab || item.approvedByUser) && (
+                    <div className="pt-3 border-t border-gray-200 text-sm text-gray-700">
+                      {item.penanggungJawab && (
+                        <p><span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}</p>
+                      )}
+                      {item.approvedByUser && (
+                        <p><span className="font-medium">Diproses oleh:</span> {item.approvedByUser.nama}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
+      </div>
+    </div>
       </div>
     </DashboardLayout>
   );
