@@ -90,50 +90,54 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const loadStatistics = async () => {
-    try {
-      setLoadingStats(true);
-      
-      // Check if token exists
-      const token = Cookies.get('token');
-      if (!token) {
-        console.error('No auth token found');
-        setStatistics({
-          totalBarang: 0,
-          totalUserRoleUsers: 0,
-          barangBaik: 0,
-          barangRusak: 0
-        });
-        return;
-      }
-      
-      console.log('Loading statistics with token...');
-      const response = await statisticsApi.get();
-      console.log('Statistics response:', response);
-      if (response.success) {
-        setStatistics(response.data);
-      } else {
-        console.error('Statistics API returned error:', response);
-        setStatistics({
-          totalBarang: 0,
-          totalUserRoleUsers: 0,
-          barangBaik: 0,
-          barangRusak: 0
-        });
-      }
-    } catch (error) {
-      console.error("Failed to load statistics:", error);
-      // Set default values if statistics fail to load
+const loadStatistics = async () => {
+  try {
+    setLoadingStats(true);
+    
+    // Check if token exists
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error('No auth token found');
       setStatistics({
         totalBarang: 0,
         totalUserRoleUsers: 0,
         barangBaik: 0,
-        barangRusak: 0
+        barangRusakBerat: 0,
+        barangRusakRingan: 0,
       });
-    } finally {
-      setLoadingStats(false);
+      return;
     }
-  };
+    
+    console.log('Loading statistics with token...');
+    const response = await statisticsApi.get();
+    console.log('Statistics response:', response);
+    if (response.success) {
+      setStatistics(response.data);
+    } else {
+      console.error('Statistics API returned error:', response);
+      setStatistics({
+        totalBarang: 0,
+        totalUserRoleUsers: 0,
+        barangBaik: 0,
+        barangRusakBerat: 0,
+        barangRusakRingan: 0,
+      });
+    }
+  } catch (error) {
+    console.error("Failed to load statistics:", error);
+    // Set default values if statistics fail to load
+    setStatistics({
+      totalBarang: 0,
+      totalUserRoleUsers: 0,
+      barangBaik: 0,
+      barangRusakBerat: 0,
+      barangRusakRingan: 0,
+    });
+  } finally {
+    setLoadingStats(false);
+  }
+};
+
 
   const loadRecentActivity = async () => {
     try {
@@ -163,15 +167,15 @@ export default function AdminDashboardPage() {
     if (statistics) {
       // Calculate rusak ringan and rusak berat from total rusak
       // Assuming we don't have separate data, split equally
-      const totalRusak = statistics.barangRusak;
-      const barangRusakRingan = Math.floor(totalRusak / 2);
-      const barangRusakBerat = totalRusak - barangRusakRingan;
+      // const totalRusak = statistics.barangRusak;
+      // const barangRusakRingan = Math.floor(totalRusak / 2);
+      // const barangRusakBerat = totalRusak - barangRusakRingan;
       
       exportBarangStatisticsPDF({
         totalBarang: statistics.totalBarang,
         barangBaik: statistics.barangBaik,
-        barangRusakRingan: barangRusakRingan,
-        barangRusakBerat: barangRusakBerat
+        barangRusakRingan: statistics.barangRusakRingan,
+        barangRusakBerat: statistics.barangRusakBerat
       });
     }
   };
@@ -273,7 +277,7 @@ export default function AdminDashboardPage() {
                   Barang Kondisi Rusak
                 </p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {loadingStats ? "..." : statistics?.barangRusak || 0}
+                  {loadingStats ? "..." : statistics?.barangRusakRingan || 0}
                 </p>
               </div>
             </div>
