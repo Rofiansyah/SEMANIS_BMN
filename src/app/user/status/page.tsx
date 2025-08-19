@@ -399,8 +399,8 @@ export default function UserStatusPage() {
                     </div>
 
                     <Link href={`/user/items/${item.barang.id}`}>
-                      <Button size="sm" variant="secondary" className="flex items-center gap-1">
-                        <Eye size={14} />
+                      <Button size="sm" variant="outline" className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200">
+                        <Eye className="w-3 h-3 mr-1"/>
                         Lihat
                       </Button>
                     </Link>
