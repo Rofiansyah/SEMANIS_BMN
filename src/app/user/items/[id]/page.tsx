@@ -320,7 +320,6 @@ return (
                       </div>
                       <div className="flex gap-3">
                         <Button
-                          size="sm"
                           variant="outlinesecond" 
                           onClick={() => {
                             setShowBorrowForm(false);
