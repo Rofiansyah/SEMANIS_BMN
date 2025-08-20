@@ -292,7 +292,7 @@ export default function DashboardUserPage() {
         placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-700"
       />
     </div>
 
@@ -317,11 +317,11 @@ export default function DashboardUserPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Kategori */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Kategori</label>
+          <label className="text-sm font-medium text-gray-900 mb-1">Kategori</label>
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full rounded-lg border-gray-300 text-sm p-2"
+            className="w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           >
             <option value="">Semua Kategori</option>
             {categories.map((c) => (
@@ -334,11 +334,11 @@ export default function DashboardUserPage() {
 
         {/* Merek */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Merek</label>
+          <label className="text-sm font-medium text-gray-900 mb-1">Merek</label>
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="w-full rounded-lg border-gray-300 text-sm p-2"
+            className="w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           >
             <option value="">Semua Merek</option>
             {brands.map((b) => (
@@ -351,11 +351,11 @@ export default function DashboardUserPage() {
 
         {/* Lokasi */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Lokasi</label>
+          <label className="text-sm font-medium text-gray-900 mb-1">Lokasi</label>
           <select
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
-            className="w-full rounded-lg border-gray-300 text-sm p-2"
+            className="w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           >
             <option value="">Semua Lokasi</option>
             {locations.map((l) => (
@@ -368,11 +368,11 @@ export default function DashboardUserPage() {
 
         {/* Sort */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Urutkan</label>
+          <label className="text-sm font-medium text-gray-900 mb-1">Urutkan</label>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="w-full rounded-lg border-gray-300 text-sm p-2"
+            className="w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
           >
             <option value="nama">Nama A-Z</option>
             <option value="kodeBarang">Kode Barang</option>
@@ -383,7 +383,7 @@ export default function DashboardUserPage() {
 
       {/* Footer filter */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-700">
           Menampilkan {filteredBarang.length} dari {barang.length} barang
         </p>
         <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200" onClick={clearFilters}>
@@ -426,7 +426,7 @@ export default function DashboardUserPage() {
                     </h3>
                     {getStatusBadge(item.kondisi)}
                   </div>
-                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                  <p className="text-sm text-gray-700 mb-2 line-clamp-2">
                     {item.deskripsi}
                   </p>
                   <div className="space-y-1 mb-4 text-xs text-gray-500">
