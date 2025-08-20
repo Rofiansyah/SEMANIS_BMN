@@ -358,7 +358,7 @@ return (
 {/* Foto Dokumentasi */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-1">
-    Foto Dokumentasi (Opsional)
+    Foto Barang (Opsional)
   </label>
   {fotoPreview ? (
     <div className="space-y-3">
@@ -394,13 +394,13 @@ return (
     </div>
   ) : (
     <div
-      className="border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 transition"
+      className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition"
       onClick={() => setIsCameraCaptureOpen(true)}
     >
       <div className="flex flex-col items-center space-y-2">
         <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
         <p className="text-xs sm:text-sm text-gray-600 text-center">
-          Klik di sini untuk ambil foto dokumentasi
+          Klik di sini untuk ambil foto barang
         </p>
       </div>
     </div>
@@ -445,7 +445,7 @@ return (
       isOpen={isCameraCaptureOpen}
       onClose={() => setIsCameraCaptureOpen(false)}
       onCapture={handleCameraCapture}
-      title="Foto Dokumentasi Pengembalian"
+      title="Foto Barang Pengembalian"
     />
   </div>
 );

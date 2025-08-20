@@ -217,6 +217,8 @@ return (
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <Button
                 onClick={retakePhoto}
+                variant="outline" 
+                size="sm" 
                 className="flex-1 px-4 py-2 text-gray-700 border-2 border-gray-300 rounded-md hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center gap-2"
               >
                 <RotateCw className="w-4 h-4" />

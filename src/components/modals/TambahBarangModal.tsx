@@ -6,6 +6,7 @@ import { barangApi } from '@/lib/api';
 import type { Kategori, Merek, Lokasi } from '@/types/api';
 import { Camera, X } from 'lucide-react';
 import toast from 'react-hot-toast';
+import CameraCapture from '@/components/camera/CameraCapture';
 
 interface TambahBarangModalProps {
   isOpen: boolean;
@@ -44,6 +45,10 @@ export function TambahBarangModal({
   });
   const [loading, setLoading] = useState(false);
 
+  // Foto states
+  const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+  const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -54,6 +59,7 @@ export function TambahBarangModal({
         lokasiId: '',
         kondisi: 'BAIK'
       });
+      setFotoPreview(null);
     }
   }, [isOpen]);
 
@@ -81,8 +87,22 @@ export function TambahBarangModal({
     }
   };
 
-  const handleInputChange = (field: keyof BarangFormData, value: string | File) => {
+  const handleInputChange = (field: keyof BarangFormData, value: string | File | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCameraCapture = (file: File) => {
+    handleInputChange('foto', file);
+    setFotoPreview(URL.createObjectURL(file));
+    setIsCameraCaptureOpen(false);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleInputChange('foto', file);
+      setFotoPreview(URL.createObjectURL(file));
+    }
   };
 
   if (!isOpen) return null;
@@ -216,35 +236,56 @@ return (
             </div>
           </div>
 
-          {/* Upload Foto */}
+          {/* Foto Barang */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Foto (Opsional)</label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleInputChange('foto', e.target.files?.[0] as File)}
-                className="hidden"
-                id="foto-upload"
-              />
-              <label htmlFor="foto-upload" className="flex flex-col items-center gap-2">
-                {formData.foto ? (
-                  <>
-                    <img
-                      src={URL.createObjectURL(formData.foto)}
-                      alt="Preview"
-                      className="h-20 w-20 object-cover rounded-md border"
-                    />
-                    <span className="text-sm text-gray-600">{formData.foto.name}</span>
-                  </>
-                ) : (
-                  <>
-                    <Camera className="w-8 h-8 text-gray-400" />
-                    <span className="text-sm text-gray-500">Klik untuk upload foto</span>
-                  </>
-                )}
-              </label>
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Foto Barang (Opsional)
+            </label>
+            {fotoPreview ? (
+              <div className="space-y-3">
+                <img
+                  src={fotoPreview}
+                  alt="Preview"
+                  className="w-full h-28 sm:h-32 object-cover rounded-lg border"
+                />
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsCameraCaptureOpen(true)}
+                    className="flex-1"
+                  >
+                    <Camera className="w-4 h-4 mr-1" />
+                    Ambil Ulang
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      handleInputChange('foto', undefined);
+                      setFotoPreview(null);
+                    }}
+                    className="flex-1"
+                  >
+                    Hapus Foto
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition"
+                onClick={() => setIsCameraCaptureOpen(true)}
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
+                  <p className="text-xs sm:text-sm text-gray-600 text-center">
+                    Klik di sini untuk ambil foto barang
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Actions */}
@@ -270,8 +311,14 @@ return (
         </form>
       </div>
     </div>
+
+    {/* Camera Capture Modal */}
+    <CameraCapture
+      isOpen={isCameraCaptureOpen}
+      onClose={() => setIsCameraCaptureOpen(false)}
+      onCapture={handleCameraCapture}
+      title="Foto Barang"
+    />
   </div>
 );
-
-
 }
