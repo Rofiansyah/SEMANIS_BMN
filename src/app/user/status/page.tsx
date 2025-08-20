@@ -343,7 +343,7 @@ const exportHistory = () => {
               return (
                 <div
                   key={item.id}
-                  className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition ${statusInfo.bgColor}`}
+                  className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}
                 >
                   {/* Header Card */}
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
