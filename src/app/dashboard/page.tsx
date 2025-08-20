@@ -231,7 +231,7 @@ export default function DashboardUserPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
               label: "Total Barang",
@@ -249,7 +249,7 @@ export default function DashboardUserPage() {
               label: "Merek Tersedia",
               value: stats.totalMerek,
               icon: <Bookmark className="h-6 w-6 text-purple-600" />,
-              bg: "bg-purle-100",
+              bg: "bg-purple-100",
             },
             {
               label: "Lokasi Tersedia",
@@ -286,13 +286,13 @@ export default function DashboardUserPage() {
   <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mb-4">
     {/* Search Box */}
     <div className="flex-1 relative">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
       <Input
         type="text"
         placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full"
+        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
       />
     </div>
 
