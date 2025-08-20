@@ -352,12 +352,12 @@ return (
                   )}
                 </div>
               ) : (
-                <div className="text-center py-4">
+                <div className="text-center py-4 bg-blue-100">
                   <Package
                     size={20}
                     className="mx-auto text-blue-800 mb-2"
                   />
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-blue-800">
                     Barang sedang dipinjam
                   </p>
                 </div>
