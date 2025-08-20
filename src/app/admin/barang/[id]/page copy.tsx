@@ -196,9 +196,10 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
           </div>
         </div>
 
-                  {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Photo */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Foto + QR (Kiri di desktop, atas di mobile) */}
+          <div className="space-y-6 order-1 lg:order-1">
+            {/* Foto Barang */}
             <div className="bg-white rounded-lg shadow border">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">Foto Barang</h2>
@@ -249,10 +250,10 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                 </div>
               </div>
             )}
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Info */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Detail Barang + Riwayat (Kanan di desktop, bawah di mobile) */}
+          <div className="lg:col-span-2 space-y-6 order-2 lg:order-2">
             {/* Basic Information */}
             <div className="bg-white rounded-lg shadow border">
               <div className="p-6 border-b border-gray-200">
@@ -394,7 +395,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                 ) : (
                   <div className="space-y-4">
                     {history.map((item) => (
-                      <div key={item.id} className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition`}>
+                      <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-3">
                             <div className="flex-shrink-0">
@@ -460,7 +461,6 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                 )}
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
