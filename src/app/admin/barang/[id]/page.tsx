@@ -476,7 +476,7 @@ return (
 
     {/* Catatan */}
     {item.catatan && (
-      <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
+      <div className="mt-4 pt-4 border-t bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
         <div className="flex items-start space-x-3">
           <FileText className="w-5 h-5 text-gray-400 mt-0.5" />
           <div>
