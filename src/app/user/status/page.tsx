@@ -449,7 +449,7 @@ const exportHistory = () => {
                             <img
                               src={item.fotoPinjam}
                               alt="Foto saat dipinjam"
-                              className="w-full h-40 object-cover rounded-lg cursor-pointer"
+                              className="w-full h-full object-cover rounded-lg cursor-pointer"
                               onClick={() => window.open(item.fotoPinjam!, "_blank")}
                             />
                           </li>
