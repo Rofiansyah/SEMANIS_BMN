@@ -173,12 +173,12 @@ return (
           <Camera className="w-5 h-5" />
           {title}
         </h3>
-        <Button
+        <button
           onClick={handleClose}
           className="text-white hover:text-gray-200 transition"
         >
           <X className="w-5 h-5" />
-        </Button>
+        </button>
       </div>
 
       {/* Body Scrollable */}

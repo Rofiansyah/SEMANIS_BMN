@@ -183,9 +183,9 @@ return (
         <h3 className="text-base sm:text-lg font-semibold text-white">
           Proses Pengembalian
         </h3>
-        <Button onClick={onClose} className="text-white hover:text-gray-200 transition">
+        <button onClick={onClose} className="text-white hover:text-gray-200 transition">
           <X className="w-5 h-5" />
-        </Button>
+        </button>
       </div>
 
       {/* Body Scrollable */}

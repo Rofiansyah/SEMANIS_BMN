@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
             Kembali ke Login
           </Button>
         </Link>
-        <button
+        <Button
           onClick={() => {
             setSuccess(false);
             setEmail('');
@@ -76,7 +76,7 @@ export default function ForgotPasswordPage() {
           className="w-full text-sm sm:text-base text-gray-600 hover:text-gray-800 underline"
         >
           Kirim ulang email
-        </button>
+        </Button>
       </div>
     </div>
 
