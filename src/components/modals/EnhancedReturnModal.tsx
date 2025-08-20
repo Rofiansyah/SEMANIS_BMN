@@ -355,78 +355,57 @@ return (
               />
             </div>
 
-            {/* Foto Dokumentasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Foto Dokumentasi (Opsional)
-              </label>
-              {fotoPreview ? (
-                <div className="space-y-3">
-                  <img
-                    src={fotoPreview}
-                    alt="Preview"
-                    className="w-full h-28 sm:h-32 object-cover rounded-lg border"
-                  />
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsCameraCaptureOpen(true)}
-                      className="flex-1"
-                    >
-                      <Camera className="w-4 h-4 mr-1" />
-                      Ambil Ulang
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setFoto(null);
-                        setFotoPreview(null);
-                      }}
-                      className="flex-1"
-                    >
-                      Hapus Foto
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4">
-                  <div className="flex flex-col items-center space-y-2">
-                    <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
-                    <p className="text-xs sm:text-sm text-gray-600 text-center">
-                      Ambil foto atau upload dari galeri
-                    </p>
-                    <div className="flex space-x-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        
-                        onClick={() => setIsCameraCaptureOpen(true)}
-                      >
-                        <Camera className="w-4 h-4 mr-1" />
-                        Kamera
-                      </Button>
-                      <label className="cursor-pointer">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                        <div className="inline-flex items-center px-2.5 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-md hover:bg-gray-50">
-                          <Upload className="w-4 h-4 mr-1" />
-                          Upload
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+{/* Foto Dokumentasi */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Foto Dokumentasi (Opsional)
+  </label>
+  {fotoPreview ? (
+    <div className="space-y-3">
+      <img
+        src={fotoPreview}
+        alt="Preview"
+        className="w-full h-28 sm:h-32 object-cover rounded-lg border"
+      />
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setIsCameraCaptureOpen(true)}
+          className="flex-1"
+        >
+          <Camera className="w-4 h-4 mr-1" />
+          Ambil Ulang
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setFoto(null);
+            setFotoPreview(null);
+          }}
+          className="flex-1"
+        >
+          Hapus Foto
+        </Button>
+      </div>
+    </div>
+  ) : (
+    <div
+      className="border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4 cursor-pointer hover:bg-gray-50 transition"
+      onClick={() => setIsCameraCaptureOpen(true)}
+    >
+      <div className="flex flex-col items-center space-y-2">
+        <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
+        <p className="text-xs sm:text-sm text-gray-600 text-center">
+          Klik di sini untuk ambil foto dokumentasi
+        </p>
+      </div>
+    </div>
+  )}
+</div>
 
             {/* Actions */}
             <div className="flex flex-col md:flex-row gap-3 pt-4">

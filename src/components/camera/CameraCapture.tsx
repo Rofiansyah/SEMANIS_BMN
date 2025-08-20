@@ -224,7 +224,7 @@ return (
               </Button>
               <Button
                 onClick={confirmPhoto}
-                className="flex-1 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white rounded-md transition-colors duration-200 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <Check className="w-4 h-4" />
                 Use Photo
