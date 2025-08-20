@@ -231,7 +231,7 @@ export default function DashboardUserPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {[
             {
               label: "Total Barang",
@@ -280,113 +280,119 @@ export default function DashboardUserPage() {
           ))}
         </div>
 
-        {/* Search & Filter */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex flex-col lg:flex-row gap-4 mb-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Button
-              variant="secondary"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <Filter size={16} />
-              Filter & Sort
-            </Button>
-          </div>
+{/* Search & Filter */}
+<div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
+  {/* Search & Toggle Filter */}
+  <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mb-4">
+    {/* Search Box */}
+    <div className="flex-1 relative">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <Input
+        type="text"
+        placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="pl-10 pr-4 py-2 w-full"
+      />
+    </div>
 
-          {showFilters && (
-            <div className="border-t pt-4">
-              {/* Filter dropdowns */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                {/* Kategori */}
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Kategori
-                  </label>
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full rounded-md border-gray-300"
-                  >
-                    <option value="">Semua Kategori</option>
-                    {categories.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.nama}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* Merek */}
-                <div>
-                  <label className="block text-sm font-medium mb-1">Merek</label>
-                  <select
-                    value={selectedBrand}
-                    onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="w-full rounded-md border-gray-300"
-                  >
-                    <option value="">Semua Merek</option>
-                    {brands.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.nama}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* Lokasi */}
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Lokasi
-                  </label>
-                  <select
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="w-full rounded-md border-gray-300"
-                  >
-                    <option value="">Semua Lokasi</option>
-                    {locations.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.nama}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* Sort */}
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Urutkan
-                  </label>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full rounded-md border-gray-300"
-                  >
-                    <option value="nama">Nama A-Z</option>
-                    <option value="kodeBarang">Kode Barang</option>
-                    <option value="createdAt">Terbaru</option>
-                  </select>
-                </div>
-              </div>
+    {/* Filter Button */}
+    <div className="flex lg:justify-end">
+      <Button
+        variant="secondary"
+        onClick={() => setShowFilters(!showFilters)}
+        className="flex items-center gap-2 w-full sm:w-auto"
+      >
+        <Filter size={16} />
+        <span className="hidden sm:inline">Filter & Sort</span>
+        <span className="sm:hidden">Filter</span>
+      </Button>
+    </div>
+  </div>
 
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-600">
-                  Menampilkan {filteredBarang.length} dari {barang.length} barang
-                </p>
-                <Button variant="secondary" size="sm" onClick={clearFilters}>
-                  Hapus Filter
-                </Button>
-              </div>
-            </div>
-          )}
+  {/* Filter Section */}
+  {showFilters && (
+    <div className="border-t pt-4 mt-2 space-y-4">
+      {/* Filter dropdowns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Kategori */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Kategori</label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full rounded-lg border-gray-300 text-sm p-2"
+          >
+            <option value="">Semua Kategori</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.nama}
+              </option>
+            ))}
+          </select>
         </div>
+
+        {/* Merek */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Merek</label>
+          <select
+            value={selectedBrand}
+            onChange={(e) => setSelectedBrand(e.target.value)}
+            className="w-full rounded-lg border-gray-300 text-sm p-2"
+          >
+            <option value="">Semua Merek</option>
+            {brands.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.nama}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Lokasi */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Lokasi</label>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="w-full rounded-lg border-gray-300 text-sm p-2"
+          >
+            <option value="">Semua Lokasi</option>
+            {locations.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.nama}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Sort */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium mb-1">Urutkan</label>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="w-full rounded-lg border-gray-300 text-sm p-2"
+          >
+            <option value="nama">Nama A-Z</option>
+            <option value="kodeBarang">Kode Barang</option>
+            <option value="createdAt">Terbaru</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Footer filter */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+        <p className="text-sm text-gray-600">
+          Menampilkan {filteredBarang.length} dari {barang.length} barang
+        </p>
+        <Button variant="secondary" size="sm" onClick={clearFilters}>
+          Hapus Filter
+        </Button>
+      </div>
+    </div>
+  )}
+</div>
 
         {/* Results */}
         {loadingBarang ? (
