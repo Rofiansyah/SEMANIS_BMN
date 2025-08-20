@@ -177,14 +177,14 @@ export default function QRScanner({ isOpen, onClose, onScan, title = "Scan QR Co
 
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-600">
-            Position the QR code within the scanning area
+            Pastikan posisikan kode QR di dalam area pemindaian!
           </p>
         </div>
 
         <div className="flex justify-center mt-4">
           <button
             onClick={handleClose}
-            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+            className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"  
           >
             Cancel
           </button>

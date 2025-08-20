@@ -292,7 +292,7 @@ export default function DashboardUserPage() {
         placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-700"
+        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
       />
     </div>
 
@@ -321,7 +321,7 @@ export default function DashboardUserPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
           >
             <option value="">Semua Kategori</option>
             {categories.map((c) => (
@@ -338,7 +338,7 @@ export default function DashboardUserPage() {
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
           >
             <option value="">Semua Merek</option>
             {brands.map((b) => (
@@ -355,7 +355,7 @@ export default function DashboardUserPage() {
           <select
             value={selectedLocation}
             onChange={(e) => setSelectedLocation(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
           >
             <option value="">Semua Lokasi</option>
             {locations.map((l) => (
@@ -372,7 +372,7 @@ export default function DashboardUserPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
           >
             <option value="nama">Nama A-Z</option>
             <option value="kodeBarang">Kode Barang</option>

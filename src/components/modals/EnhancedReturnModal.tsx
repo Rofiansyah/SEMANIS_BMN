@@ -304,16 +304,17 @@ return (
 
             <div className="flex flex-col space-y-3">
               <Button
+                variant="primary"
                 onClick={() => setIsQRScannerOpen(true)}
-                className="flex items-center justify-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                className="w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                 disabled={scanLoading}
               >
-                <QrCode className="w-4 h-4" />
+                <QrCode className="w-4 h-4 mr-2" />
                 Buka Scanner QR
               </Button>
               <Button
                 variant="outline"
-                className="flex items-center justify-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"  
+                className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"  
                 onClick={handleSkipScan}
                 disabled={scanLoading}
               >
