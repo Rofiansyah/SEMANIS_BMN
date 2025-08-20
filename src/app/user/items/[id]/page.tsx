@@ -14,7 +14,10 @@ import {
   Send, 
   CheckCircle,
   AlertCircle,
-  Image as ImageIcon
+  Image as ImageIcon,
+  XCircle,
+  Clock,
+  Eye
 } from 'lucide-react';
 import api from '@/lib/api';
 import { Barang, CreatePeminjamanRequest, Peminjaman } from '@/types/api';
@@ -32,6 +35,43 @@ export default function ItemDetailPage() {
   const [showBorrowForm, setShowBorrowForm] = useState(false);
   const [borrowNote, setBorrowNote] = useState('');
   const [success, setSuccess] = useState(false);
+
+  // mapping status untuk riwayat peminjaman
+  const statusMap: Record<
+    string,
+    { icon: React.ReactNode; text: string; color: string; bgColor: string }
+  > = {
+    DIKEMBALIKAN: {
+      icon: <CheckCircle size={16} />,
+      text: 'Dikembalikan',
+      color: 'bg-green-100 text-green-800',
+      bgColor: 'bg-green-50',
+    },
+    DITOLAK: {
+      icon: <XCircle size={16} />,
+      text: 'Ditolak',
+      color: 'bg-red-100 text-red-800',
+      bgColor: 'bg-red-50',
+    },
+    MENUNGGU: {
+      icon: <Clock size={16} />,
+      text: 'Menunggu Persetujuan',
+      color: 'bg-yellow-100 text-yellow-800',
+      bgColor: 'bg-yellow-50',
+    },
+    DISETUJUI: {
+      icon: <CheckCircle size={16} />,
+      text: 'Disetujui',
+      color: 'bg-blue-100 text-blue-800',
+      bgColor: 'bg-blue-50',
+    },
+    DIPINJAM: {
+      icon: <Eye size={16} />,
+      text: 'Sedang Dipinjam',
+      color: 'bg-purple-100 text-purple-800',
+      bgColor: 'bg-purple-50',
+    },
+  };
 
   const fetchItemDetail = useCallback(async () => {
     try {
@@ -51,7 +91,7 @@ export default function ItemDetailPage() {
       const response = await api.get('/peminjaman/my-history');
       const data = response.data.data || [];
       
-      // Filter history for this specific item
+      // Filter history untuk barang ini
       const itemHistory = data.filter((peminjaman: { barangId: string }) => 
         peminjaman.barangId === params.id
       );
@@ -86,7 +126,6 @@ export default function ItemDetailPage() {
       
       toast.success('Permintaan peminjaman berhasil dikirim!');
       
-      // Show success message for 3 seconds then redirect
       setTimeout(() => {
         router.push('/user/status');
       }, 3000);
@@ -112,7 +151,7 @@ export default function ItemDetailPage() {
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusMap[kondisi as keyof typeof statusMap] || 'bg-gray-100 text-gray-800'}`}>
+      <span className={`px-3 py-1 flex justify-center items-center rounded-full text-sm font-medium ${statusMap[kondisi as keyof typeof statusMap] || 'bg-gray-100 text-gray-800'}`}>
         {statusText[kondisi as keyof typeof statusText] || kondisi}
       </span>
     );
@@ -288,7 +327,7 @@ return (
                             setBorrowNote("");
                           }}
                           disabled={borrowing}
-                          className="text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                          className="flex-1 flex items-center justify-center gap-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                         >
                           Batal
                         </Button>
@@ -338,106 +377,108 @@ return (
           </h3>
 
           <div className="space-y-6">
-            {borrowHistory.map((history, index) => (
-              <div key={history.id} className="border rounded-xl p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
-                  <div>
-                    <h4 className="font-medium text-gray-900">
-                      Peminjaman #{borrowHistory.length - index}
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      {new Date(history.tanggalPengajuan).toLocaleDateString(
-                        "id-ID"
-                      )}{" "}
-                      -{" "}
-                      {history.tanggalDikembalikan
-                        ? new Date(
-                            history.tanggalDikembalikan
-                          ).toLocaleDateString("id-ID")
-                        : "Belum dikembalikan"}
-                    </p>
-                  </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      history.status === "DIKEMBALIKAN"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {history.status === "DIKEMBALIKAN"
-                      ? "Dikembalikan"
-                      : "Ditolak"}
-                  </span>
-                </div>
+            {borrowHistory.map((history, index) => {
+              const statusInfo = statusMap[history.status] || {
+                icon: null,
+                text: history.status,
+                color: 'bg-gray-100 text-gray-800',
+                bgColor: 'bg-gray-50',
+              };
 
-                {(history.fotoPinjam || history.fotoKembali) && (
-                  <div>
-                    <h5 className="font-medium text-gray-700 mb-3">
-                      Dokumentasi
-                    </h5>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {history.fotoPinjam && (
-                        <div>
-                          <h6 className="text-sm font-medium text-gray-600 mb-2">
-                            Foto Saat Dipinjam
-                          </h6>
-                          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                            <img
-                              src={history.fotoPinjam}
-                              alt="Foto saat dipinjam"
-                              className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition"
-                              onClick={() =>
-                                history.fotoPinjam &&
-                                window.open(history.fotoPinjam, "_blank")
-                              }
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Klik untuk memperbesar
-                          </p>
-                          {history.penanggungJawab && (
-                            <p className="text-xs text-gray-600 mt-1">
-                              Penanggung jawab: {history.penanggungJawab}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {history.fotoKembali && (
-                        <div>
-                          <h6 className="text-sm font-medium text-gray-600 mb-2">
-                            Foto Saat Dikembalikan
-                          </h6>
-                          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                            <img
-                              src={history.fotoKembali}
-                              alt="Foto saat dikembalikan"
-                              className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition"
-                              onClick={() =>
-                                history.fotoKembali &&
-                                window.open(history.fotoKembali, "_blank")
-                              }
-                            />
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">
-                            Klik untuk memperbesar
-                          </p>
-                        </div>
-                      )}
+              return (
+                <div
+                  key={history.id}
+                  className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition ${statusInfo.bgColor}`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2">
+                    <div>
+                      <h4 className="font-medium text-gray-900">
+                        Peminjaman #{borrowHistory.length - index}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {new Date(history.tanggalPengajuan).toLocaleDateString("id-ID")} -{" "}
+                        {history.tanggalDikembalikan
+                          ? new Date(history.tanggalDikembalikan).toLocaleDateString("id-ID")
+                          : "Belum dikembalikan"}
+                      </p>
                     </div>
+                    <span
+                      className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${statusInfo.color}`}
+                    >
+                      {statusInfo.icon}
+                      {statusInfo.text}
+                    </span>
                   </div>
-                )}
 
-                {history.catatan && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <h6 className="text-sm font-medium text-gray-700 mb-1">
-                      Catatan
-                    </h6>
-                    <p className="text-sm text-gray-600">{history.catatan}</p>
-                  </div>
-                )}
-              </div>
-            ))}
+                  {(history.fotoPinjam || history.fotoKembali) && (
+                    <div>
+                      <h5 className="font-medium text-gray-700 mb-3">
+                        Dokumentasi
+                      </h5>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {history.fotoPinjam && (
+                          <div>
+                            <h6 className="text-sm font-medium text-gray-600 mb-2">
+                              Foto Saat Dipinjam
+                            </h6>
+                            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                              <img
+                                src={history.fotoPinjam}
+                                alt="Foto saat dipinjam"
+                                className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition"
+                                onClick={() =>
+                                  history.fotoPinjam &&
+                                  window.open(history.fotoPinjam, "_blank")
+                                }
+                              />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Klik untuk memperbesar
+                            </p>
+                            {history.penanggungJawab && (
+                              <p className="text-xs text-gray-600 mt-1">
+                                Penanggung jawab: {history.penanggungJawab}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {history.fotoKembali && (
+                          <div>
+                            <h6 className="text-sm font-medium text-gray-600 mb-2">
+                              Foto Saat Dikembalikan
+                            </h6>
+                            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                              <img
+                                src={history.fotoKembali}
+                                alt="Foto saat dikembalikan"
+                                className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition"
+                                onClick={() =>
+                                  history.fotoKembali &&
+                                  window.open(history.fotoKembali, "_blank")
+                                }
+                              />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Klik untuk memperbesar
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {history.catatan && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <h6 className="text-sm font-medium text-gray-700 mb-1">
+                        Catatan
+                      </h6>
+                      <p className="text-sm text-gray-600">{history.catatan}</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
