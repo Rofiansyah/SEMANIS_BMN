@@ -491,7 +491,7 @@ return (
 
     {/* Approved By */}
     {item.approvedByUser && (
-      <div className="mt-4 pt-4 border-t border-gray-100">
+      <div className="mt-3 pt-3 border-t border-gray-100">
         <span className="text-sm text-gray-500">Disetujui oleh:</span>
         <p className="text-sm font-medium text-gray-900">
           {item.approvedByUser.nama}
