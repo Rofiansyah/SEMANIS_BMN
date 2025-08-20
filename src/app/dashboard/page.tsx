@@ -285,7 +285,7 @@ export default function DashboardUserPage() {
   {/* Search & Toggle Filter */}
   <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mb-4">
     {/* Search Box */}
-    <div className="flex-1 relative">
+    <div className="relative max-w-md w-full">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
       <Input
         type="text"

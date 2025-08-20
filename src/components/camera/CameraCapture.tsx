@@ -159,22 +159,29 @@ export default function CameraCapture({ isOpen, onClose, onCapture, title = "Tak
   
   console.log('CameraCapture: Modal is open, rendering...');
 
-  return (
-    <div className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[70]">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            <Camera className="w-5 h-5" />
-            {title}
-          </h3>
-          <button
-            onClick={handleClose}
-            className="p-1 hover:bg-gray-100 rounded-full"
-          >
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
-        </div>
+return (
+  <div
+    className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[70]"
+    onClick={(e) => e.target === e.currentTarget && handleClose()}
+  >
+    <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col animate-fadeIn">
+      
+      {/* Header Fixed */}
+      <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
+        <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+          <Camera className="w-5 h-5" />
+          {title}
+        </h3>
+        <button
+          onClick={handleClose}
+          className="text-white hover:text-gray-200 transition"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
+      {/* Body Scrollable */}
+      <div className="p-6 overflow-y-auto flex-1 space-y-4">
         {error ? (
           <div className="text-center py-8">
             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -233,7 +240,7 @@ export default function CameraCapture({ isOpen, onClose, onCapture, title = "Tak
                 playsInline
                 muted
               />
-              
+
               {isStreaming && (
                 <div className="absolute top-2 right-2">
                   <button
@@ -277,5 +284,6 @@ export default function CameraCapture({ isOpen, onClose, onCapture, title = "Tak
         />
       </div>
     </div>
-  );
+  </div>
+);
 }
