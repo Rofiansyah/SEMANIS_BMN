@@ -354,9 +354,9 @@ return (
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <AlertCircle
+                  <Package
                     size={20}
-                    className="mx-auto text-yellow-500 mb-2"
+                    className="mx-auto text-blue-800 mb-2"
                   />
                   <p className="text-sm text-gray-600">
                     Barang sedang dipinjam
@@ -399,7 +399,7 @@ return (
                         {new Date(history.tanggalPengajuan).toLocaleDateString("id-ID")} -{" "}
                         {history.tanggalDikembalikan
                           ? new Date(history.tanggalDikembalikan).toLocaleDateString("id-ID")
-                          : "Belum dikembalikan"}
+                          : "Peminjaman ditolak"}
                       </p>
                     </div>
                     <span
