@@ -476,10 +476,10 @@ return (
 
     {/* Catatan */}
     {item.catatan && (
-      <div className="mt-4 pt-4 border-t border-gray-100">
+      <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
         <div className="flex items-start space-x-3">
           <FileText className="w-5 h-5 text-gray-400 mt-0.5" />
-          <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
+          <div>
             <span className="text-sm text-gray-500">Catatan:</span>
             <p className="text-sm text-gray-900 mt-1 leading-relaxed">
               {item.catatan}
