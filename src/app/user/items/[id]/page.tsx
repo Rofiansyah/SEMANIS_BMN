@@ -352,7 +352,7 @@ return (
                   )}
                 </div>
               ) : (
-                <div className="text-center py-4 bg-blue-100">
+                <div className="text-center py-4 rounded-xl border shadow-sm hover:shadow-md transition bg-blue-100">
                   <Package
                     size={20}
                     className="mx-auto text-blue-800 mb-2"
