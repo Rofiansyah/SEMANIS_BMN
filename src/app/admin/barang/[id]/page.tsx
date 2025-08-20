@@ -6,7 +6,7 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
 import { barangApi, peminjamanApi } from '@/lib/api';
 import type { Barang, Peminjaman } from '@/types/api';
-import {
+import { 
   ArrowLeft,
   Package,
   Tag,
@@ -48,37 +48,6 @@ const kondisiLabels = {
   RUSAK_BERAT: 'Rusak Berat'
 };
 
-// Config untuk status peminjaman
-const statusInfoConfig: Record<
-  string,
-  { icon: React.ReactNode; text: string; color: string; bgColor: string }
-> = {
-  DIPINJAM: {
-    icon: <Package size={16} />,
-    text: 'Sedang Dipinjam',
-    color: 'bg-blue-100 text-blue-800',
-    bgColor: 'bg-blue-50',
-  },
-  DIKEMBALIKAN: {
-    icon: <CheckCircle size={16} />,
-    text: 'Dikembalikan',
-    color: 'bg-green-100 text-green-800',
-    bgColor: 'bg-green-50',
-  },
-  DITOLAK: {
-    icon: <XCircle size={16} />,
-    text: 'Ditolak',
-    color: 'bg-red-100 text-red-800',
-    bgColor: 'bg-red-50',
-  },
-  DEFAULT: {
-    icon: <Clock size={16} />,
-    text: 'Menunggu',
-    color: 'bg-yellow-100 text-yellow-800',
-    bgColor: 'bg-yellow-50',
-  },
-};
-
 export default function BarangDetailPage({ params }: BarangDetailPageProps) {
   const router = useRouter();
   const [barang, setBarang] = useState<Barang | null>(null);
@@ -98,7 +67,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
 
   const loadBarangDetail = useCallback(async () => {
     if (!paramsId) return;
-
+    
     try {
       const response = await barangApi.getById(paramsId);
       if (response.success) {
@@ -116,7 +85,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
 
   const loadHistory = useCallback(async () => {
     if (!paramsId) return;
-
+    
     setHistoryLoading(true);
     try {
       const response = await peminjamanApi.getHistoryByBarangId(paramsId);
@@ -141,7 +110,7 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
 
   const handleDownloadQRCode = async () => {
     if (!barang?.qrCodeUrl) return;
-
+    
     try {
       const response = await fetch(barang.qrCodeUrl);
       const blob = await response.blob();
@@ -165,10 +134,10 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
       DIKEMBALIKAN: { color: 'bg-green-100 text-green-800', label: 'Dikembalikan' },
       REJECTED: { color: 'bg-red-100 text-red-800', label: 'Ditolak' }
     };
-
-    const config = statusConfig[status as keyof typeof statusConfig] ||
-      { color: 'bg-gray-100 text-gray-800', label: status };
-
+    
+    const config = statusConfig[status as keyof typeof statusConfig] || 
+                  { color: 'bg-gray-100 text-gray-800', label: status };
+    
     return (
       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
         {config.label}
@@ -227,205 +196,206 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Photo */}
-          <div className="bg-white rounded-lg shadow border">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Foto Barang</h2>
-            </div>
-            <div className="p-6">
-              {barang.fotoUrl ? (
-                <div className="relative">
-                  <img
-                    src={barang.fotoUrl}
-                    alt={barang.nama}
-                    className="w-full h-64 object-cover rounded-lg border"
-                  />
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-                  <ImageIcon className="w-12 h-12 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">Tidak ada foto</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* QR Code */}
-          {barang.qrCodeUrl && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Foto + QR (Kiri di desktop, atas di mobile) */}
+          <div className="space-y-6 order-1 lg:order-1">
+            {/* Foto Barang */}
             <div className="bg-white rounded-lg shadow border">
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">QR Code</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Foto Barang</h2>
               </div>
               <div className="p-6">
-                <div className="flex flex-col items-center space-y-4">
-                  <img
-                    src={barang.qrCodeUrl}
-                    alt={`QR Code ${barang.kodeBarang}`}
-                    className="w-32 h-32 border rounded-lg"
-                  />
-                  <p className="text-sm text-gray-600 text-center">
-                    Scan untuk melihat detail barang
-                  </p>
-                  <Button
-                    variant="outlinesecond"
-                    size="sm"
-                    className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                    onClick={handleDownloadQRCode}>
-                    <QrCode className="w-4 h-4 mr-2" />
-                    Download QR Code
-                  </Button>
-                </div>
+                {barang.fotoUrl ? (
+                  <div className="relative">
+                    <img
+                      src={barang.fotoUrl}
+                      alt={barang.nama}
+                      className="w-full h-64 object-cover rounded-lg border"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                    <ImageIcon className="w-12 h-12 text-gray-400 mb-2" />
+                    <p className="text-sm text-gray-500">Tidak ada foto</p>
+                  </div>
+                )}
               </div>
             </div>
-          )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Main Info */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Basic Information */}
+            {/* QR Code */}
+            {barang.qrCodeUrl && (
               <div className="bg-white rounded-lg shadow border">
                 <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900">Informasi Dasar</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">QR Code</h2>
                 </div>
-                <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Kode Barang
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <Package className="w-4 h-4 text-gray-500" />
-                        <span className="font-mono text-lg">{barang.kodeBarang}</span>
-                      </div>
-                    </div>
+                <div className="p-6">
+                  <div className="flex flex-col items-center space-y-4">
+                    <img
+                      src={barang.qrCodeUrl}
+                      alt={`QR Code ${barang.kodeBarang}`}
+                      className="w-32 h-32 border rounded-lg"
+                    />
+                    <p className="text-sm text-gray-600 text-center">
+                      Scan untuk melihat detail barang
+                    </p>
+                    <Button 
+                      variant="outlinesecond" 
+                      size="sm" 
+                      className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                      onClick={handleDownloadQRCode}>
+                      <QrCode className="w-4 h-4 mr-2" />
+                      Download QR Code
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Status Kondisi
-                      </label>
-                      <div className="flex items-center space-x-2">
-                        <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${
-                          kondisiColors[barang.kondisi]
-                        }`}>
-                          {kondisiIcons[barang.kondisi]}
-                          <span className="ml-2">{kondisiLabels[barang.kondisi]}</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Kategori
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <Tag className="w-4 h-4 text-gray-500" />
-                        <span>{barang.kategori.nama}</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Merek
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <Building className="w-4 h-4 text-gray-500" />
-                        <span>{barang.merek.nama}</span>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Lokasi
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <MapPin className="w-4 h-4 text-gray-500" />
-                        <span>{barang.lokasi.nama}</span>
-                      </div>
+          {/* Detail Barang + Riwayat (Kanan di desktop, bawah di mobile) */}
+          <div className="lg:col-span-2 space-y-6 order-2 lg:order-2">
+            {/* Basic Information */}
+            <div className="bg-white rounded-lg shadow border">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Informasi Dasar</h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Kode Barang
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <Package className="w-4 h-4 text-gray-500" />
+                      <span className="font-mono text-lg">{barang.kodeBarang}</span>
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Deskripsi
+                      Status Kondisi
                     </label>
-                    <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
-                      {barang.deskripsi || 'Tidak ada deskripsi'}
-                    </p>
+                    <div className="flex items-center space-x-2">
+                      <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${
+                        kondisiColors[barang.kondisi]
+                      }`}>
+                        {kondisiIcons[barang.kondisi]}
+                        <span className="ml-2">{kondisiLabels[barang.kondisi]}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Kategori
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <Tag className="w-4 h-4 text-gray-500" />
+                      <span>{barang.kategori.nama}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Merek
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <Building className="w-4 h-4 text-gray-500" />
+                      <span>{barang.merek.nama}</span>
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Lokasi
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <MapPin className="w-4 h-4 text-gray-500" />
+                      <span>{barang.lokasi.nama}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Deskripsi
+                  </label>
+                  <p className="text-gray-900 bg-gray-50 p-3 rounded-md">
+                    {barang.deskripsi || 'Tidak ada deskripsi'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Timestamps */}
+            <div className="bg-white rounded-lg shadow border">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Informasi Waktu</h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tanggal Dibuat
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      <span>{new Date(barang.createdAt).toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Terakhir Diupdate
+                    </label>
+                    <div className="flex items-center space-x-2 text-gray-900">
+                      <Calendar className="w-4 h-4 text-gray-500" />
+                      <span>{new Date(barang.updatedAt).toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}</span>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Timestamps */}
-              <div className="bg-white rounded-lg shadow border">
-                <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900">Informasi Waktu</h2>
-                </div>
-                <div className="p-6 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Tanggal Dibuat
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <Calendar className="w-4 h-4 text-gray-500" />
-                        <span>{new Date(barang.createdAt).toLocaleDateString('id-ID', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Terakhir Diupdate
-                      </label>
-                      <div className="flex items-center space-x-2 text-gray-900">
-                        <Calendar className="w-4 h-4 text-gray-500" />
-                        <span>{new Date(barang.updatedAt).toLocaleDateString('id-ID', {
-                          weekday: 'long',
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}</span>
-                      </div>
-                    </div>
-                  </div>
+            {/* Riwayat Peminjaman */}
+            <div className="bg-white rounded-lg shadow border">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center space-x-2">
+                  <History className="w-5 h-5 text-gray-600" />
+                  <h2 className="text-lg font-semibold text-gray-900">Riwayat Peminjaman</h2>
                 </div>
               </div>
-
-              {/* Riwayat Peminjaman */}
-              <div className="bg-white rounded-lg shadow border">
-                <div className="p-6 border-b border-gray-200">
-                  <div className="flex items-center space-x-2">
-                    <History className="w-5 h-5 text-gray-600" />
-                    <h2 className="text-lg font-semibold text-gray-900">Riwayat Peminjaman</h2>
+              <div className="p-6">
+                {historyLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="inline-flex items-center space-x-2">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-500"></div>
+                      <span className="text-gray-600">Memuat riwayat...</span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  {historyLoading ? (
-                    <div className="flex items-center justify-center py-8">
-                      <div className="inline-flex items-center space-x-2">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-500"></div>
-                        <span className="text-gray-600">Memuat riwayat...</span>
-                      </div>
-                    </div>
-                  ) : history.length === 0 ? (
-                    <div className="text-center py-8">
-                      <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                      <p className="text-gray-500">Belum ada riwayat peminjaman</p>
-                    </div>
-                  ) : (
+                ) : history.length === 0 ? (
+                  <div className="text-center py-8">
+                    <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">Belum ada riwayat peminjaman</p>
+                  </div>
+                ) : (
                   <div className="space-y-4">
                     {history.map((item) => (
-                      <div key={item.id} className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition`}>
+                      <div key={item.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-3">
                             <div className="flex-shrink-0">
@@ -491,7 +461,6 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                 )}
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
