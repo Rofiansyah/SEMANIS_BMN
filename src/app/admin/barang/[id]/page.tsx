@@ -232,7 +232,8 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                     <img
                       src={barang.fotoUrl}
                       alt={barang.nama}
-                      className="w-full h-64 object-cover rounded-lg border"
+                      className="w-full h-64 object-cover rounded-lg cursor-pointer"
+                      onClick={() => window.open(barang.fotoUrl!, "_blank")}
                     />
                   </div>
                 ) : (

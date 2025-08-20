@@ -236,7 +236,8 @@ return (
               <img
                 src={item.fotoUrl}
                 alt={item.nama}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-lg cursor-pointer"
+                onClick={() => window.open(item.fotoUrl!, "_blank")}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-100">
