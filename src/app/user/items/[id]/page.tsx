@@ -355,9 +355,9 @@ return (
                 <div className="text-center py-4 rounded-xl border shadow-sm hover:shadow-md transition bg-blue-100">
                   <Package
                     size={20}
-                    className="mx-auto text-blue-800 mb-2"
+                    className="mx-auto text-blue-600 mb-2"
                   />
-                  <p className="text-sm text-blue-800">
+                  <p className="text-sm text-blue-600">
                     Barang sedang dipinjam
                   </p>
                 </div>
