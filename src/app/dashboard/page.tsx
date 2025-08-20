@@ -301,7 +301,7 @@ export default function DashboardUserPage() {
       <Button
         variant="secondary"
         onClick={() => setShowFilters(!showFilters)}
-        className="flex items-center gap-2 w-full sm:w-auto"
+        className="flex items-center gap-2 w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
       >
         <Filter size={16} />
         <span className="hidden sm:inline">Filter & Sort</span>
@@ -386,7 +386,7 @@ export default function DashboardUserPage() {
         <p className="text-sm text-gray-600">
           Menampilkan {filteredBarang.length} dari {barang.length} barang
         </p>
-        <Button variant="secondary" size="sm" onClick={clearFilters}>
+        <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200" onClick={clearFilters}>
           Hapus Filter
         </Button>
       </div>
