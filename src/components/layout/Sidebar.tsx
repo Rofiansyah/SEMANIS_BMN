@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight,
   ClipboardList,
+  Bookmark,
   CheckCircle,
   BookOpen
 } from 'lucide-react';
@@ -52,7 +53,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
       children: [
         { label: 'Barang', href: '/admin/barang', icon: <Package size={16} /> },
         { label: 'Kategori', href: '/admin/kategori', icon: <Tag size={16} /> },
-        { label: 'Merek', href: '/admin/merek', icon: <Tag size={16} /> },
+        { label: 'Merek', href: '/admin/merek', icon: <Bookmark size={16} /> },
         { label: 'Lokasi', href: '/admin/lokasi', icon: <MapPin size={16} /> }
       ]
     },

@@ -186,8 +186,8 @@ return (
                   <tr key={lokasi.id} className="hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-4 sm:px-6">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-green-600" />
+                        <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                          <MapPin className="w-4 h-4 text-orange-600" />
                         </div>
                         <span className="font-medium text-gray-900">{lokasi.nama}</span>
                       </div>

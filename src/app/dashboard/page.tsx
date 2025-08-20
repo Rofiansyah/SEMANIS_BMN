@@ -30,6 +30,7 @@ export default function DashboardUserPage() {
   const [stats, setStats] = useState({
     totalBarang: 0,
     totalKategori: 0,
+    totalMerek: 0,
     totalLokasi: 0,
     myPeminjaman: 0,
   });
@@ -62,10 +63,11 @@ export default function DashboardUserPage() {
   const fetchUserStats = async () => {
     try {
       setLoadingStats(true);
-      const [barangRes, kategoriRes, lokasiRes, peminjamanRes] =
+      const [barangRes, kategoriRes, merekRes, lokasiRes, peminjamanRes] =
         await Promise.all([
           api.get("/barang"),
           api.get("/kategori"),
+          api.get("/merek"),
           api.get("/lokasi"),
           api
             .get("/peminjaman/my-requests")
@@ -76,6 +78,8 @@ export default function DashboardUserPage() {
         barangRes.data.data.items || barangRes.data.data || [];
       const kategoriData =
         kategoriRes.data.data.items || kategoriRes.data.data || [];
+      const merekData = 
+        merekRes.data.data.items || merekRes.data.data || [];
       const lokasiData =
         lokasiRes.data.data.items || lokasiRes.data.data || [];
       const peminjamanData =
@@ -84,6 +88,7 @@ export default function DashboardUserPage() {
       setStats({
         totalBarang: barangData.length,
         totalKategori: kategoriData.length,
+        totalMerek: merekData.length,
         totalLokasi: lokasiData.length,
         myPeminjaman: peminjamanData.filter(
           (p: { status: string }) => p.status === "DIPINJAM"
@@ -237,20 +242,26 @@ export default function DashboardUserPage() {
             {
               label: "Kategori Tersedia",
               value: stats.totalKategori,
-              icon: <Tag className="h-6 w-6 text-green-600" />,
-              bg: "bg-green-100",
+              icon: <Tag className="h-6 w-6 text-pink-600" />,
+              bg: "bg-pink-100",
+            },
+            {
+              label: "Merek Tersedia",
+              value: stats.totalMerek,
+              icon: <Bookmark className="h-6 w-6 text-purple-600" />,
+              bg: "bg-purle-100",
             },
             {
               label: "Lokasi Tersedia",
               value: stats.totalLokasi,
-              icon: <Building className="h-6 w-6 text-purple-600" />,
-              bg: "bg-purple-100",
+              icon: <Building className="h-6 w-6 text-orange-600" />,
+              bg: "bg-orange-100",
             },
             {
               label: "Peminjaman Aktif",
               value: stats.myPeminjaman,
-              icon: <History className="h-6 w-6 text-orange-600" />,
-              bg: "bg-orange-100",
+              icon: <History className="h-6 w-6 text-green-600" />,
+              bg: "bg-green-100",
             },
           ].map((stat, idx) => (
             <div key={idx} className="bg-white rounded-lg shadow p-6">

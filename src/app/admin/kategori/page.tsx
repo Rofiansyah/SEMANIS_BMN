@@ -194,8 +194,8 @@ return (
                   <tr key={kategori.id} className="hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-4 sm:px-6">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
-                          <Tag className="w-4 h-4 text-yellow-600" />
+                        <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center">
+                          <Tag className="w-4 h-4 text-pink-600" />
                         </div>
                         <span className="font-medium text-gray-900">{kategori.nama}</span>
                       </div>

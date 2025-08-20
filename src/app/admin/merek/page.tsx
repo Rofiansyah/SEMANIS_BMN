@@ -12,6 +12,7 @@ import {
   Trash2,
   Tag, 
   Search,
+  Bookmark,
   AlertCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -140,7 +141,7 @@ return (
               <p className="text-sm text-gray-600">Total Merek</p>
               <p className="text-2xl font-bold text-gray-900">{merekList.length}</p>
             </div>
-            <Tag className="w-8 h-8 text-gray-400" />
+            <Bookmark className="w-8 h-8 text-gray-400" />
           </div>
         </div>
       </div>
@@ -186,8 +187,8 @@ return (
                   <tr key={merek.id} className="hover:bg-gray-50 transition-colors">
                     <td className="py-4 px-4 sm:px-6">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <Tag className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <Bookmark className="w-4 h-4 text-purple-600" />
                         </div>
                         <span className="font-medium text-gray-900">{merek.nama}</span>
                       </div>
