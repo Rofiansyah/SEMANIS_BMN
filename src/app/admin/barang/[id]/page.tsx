@@ -426,18 +426,17 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                           key={item.id} 
                           className={`rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200 ${config.bgColor}`}
                         >
-                          {/* Header */}
-                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                          <div className="flex items-start justify-between mb-3">
                             <div className="flex items-center space-x-3">
                               <div className="flex-shrink-0">
-                                <User className="w-10 h-10 text-gray-500 bg-gray-100 rounded-full p-2" />
+                                <User className="w-8 h-8 text-gray-400 bg-gray-100 rounded-full p-1.5" />
                               </div>
                               <div>
-                                <h4 className="text-base sm:text-lg font-semibold text-gray-900">{item.user.nama}</h4>
+                                <h4 className="font-medium text-gray-900">{item.user.nama}</h4>
                                 <p className="text-sm text-gray-600">{item.user.email}</p>
                               </div>
                             </div>
-                            <div className="flex-shrink-0">{getStatusBadge(item.status)}</div>
+                            {getStatusBadge(item.status)}
                           </div>
                           
                           {/* Info tanggal & lainnya tetap sama */}
