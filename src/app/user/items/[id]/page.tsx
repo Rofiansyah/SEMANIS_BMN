@@ -176,9 +176,10 @@ return (
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <Button
-          variant="secondary"
+          size="sm"
+          variant="outlinesecond" 
           onClick={() => router.back()}
-          className="flex items-center gap-2"
+          className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
         >
           <ArrowLeft size={16} />
           Kembali
@@ -266,23 +267,35 @@ return (
                   ) : (
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Catatan Peminjaman
+                        <label className="block text-sm font-medium text-gray-900 mb-2">
+                          Catatan Peminjaman <span className="text-red-500">*</span>
                         </label>
                         <textarea
                           value={borrowNote}
                           onChange={(e) => setBorrowNote(e.target.value)}
                           placeholder="Jelaskan tujuan peminjaman barang ini..."
-                          className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                          rows={4}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+                          rows={3}
                           required
                         />
                       </div>
                       <div className="flex gap-3">
                         <Button
+                          size="sm"
+                          variant="outlinesecond" 
+                          onClick={() => {
+                            setShowBorrowForm(false);
+                            setBorrowNote("");
+                          }}
+                          disabled={borrowing}
+                          className="text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                        >
+                          Batal
+                        </Button>
+                        <Button
                           onClick={handleBorrowRequest}
                           disabled={borrowing || !borrowNote.trim()}
-                          className="flex-1 flex items-center justify-center gap-2"
+                          className="flex-1 flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-white rounded-lg py-2 transition"
                         >
                           {borrowing ? (
                             <>
@@ -295,17 +308,6 @@ return (
                               Kirim Permintaan
                             </>
                           )}
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          onClick={() => {
-                            setShowBorrowForm(false);
-                            setBorrowNote("");
-                          }}
-                          disabled={borrowing}
-                          className="rounded-lg"
-                        >
-                          Batal
                         </Button>
                       </div>
                     </div>
