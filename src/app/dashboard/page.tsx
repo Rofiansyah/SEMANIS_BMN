@@ -287,7 +287,7 @@ export default function DashboardUserPage() {
     {/* Search Box */}
     <div className="flex-1 relative">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700 w-4 h-4" />
-      <Input
+      <input
         type="text"
         placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
         value={searchTerm}
