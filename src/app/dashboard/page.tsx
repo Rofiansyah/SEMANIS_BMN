@@ -404,7 +404,7 @@ export default function DashboardUserPage() {
                 </div>
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold truncate flex-1">
+                    <h3 className="font-semibold truncate flex-1 text-gray-900">
                       {item.nama}
                     </h3>
                     {getStatusBadge(item.kondisi)}
@@ -431,7 +431,7 @@ export default function DashboardUserPage() {
                       {item.kodeBarang}
                     </span>
                     <Link href={`/user/items/${item.id}`}>
-                      <Button size="sm" className="flex items-center gap-1">
+                      <Button size="sm" className="flex items-center gap-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
                         <Eye size={14} />
                         Detail
                       </Button>

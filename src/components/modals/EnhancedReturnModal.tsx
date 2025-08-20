@@ -195,7 +195,7 @@ return (
           <div
             className={`flex items-center ${
               step === "scan"
-                ? "text-blue-950"
+                ? "text-blue-600"
                 : validationResult?.isValid
                 ? "text-green-600"
                 : "text-gray-400"
@@ -204,7 +204,7 @@ return (
             <div
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
                 step === "scan"
-                  ? "bg-blue-200"
+                  ? "bg-blue-100"
                   : validationResult?.isValid
                   ? "bg-green-100"
                   : "bg-gray-100"
@@ -212,22 +212,22 @@ return (
             >
               {validationResult?.isValid ? <Check className="w-4 h-4" /> : "1"}
             </div>
-            <span className="ml-2 text-xs sm:text-sm font-medium text-blue-950">Scan QR Code</span>
+            <span className="ml-2 text-xs sm:text-sm font-medium">Scan QR Code</span>
           </div>
           <div className="flex-1 h-px bg-gray-300 sm:mx-4 hidden sm:block"></div>
           <div
             className={`flex items-center ${
-              step === "form" ? "text-blue-950" : "text-gray-400"
+              step === "form" ? "text-blue-600" : "text-gray-400"
             }`}
           >
             <div
               className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium ${
-                step === "form" ? "bg-blue-200" : "bg-gray-100"
+                step === "form" ? "bg-blue-100" : "bg-gray-100"
               }`}
             >
               2
             </div>
-            <span className="ml-2 text-xs sm:text-sm font-medium text-blue-950">Form Pengembalian</span>
+            <span className="ml-2 text-xs sm:text-sm font-medium">Form Pengembalian</span>
           </div>
         </div>
 
@@ -305,7 +305,7 @@ return (
             <div className="flex flex-col space-y-3">
               <Button
                 onClick={() => setIsQRScannerOpen(true)}
-                className="flex items-center justify-center gap-2"
+                className="flex items-center justify-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
                 disabled={scanLoading}
               >
                 <QrCode className="w-4 h-4" />
@@ -313,6 +313,7 @@ return (
               </Button>
               <Button
                 variant="outline"
+                className="flex items-center justify-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"  
                 onClick={handleSkipScan}
                 disabled={scanLoading}
               >
@@ -333,7 +334,7 @@ return (
                 value={penanggungJawab}
                 onChange={(e) => setPenanggungJawab(e.target.value)}
                 placeholder="Nama lengkap penanggung jawab"
-                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white text-gray-900 placeholder-gray-500 text-sm sm:text-base"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
                 required
               />
             </div>
@@ -347,7 +348,7 @@ return (
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}
                 placeholder="Kondisi barang saat dikembalikan, catatan khusus, dll..."
-                className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 bg-white text-gray-900 placeholder-gray-500 text-sm sm:text-base"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
                 rows={3}
                 required
               />
@@ -402,6 +403,7 @@ return (
                         type="button"
                         variant="outline"
                         size="sm"
+                        
                         onClick={() => setIsCameraCaptureOpen(true)}
                       >
                         <Camera className="w-4 h-4 mr-1" />
