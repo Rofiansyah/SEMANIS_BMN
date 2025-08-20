@@ -421,86 +421,71 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
                       const config = statusConfig[item.status as keyof typeof statusConfig] || 
                                     { color: 'bg-gray-100 text-gray-800', bgColor: 'bg-gray-50' };
 
-return (
-  <div
-    key={item.id}
-    className={`rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200 ${config.bgColor}`}
-  >
-    {/* Header */}
-    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
-      <div className="flex items-center space-x-3">
-        <div className="flex-shrink-0">
-          <User className="w-10 h-10 text-gray-500 bg-gray-100 rounded-full p-2" />
-        </div>
-        <div>
-          <h4 className="text-base sm:text-lg font-semibold text-gray-900">
-            {item.user.nama}
-          </h4>
-          <p className="text-sm text-gray-600">{item.user.email}</p>
-        </div>
-      </div>
-      <div className="flex-shrink-0">{getStatusBadge(item.status)}</div>
-    </div>
+                      return (
+                        <div 
+                          key={item.id} 
+                          className={`rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition-all duration-200 ${config.bgColor}`}
+                        >
+                          {/* Header */}
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="flex-shrink-0">
+                                <User className="w-10 h-10 text-gray-500 bg-gray-100 rounded-full p-2" />
+                              </div>
+                              <div>
+                                <h4 className="text-base sm:text-lg font-semibold text-gray-900">{item.user.nama}</h4>
+                                <p className="text-sm text-gray-600">{item.user.email}</p>
+                              </div>
+                            </div>
+                            <div className="flex-shrink-0">{getStatusBadge(item.status)}</div>
+                          </div>
+                          
+                          {/* Info tanggal & lainnya tetap sama */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span className="text-gray-600">Tanggal Pengajuan:</span>
+                              <p className="font-medium">{new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</p>
+                            </div>
+                            {item.tanggalDisetujui && (
+                              <div>
+                                <span className="text-gray-600">Tanggal Disetujui:</span>
+                                <p className="font-medium">{new Date(item.tanggalDisetujui).toLocaleDateString('id-ID')}</p>
+                              </div>
+                            )}
+                            {item.tanggalDikembalikan && (
+                              <div>
+                                <span className="text-gray-600">Tanggal Dikembalikan:</span>
+                                <p className="font-medium">{new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</p>
+                              </div>
+                            )}
+                            {item.penanggungJawab && (
+                              <div>
+                                <span className="text-gray-600">Penanggung Jawab:</span>
+                                <p className="font-medium">{item.penanggungJawab}</p>
+                              </div>
+                            )}
+                          </div>
 
-    {/* Info Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-      <div>
-        <span className="text-gray-500">Tanggal Pengajuan:</span>
-        <p className="font-medium text-gray-900">
-          {new Date(item.tanggalPengajuan).toLocaleDateString("id-ID")}
-        </p>
-      </div>
-      {item.tanggalDisetujui && (
-        <div>
-          <span className="text-gray-500">Tanggal Disetujui:</span>
-          <p className="font-medium text-gray-900">
-            {new Date(item.tanggalDisetujui).toLocaleDateString("id-ID")}
-          </p>
-        </div>
-      )}
-      {item.tanggalDikembalikan && (
-        <div>
-          <span className="text-gray-500">Tanggal Dikembalikan:</span>
-          <p className="font-medium text-gray-900">
-            {new Date(item.tanggalDikembalikan).toLocaleDateString("id-ID")}
-          </p>
-        </div>
-      )}
-      {item.penanggungJawab && (
-        <div>
-          <span className="text-gray-500">Penanggung Jawab:</span>
-          <p className="font-medium text-gray-900">{item.penanggungJawab}</p>
-        </div>
-      )}
-    </div>
+                          {item.catatan && (
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <div className="flex items-start space-x-2">
+                                <FileText className="w-4 h-4 text-gray-400 mt-0.5" />
+                                <div>
+                                  <span className="text-sm text-gray-600">Catatan:</span>
+                                  <p className="text-sm text-gray-900 mt-1">{item.catatan}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
 
-    {/* Catatan */}
-    {item.catatan && (
-      <div className="mt-4 pt-4 border-t border-gray-100">
-        <div className="flex items-start space-x-3">
-          <FileText className="w-5 h-5 text-gray-400 mt-0.5" />
-          <div>
-            <span className="text-sm text-gray-500">Catatan:</span>
-            <p className="text-sm text-gray-900 mt-1 leading-relaxed">
-              {item.catatan}
-            </p>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* Approved By */}
-    {item.approvedByUser && (
-      <div className="mt-4 pt-4 border-t border-gray-100">
-        <span className="text-sm text-gray-500">Disetujui oleh:</span>
-        <p className="text-sm font-medium text-gray-900">
-          {item.approvedByUser.nama}
-        </p>
-      </div>
-    )}
-  </div>
-);
-
+                          {item.approvedByUser && (
+                            <div className="mt-3 pt-3 border-t border-gray-100">
+                              <span className="text-sm text-gray-600">Disetujui oleh:</span>
+                              <p className="text-sm font-medium text-gray-900">{item.approvedByUser.nama}</p>
+                            </div>
+                          )}
+                        </div>
+                      );
                     })}
                   </div>
                 )}
