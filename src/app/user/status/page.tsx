@@ -219,98 +219,108 @@ export default function UserStatusPage() {
   return (
     <DashboardLayout title="Peminjaman Barang">
       <div className="space-y-6">
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Total */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'ALL'
-                ? 'border-gray-500 bg-gray-100'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('ALL')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Permintaan</p>
-                <p className="text-2xl font-bold text-gray-900">{allCount}</p>
-              </div>
-              <ClipboardList className="w-8 h-8 text-gray-700" />
-            </div>
-          </div>
-
-          {/* Pending */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'PENDING'
-                ? 'border-yellow-500 bg-yellow-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('PENDING')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Menunggu Persetujuan</p>
-                <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
-              </div>
-              <Clock className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-
-          {/* Dipinjam */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIPINJAM'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DIPINJAM')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
-              </div>
-              <Package className="w-8 h-8 text-blue-600" />
-            </div>
-          </div>
-
-          {/* Ditolak */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DITOLAK'
-                ? 'border-red-500 bg-red-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DITOLAK')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">DITOLAK</p>
-                <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
-              </div>
-              <XCircle className="w-8 h-8 text-red-600" />
-            </div>
-          </div>   
-
-          {/* Dikembalikan */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIKEMBALIKAN'
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DIKEMBALIKAN')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">DIKEMBALIKAN</p>
-                <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-green-600" />
-            </div>
-          </div>  
+        {/* Welcome */}
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Peminjaman Barang
+          </h2>
+          <p className="text-gray-600">
+            Akses informasi riwayat peminjaman barang dari pengajuan hingga pengembalian
+          </p>
         </div>
+{/* Statistics Cards */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+  {/* Total */}
+  <div
+    className={`p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
+      activeTab === 'ALL'
+        ? 'border-gray-600 bg-gradient-to-br from-gray-100 to-gray-50'
+        : 'border-gray-200 hover:border-gray-300 bg-white'
+    }`}
+    onClick={() => setActiveTab('ALL')}
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-600">Total Permintaan</p>
+        <p className="text-3xl font-bold text-gray-900">{allCount}</p>
+      </div>
+      <ClipboardList className="w-10 h-10 text-gray-700" />
+    </div>
+  </div>
+
+  {/* Pending */}
+  <div
+    className={`p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
+      activeTab === 'PENDING'
+        ? 'border-yellow-500 bg-gradient-to-br from-yellow-50 to-yellow-100'
+        : 'border-gray-200 hover:border-gray-300 bg-white'
+    }`}
+    onClick={() => setActiveTab('PENDING')}
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-600">Menunggu Persetujuan</p>
+        <p className="text-3xl font-bold text-yellow-800">{pendingCount}</p>
+      </div>
+      <Clock className="w-10 h-10 text-yellow-600" />
+    </div>
+  </div>
+
+  {/* Dipinjam */}
+  <div
+    className={`p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
+      activeTab === 'DIPINJAM'
+        ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100'
+        : 'border-gray-200 hover:border-gray-300 bg-white'
+    }`}
+    onClick={() => setActiveTab('DIPINJAM')}
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-600">Sedang Dipinjam</p>
+        <p className="text-3xl font-bold text-blue-800">{borrowedCount}</p>
+      </div>
+      <Package className="w-10 h-10 text-blue-600" />
+    </div>
+  </div>
+
+  {/* Ditolak */}
+  <div
+    className={`p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
+      activeTab === 'DITOLAK'
+        ? 'border-red-500 bg-gradient-to-br from-red-50 to-red-100'
+        : 'border-gray-200 hover:border-gray-300 bg-white'
+    }`}
+    onClick={() => setActiveTab('DITOLAK')}
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-600">Ditolak</p>
+        <p className="text-3xl font-bold text-red-800">{rejectedCount}</p>
+      </div>
+      <XCircle className="w-10 h-10 text-red-600" />
+    </div>
+  </div>
+
+  {/* Dikembalikan */}
+  <div
+    className={`p-5 rounded-2xl border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
+      activeTab === 'DIKEMBALIKAN'
+        ? 'border-green-500 bg-gradient-to-br from-green-50 to-green-100'
+        : 'border-gray-200 hover:border-gray-300 bg-white'
+    }`}
+    onClick={() => setActiveTab('DIKEMBALIKAN')}
+  >
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-600">Dikembalikan</p>
+        <p className="text-3xl font-bold text-green-800">{returnedCount}</p>
+      </div>
+      <CheckCircle className="w-10 h-10 text-green-600" />
+    </div>
+  </div>
+</div>
+
 
 <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
   {/* Header */}
