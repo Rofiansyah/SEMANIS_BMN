@@ -342,7 +342,7 @@ export default function AdminStatusPage(){
                       <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Tgl Dipinjam</th>
                       <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Status</th>
                       <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lama</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">PJ</th>
+                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Penanggung Jawab</th>
                       <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Catatan</th>
                       <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
                     </tr>
