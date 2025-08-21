@@ -306,35 +306,58 @@ export default function AdminStatusPage(){
                           </td>
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex items-center space-x-3">
-                              <p className="font-medium">{request.barang.nama}</p>
-                              <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                              <div>
+                                <p className="font-medium">{request.barang.nama}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                              </div>
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
+                            <div className="flex items-center space-x-3">
+                              {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
+                            </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            {request.tanggalDipinjam 
-                              ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') 
-                              : '-'}
+                            <div className="flex items-center space-x-3">
+                              {request.tanggalDipinjam 
+                                ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') 
+                                : '-'}
+                              </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            {statusLabels[request.status as keyof typeof statusLabels]}
+                            <div className="flex items-center space-x-3">
+                              {statusInfo.icon}
+                              {statusInfo.text}
+                            </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
+                            <div className="flex items-center space-x-3">
+                              {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
+                            </div>
                           </td>
-                          <td className="py-4 px-4 border border-gray-300 text-center">{request.penanggungJawab || '-'}</td>
-                          <td className="py-4 px-4 border border-gray-300 truncate max-w-xs">{request.catatan || '-'}</td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                            >
-                              <Eye className="w-3 h-3 mr-1" />
-                              Detail
-                            </Button>
+                            <div className="flex items-center space-x-3">
+                              {request.penanggungJawab || '-'}
+                            </div>
+                          </td>
+                          <td className="py-4 px-4 border border-gray-300">
+                            <div className="flex items-center space-x-3">
+                              {request.catatan || '-'}
+                            </div>
+                          </td>
+                          <td className="py-4 px-4 border border-gray-300 text-center">
+                            <div className="flex items-center space-x-3">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                              >
+                                <Eye className="w-3 h-3 mr-1" />
+                                Detail
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       );
