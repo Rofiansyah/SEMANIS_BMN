@@ -241,10 +241,10 @@ export default function UserStatusPage() {
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">Total Permintaan</p>
-        <p className="text-3xl font-bold text-gray-900">{allCount}</p>
+        <p className="text-sm text-gray-600">Total Permintaan</p>
+        <p className="text-2xl font-bold text-gray-900">{allCount}</p>
       </div>
-      <ClipboardList className="w-10 h-10 text-gray-700" />
+      <ClipboardList className="w-8 h-8 text-gray-700" />
     </div>
   </div>
 
@@ -259,10 +259,10 @@ export default function UserStatusPage() {
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">Menunggu Persetujuan</p>
-        <p className="text-3xl font-bold text-yellow-800">{pendingCount}</p>
+        <p className="text-sm text-gray-600">Menunggu Persetujuan</p>
+        <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
       </div>
-      <Clock className="w-10 h-10 text-yellow-600" />
+      <Clock className="w-8 h-8 text-yellow-600" />
     </div>
   </div>
 
@@ -277,10 +277,10 @@ export default function UserStatusPage() {
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">Sedang Dipinjam</p>
-        <p className="text-3xl font-bold text-blue-800">{borrowedCount}</p>
+        <p className="text-sm text-gray-600">Sedang Dipinjam</p>
+        <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
       </div>
-      <Package className="w-10 h-10 text-blue-600" />
+      <Package className="w-8 h-8 text-blue-600" />
     </div>
   </div>
 
@@ -295,10 +295,10 @@ export default function UserStatusPage() {
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">Ditolak</p>
-        <p className="text-3xl font-bold text-red-800">{rejectedCount}</p>
+        <p className="text-sm text-gray-600">Ditolak</p>
+        <p className="text-2xl font-bold text-red-800">{rejectedCount}</p>
       </div>
-      <XCircle className="w-10 h-10 text-red-600" />
+      <XCircle className="w-8 h-8 text-red-600" />
     </div>
   </div>
 
@@ -313,10 +313,10 @@ export default function UserStatusPage() {
   >
     <div className="flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-gray-600">Dikembalikan</p>
-        <p className="text-3xl font-bold text-green-800">{returnedCount}</p>
+        <p className="text-sm text-gray-600">Dikembalikan</p>
+        <p className="text-2xl font-bold text-green-800">{returnedCount}</p>
       </div>
-      <CheckCircle className="w-10 h-10 text-green-600" />
+      <CheckCircle className="w-8 h-8 text-green-600" />
     </div>
   </div>
 </div>
