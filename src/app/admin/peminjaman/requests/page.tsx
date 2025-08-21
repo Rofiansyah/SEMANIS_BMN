@@ -369,7 +369,7 @@ export default function AdminStatusPage(){
                               </div>
 
                               {/* Nama + Email (justify) */}
-                              <div className="flex flex-col text-justify">
+                              <div className="flex flex-col">
                                 <p className="font-medium text-gray-900">{request.user.nama}</p>
                                 <p className="text-xs text-gray-500">{request.user.email}</p>
                               </div>
@@ -379,10 +379,10 @@ export default function AdminStatusPage(){
                           {/* Barang (tetap kiri juga) */}
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex flex-col">
-                              <p className="font-medium text-justify">
+                              <p className="font-medium">
                                 {request.barang.nama}
                               </p>
-                              <p className="text-xs text-gray-500 text-justify">
+                              <p className="text-xs text-gray-500">
                                 {request.barang.kodeBarang}
                               </p>
                             </div>
@@ -422,7 +422,7 @@ export default function AdminStatusPage(){
 
                           {/* Catatan (biar tetap kiri, biasanya panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            <p className="text-justify">
+                            <p>
                               {request.catatan || '-'}
                             </p>
                           </td>
@@ -430,62 +430,76 @@ export default function AdminStatusPage(){
                           {/* Aksi → fixed width center */}
                           <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
                             {request.status === 'PENDING' && (
-                              <div className="flex justify-center gap-2 flex-wrap">
-                                <Button
-                                  size="sm"
-                                  variant="outlinesecond"
-                                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                                  onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                                >
-                                  <Eye className="w-3 h-3 mr-1" />
-                                  Detail
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="danger"
-                                  onClick={() => setRejectRequest(request)}
-                                  className="text-xs"
-                                >
-                                  <XCircle className="w-3 h-3 mr-1" />
-                                  Tolak
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                                  onClick={() => setApproveRequest(request)}
-                                >
-                                  <CheckCircle className="w-3 h-3 mr-1" />
-                                  Setujui
-                                </Button>
+                              <div className="flex flex-col items-center gap-2">
+                                {/* Baris 1 */}
+                                <div className="flex justify-center">
+                                  <Button
+                                    size="sm"
+                                    variant="outlinesecond"
+                                    className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                    onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                                  >
+                                    <Eye className="w-3 h-3 mr-1" />
+                                    Detail
+                                  </Button>
+                                </div>
+
+                                {/* Baris 2 */}
+                                <div className="flex justify-center gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="danger"
+                                    onClick={() => setRejectRequest(request)}
+                                    className="text-xs"
+                                  >
+                                    <XCircle className="w-3 h-3 mr-1" />
+                                    Tolak
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                                    onClick={() => setApproveRequest(request)}
+                                  >
+                                    <CheckCircle className="w-3 h-3 mr-1" />
+                                    Setujui
+                                  </Button>
+                                </div>
                               </div>
                             )}
 
                             {request.status === 'DIPINJAM' && (
-                              <div className="flex justify-center gap-2 flex-wrap">
-                                <Button
-                                  size="sm"
-                                  variant="outlinesecond"
-                                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                                  onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                                >
-                                  <Eye className="w-3 h-3 mr-1" />
-                                  Detail
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                                  onClick={() => handleOpenReturnModal(request)}
-                                >
-                                  <RotateCcw className="w-3 h-3 mr-1" />
-                                  Pengembalian
-                                </Button>
+                              <div className="flex flex-col items-center gap-2">
+                                {/* Baris 1 */}
+                                <div className="flex justify-center">
+                                  <Button
+                                    size="sm"
+                                    variant="outlinesecond"
+                                    className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                    onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                                  >
+                                    <Eye className="w-3 h-3 mr-1" />
+                                    Detail
+                                  </Button>
+                                </div>
+
+                                {/* Baris 2 */}
+                                <div className="flex justify-center">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                                    onClick={() => handleOpenReturnModal(request)}
+                                  >
+                                    <RotateCcw className="w-3 h-3 mr-1" />
+                                    Pengembalian
+                                  </Button>
+                                </div>
                               </div>
                             )}
 
                             {(request.status === 'DIKEMBALIKAN' || request.status === 'DITOLAK') && (
-                              <div className="flex justify-center gap-2">
+                              <div className="flex justify-center">
                                 <Button
                                   size="sm"
                                   variant="outlinesecond"
@@ -498,7 +512,6 @@ export default function AdminStatusPage(){
                               </div>
                             )}
                           </td>
-
                         </tr>
                       );
                     })}
