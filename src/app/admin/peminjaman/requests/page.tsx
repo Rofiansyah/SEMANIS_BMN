@@ -427,10 +427,10 @@ export default function AdminStatusPage(){
                             </p>
                           </td>
 
-                          {/* Aksi → center */}
-                          <td className="py-4 px-4 border border-gray-300 text-center">
+                          {/* Aksi → fixed width center */}
+                          <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
                             {request.status === 'PENDING' && (
-                              <>
+                              <div className="flex justify-center gap-2 flex-wrap">
                                 <Button
                                   size="sm"
                                   variant="outlinesecond"
@@ -448,7 +448,7 @@ export default function AdminStatusPage(){
                                 >
                                   <XCircle className="w-3 h-3 mr-1" />
                                   Tolak
-                                </Button>                                
+                                </Button>
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -458,10 +458,11 @@ export default function AdminStatusPage(){
                                   <CheckCircle className="w-3 h-3 mr-1" />
                                   Setujui
                                 </Button>
-                              </>
+                              </div>
                             )}
+
                             {request.status === 'DIPINJAM' && (
-                              <>
+                              <div className="flex justify-center gap-2 flex-wrap">
                                 <Button
                                   size="sm"
                                   variant="outlinesecond"
@@ -480,20 +481,24 @@ export default function AdminStatusPage(){
                                   <RotateCcw className="w-3 h-3 mr-1" />
                                   Pengembalian
                                 </Button>
-                              </>
+                              </div>
                             )}
-                            {request.status === 'DIKEMBALIKAN' || request.status === 'DITOLAK' && (
-                              <Button
-                                size="sm"
-                                variant="outlinesecond"
-                                className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                                onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                              >
-                                <Eye className="w-3 h-3 mr-1" />
-                                Detail
-                              </Button>
+
+                            {(request.status === 'DIKEMBALIKAN' || request.status === 'DITOLAK') && (
+                              <div className="flex justify-center gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outlinesecond"
+                                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                  onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                                >
+                                  <Eye className="w-3 h-3 mr-1" />
+                                  Detail
+                                </Button>
+                              </div>
                             )}
                           </td>
+
                         </tr>
                       );
                     })}
