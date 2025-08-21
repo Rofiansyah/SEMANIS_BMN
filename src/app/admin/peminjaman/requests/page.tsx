@@ -189,6 +189,24 @@ export default function AdminStatusPage(){
             </div>
           </div>
 
+          {/* Dipinjam */}
+          <div
+            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+              activeTab === 'DIPINJAM'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+            onClick={() => setActiveTab('DIPINJAM')}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Sedang Dipinjam</p>
+                <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
+              </div>
+              <Package className="w-8 h-8 text-blue-600" />
+            </div>
+          </div>
+
           {/* Ditolak */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -237,7 +255,6 @@ export default function AdminStatusPage(){
           </div>
 
           <div className="space-y-9">
-            {/* TABLE VIEW */}
               {loading ? (
                 <div className="p-8 text-center">
                   <div className="inline-flex items-center space-x-2">
