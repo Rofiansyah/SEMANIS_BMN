@@ -80,7 +80,7 @@ export default function AdminStatusPage(){
     const statusMap = {
       'PENDING': {
         icon: <Clock size={16} />,
-        text: 'Menunggu Persetujuan',
+        text: 'Menunggu',
         color: 'bg-yellow-100 text-yellow-800',
         bgColor: 'bg-yellow-50'
       },
@@ -92,7 +92,7 @@ export default function AdminStatusPage(){
       },
       'DIPINJAM': {
         icon: <Package size={16} />,
-        text: 'Sedang Dipinjam',
+        text: 'Dipinjam',
         color: 'bg-blue-100 text-blue-800',
         bgColor: 'bg-blue-50'
       },
@@ -292,7 +292,11 @@ export default function AdminStatusPage(){
                       const daysBorrowed = Math.floor((Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
 
                       return (
-                        <tr key={request.id} className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}>
+                        <tr
+                          key={request.id}
+                          className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}
+                        >
+                          {/* Peminjam (biar tetap kiri karena biasanya teks panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex items-center space-x-3">
                               <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
@@ -304,60 +308,62 @@ export default function AdminStatusPage(){
                               </div>
                             </div>
                           </td>
+
+                          {/* Barang (tetap kiri juga) */}
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex flex-col">
                               <p className="font-medium">{request.barang.nama}</p>
                               <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
                             </div>
                           </td>
+
+                          {/* Tanggal Pengajuan → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3 text-center">
-                              {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
-                            </div>
+                            {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
                           </td>
+
+                          {/* Tanggal Dipinjam → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3 text-center">
-                              {request.tanggalDipinjam 
-                                ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') 
-                                : '-'}
-                              </div>
+                            {request.tanggalDipinjam
+                              ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID')
+                              : '-'}
                           </td>
+
+                          {/* Status → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3 text-center">
-                              <span
-                                className={`px-2 py-0.5 text-center rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
-                              >
-                                {statusInfo.icon}
-                                {statusInfo.text}
-                              </span>
-                            </div>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center justify-center gap-1 ${statusInfo.color}`}
+                            >
+                              {statusInfo.icon}
+                              {statusInfo.text}
+                            </span>
                           </td>
+
+                          {/* Lama Pinjam → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3 text-center">
-                              {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
-                            </div>
+                            {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
                           </td>
+
+                          {/* Penanggung Jawab → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3 text-center">
-                              {request.penanggungJawab || '-'}
-                            </div>
+                            {request.penanggungJawab || '-'}
                           </td>
+
+                          {/* Catatan (biar tetap kiri, biasanya panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            <div className="flex items-center space-x-3">
-                              {request.catatan || '-'}
-                            </div>
+                            {request.catatan || '-'}
                           </td>
+
+                          {/* Aksi → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                              >
-                                <Eye className="w-3 h-3 mr-1" />
-                                Detail
-                              </Button>
-                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                            >
+                              <Eye className="w-3 h-3 mr-1" />
+                              Detail
+                            </Button>
                           </td>
                         </tr>
                       );
