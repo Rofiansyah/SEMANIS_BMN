@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import CameraCapture from '@/components/camera/CameraCapture';
 import EnhancedReturnModal from '@/components/modals/EnhancedReturnModal';
+import ApproveModal from '@/components/modals/ApproveModal';
+import RejectModal from '@/components/modals/RejectModal';
 import { peminjamanApi } from '@/lib/api';
 import type { Peminjaman } from '@/types/api';
 import { 
@@ -55,6 +57,8 @@ export default function AdminStatusPage(){
   const [selectedPeminjamanForReturn, setSelectedPeminjamanForReturn] = useState<Peminjaman | null>(null);
   const [returnLoading, setReturnLoading] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<Peminjaman | null>(null);
+  const [approveRequest, setApproveRequest] = useState<Peminjaman | null>(null);
+  const [rejectRequest, setRejectRequest] = useState<Peminjaman | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('30'); // days
   const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN' | 'DISETUJUI'>('ALL');
@@ -75,6 +79,66 @@ export default function AdminStatusPage(){
       setLoading(false);
     }
   };
+
+  const handleOpenModal = (request: Peminjaman) => {
+    setSelectedRequest(request);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedRequest(null);
+    setIsModalOpen(false);
+  };
+
+  const handleApprove = async (id: string, penanggungJawab: string, foto?: File) => {
+    const response = await peminjamanApi.approve(id, { penanggungJawab, fotoPinjam: foto });
+    if (response.status === 'success') {
+      toast.success('Permintaan berhasil disetujui! ✅');
+      loadRequests();
+    }
+  };
+
+  const handleReject = async (id: string, catatan: string) => {
+    const response = await peminjamanApi.reject(id, { catatan });
+    if (response.status === 'success') {
+      toast.success('Permintaan berhasil ditolak! ❌');
+      loadRequests();
+    }
+  };  
+
+  const handleOpenReturnModal = (peminjaman: Peminjaman) => {
+    setSelectedPeminjamanForReturn(peminjaman);
+    setIsReturnModalOpen(true);
+  };
+
+  const handleCloseReturnModal = () => {
+    setSelectedPeminjamanForReturn(null);
+    setIsReturnModalOpen(false);
+  };
+
+  const handleProcessReturn = async (penanggungJawab: string, catatan: string, foto?: File) => {
+    if (!selectedPeminjamanForReturn) return;
+    
+    setReturnLoading(true);
+    try {
+      const response = await peminjamanApi.processReturn(selectedPeminjamanForReturn.id, {
+        penanggungJawab,
+        catatan,
+        fotoKembali: foto
+      });
+
+      if (response.status === 'success') {
+        toast.success('Pengembalian berhasil diproses! 📦');
+        handleCloseReturnModal();
+        loadRequests();
+      }
+    } catch (error) {
+      console.error('Failed to process return:', error);
+      toast.error('Gagal memproses pengembalian');
+    } finally {
+      setReturnLoading(false);
+    }
+  };  
   
   const getStatusInfo = (status: string) => {
     const statusMap = {
@@ -141,7 +205,7 @@ export default function AdminStatusPage(){
   }
   
   return (
-    <DashboardLayout title="Kelola Peminjaman Barang">
+    <DashboardLayout title="Kelola Peminjaman">
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -298,11 +362,14 @@ export default function AdminStatusPage(){
                         >
                           {/* Peminjam (biar tetap kiri karena biasanya teks panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-start space-x-3">
+                              {/* Ikon User */}
                               <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
                                 <User className="w-4 h-4 text-gray-600" />
                               </div>
-                              <div>
+
+                              {/* Nama + Email (justify) */}
+                              <div className="flex flex-col text-justify whitespace-normal break-words">
                                 <p className="font-medium text-gray-900">{request.user.nama}</p>
                                 <p className="text-xs text-gray-500">{request.user.email}</p>
                               </div>
@@ -312,8 +379,12 @@ export default function AdminStatusPage(){
                           {/* Barang (tetap kiri juga) */}
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex flex-col">
-                              <p className="font-medium">{request.barang.nama}</p>
-                              <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                              <p className="font-medium text-justify whitespace-normal break-words">
+                                {request.barang.nama}
+                              </p>
+                              <p className="text-xs text-gray-500 text-justify whitespace-normal break-words">
+                                {request.barang.kodeBarang}
+                              </p>
                             </div>
                           </td>
 
@@ -351,19 +422,77 @@ export default function AdminStatusPage(){
 
                           {/* Catatan (biar tetap kiri, biasanya panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            {request.catatan || '-'}
+                            <p className="text-justify whitespace-normal break-words">
+                              {request.catatan || '-'}
+                            </p>
                           </td>
 
                           {/* Aksi → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                            >
-                              <Eye className="w-3 h-3 mr-1" />
-                              Detail
-                            </Button>
+                            {request.status === 'PENDING' && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  variant="outlinesecond"
+                                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                  onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                                >
+                                  <Eye className="w-3 h-3 mr-1" />
+                                  Detail
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  onClick={() => setRejectRequest(request)}
+                                  className="text-xs"
+                                >
+                                  <XCircle className="w-3 h-3 mr-1" />
+                                  Tolak
+                                </Button>                                
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                                  onClick={() => setApproveRequest(request)}
+                                >
+                                  <CheckCircle className="w-3 h-3 mr-1" />
+                                  Setujui
+                                </Button>
+                              </>
+                            )}
+                            {request.status === 'DIPINJAM' && (
+                              <>
+                                <Button
+                                  size="sm"
+                                  variant="outlinesecond"
+                                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                  onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                                >
+                                  <Eye className="w-3 h-3 mr-1" />
+                                  Detail
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                                  onClick={() => handleOpenReturnModal(request)}
+                                >
+                                  <RotateCcw className="w-3 h-3 mr-1" />
+                                  Pengembalian
+                                </Button>
+                              </>
+                            )}
+                            {request.status === 'DIKEMBALIKAN' || request.status === 'DITOLAK' && (
+                              <Button
+                                size="sm"
+                                variant="outlinesecond"
+                                className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                                onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
+                              >
+                                <Eye className="w-3 h-3 mr-1" />
+                                Detail
+                              </Button>
+                            )}
                           </td>
                         </tr>
                       );
@@ -375,6 +504,27 @@ export default function AdminStatusPage(){
           </div>
         </div>
       </div>
+      {/* Enhanced Return Modal */}
+      <EnhancedReturnModal
+        isOpen={isReturnModalOpen}
+        onClose={handleCloseReturnModal}
+        onSubmit={handleProcessReturn}
+        peminjaman={selectedPeminjamanForReturn}
+        loading={returnLoading}
+      />
+      <ApproveModal
+        request={approveRequest}
+        isOpen={!!approveRequest}
+        onClose={() => setApproveRequest(null)}
+        onApprove={handleApprove}
+      />
+
+      <RejectModal
+        request={rejectRequest}
+        isOpen={!!rejectRequest}
+        onClose={() => setRejectRequest(null)}
+        onReject={handleReject}
+      />
     </DashboardLayout>
   );
 }

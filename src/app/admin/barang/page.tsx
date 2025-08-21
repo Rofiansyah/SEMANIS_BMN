@@ -25,9 +25,9 @@ import { exportBarangListPDF } from '@/utils/pdfExport';
 
 
 const kondisiColors = {
-  BAIK: 'bg-green-100 text-green-800',
-  RUSAK_RINGAN: 'bg-yellow-100 text-yellow-800',
-  RUSAK_BERAT: 'bg-red-100 text-red-800'
+  BAIK: 'bg-green-100 text-green-800 text-center',
+  RUSAK_RINGAN: 'bg-yellow-100 text-yellow-800 text-center',
+  RUSAK_BERAT: 'bg-red-100 text-red-800 text-center'
 };
 
 const kondisiLabels = {
@@ -294,21 +294,12 @@ export default function AdminBarangPage() {
                         <div className="flex items-center justify-center space-x-2">
                           <Button
                             size="sm"
-                            variant="outline"
-                            className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                            variant="outlinesecond"
+                            className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
                             onClick={() => router.push(`/admin/barang/${barang.id}`)}
                           >
                             <Eye className="w-3 h-3 mr-1" />
                             Detail
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outlinesecond"
-                            className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                            onClick={() => openEditModal(barang)}
-                          >
-                            <Edit className="w-3 h-3 mr-1" />
-                            Edit
                           </Button>
                           <Button
                             size="sm"
@@ -318,6 +309,15 @@ export default function AdminBarangPage() {
                           >
                             <Trash2 className="w-3 h-3 mr-1" />
                             Hapus
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                            onClick={() => openEditModal(barang)}
+                          >
+                            <Edit className="w-3 h-3 mr-1" />
+                            Edit
                           </Button>
                         </div>
                       </td>
