@@ -305,40 +305,40 @@ export default function AdminStatusPage(){
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300">
-                            <div className="flex items-center space-x-3">
-                              <div>
-                                <p className="font-medium">{request.barang.nama}</p>
-                              </div>
-                              <div>
-                                <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
-                              </div>
+                            <div className="flex flex-col">
+                              <p className="font-medium">{request.barang.nama}</p>
+                              <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3 text-center">
                               {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3 text-center">
                               {request.tanggalDipinjam 
                                 ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') 
                                 : '-'}
                               </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
-                              {statusInfo.icon}
-                              {statusInfo.text}
+                            <div className="flex items-center space-x-3 text-center">
+                              <span
+                                className={`px-2 py-0.5 text-center rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
+                              >
+                                {statusInfo.icon}
+                                {statusInfo.text}
+                              </span>
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3 text-center">
                               {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center space-x-3 text-center">
                               {request.penanggungJawab || '-'}
                             </div>
                           </td>
