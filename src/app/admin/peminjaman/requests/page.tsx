@@ -285,13 +285,14 @@ export default function AdminStatusPage(){
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredRequests.map((request) => {
+                      const statusInfo = getStatusInfo(request.status);
                       const borrowDate = request.tanggalDipinjam 
                         ? new Date(request.tanggalDipinjam) 
                         : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
                       const daysBorrowed = Math.floor((Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
 
                       return (
-                        <tr key={request.id} className="hover:bg-gray-50">
+                        <tr key={request.id} className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}>
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex items-center space-x-3">
                               <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
@@ -304,13 +305,15 @@ export default function AdminStatusPage(){
                             </div>
                           </td>
                           <td className="py-4 px-4 border border-gray-300">
-                            <p className="font-medium">{request.barang.nama}</p>
-                            <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                            <div className="flex items-center space-x-3">
+                              <p className="font-medium">{request.barang.nama}</p>
+                              <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                            </div>
                           </td>
-                          <td className="py-4 px-4 border border-gray-300">
+                          <td className="py-4 px-4 border border-gray-300 text-center">
                             {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
                           </td>
-                          <td className="py-4 px-4 border border-gray-300">
+                          <td className="py-4 px-4 border border-gray-300 text-center">
                             {request.tanggalDipinjam 
                               ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') 
                               : '-'}
@@ -321,7 +324,7 @@ export default function AdminStatusPage(){
                           <td className="py-4 px-4 border border-gray-300 text-center">
                             {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
                           </td>
-                          <td className="py-4 px-4 border border-gray-300">{request.penanggungJawab || '-'}</td>
+                          <td className="py-4 px-4 border border-gray-300 text-center">{request.penanggungJawab || '-'}</td>
                           <td className="py-4 px-4 border border-gray-300 truncate max-w-xs">{request.catatan || '-'}</td>
                           <td className="py-4 px-4 border border-gray-300 text-center">
                             <Button
