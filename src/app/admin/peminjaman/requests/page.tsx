@@ -369,7 +369,7 @@ export default function AdminStatusPage(){
                               </div>
 
                               {/* Nama + Email (justify) */}
-                              <div className="flex flex-col text-justify whitespace-normal break-words">
+                              <div className="flex flex-col text-justify">
                                 <p className="font-medium text-gray-900">{request.user.nama}</p>
                                 <p className="text-xs text-gray-500">{request.user.email}</p>
                               </div>
@@ -379,10 +379,10 @@ export default function AdminStatusPage(){
                           {/* Barang (tetap kiri juga) */}
                           <td className="py-4 px-4 border border-gray-300">
                             <div className="flex flex-col">
-                              <p className="font-medium text-justify whitespace-normal break-words">
+                              <p className="font-medium text-justify">
                                 {request.barang.nama}
                               </p>
-                              <p className="text-xs text-gray-500 text-justify whitespace-normal break-words">
+                              <p className="text-xs text-gray-500 text-justify">
                                 {request.barang.kodeBarang}
                               </p>
                             </div>
@@ -422,7 +422,7 @@ export default function AdminStatusPage(){
 
                           {/* Catatan (biar tetap kiri, biasanya panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            <p className="text-justify whitespace-normal break-words">
+                            <p className="text-justify">
                               {request.catatan || '-'}
                             </p>
                           </td>
