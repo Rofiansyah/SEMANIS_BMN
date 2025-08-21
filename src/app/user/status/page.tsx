@@ -73,9 +73,8 @@ export default function UserStatusPage() {
       setCategories(kategoriRes.data.data.items || kategoriRes.data.data || []);
       setBrands(merekRes.data.data.items || merekRes.data.data || []);
       setLocations(lokasiRes.data.data.items || lokasiRes.data.data || []);
-
-      const peminjamanData = peminjamanRes.data.data || peminjamanRes.data || [];
-      setPeminjaman(peminjamanData);
+      setPeminjaman(peminjamanRes.data.data || peminjamanRes.data || []);
+      
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Gagal memuat data peminjaman");
