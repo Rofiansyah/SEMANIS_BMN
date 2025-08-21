@@ -152,7 +152,7 @@ export default function AdminStatusPage(){
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -186,42 +186,6 @@ export default function AdminStatusPage(){
                 <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-
-          {/* Disetujui */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DISETUJUI'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DISETUJUI')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Disetujui</p>
-                <p className="text-2xl font-bold text-indigo-800">{approvedCount}</p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-indigo-600" />
-            </div>
-          </div>
-
-          {/* Dipinjam */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DIPINJAM'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DIPINJAM')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Sedang Dipinjam</p>
-                <p className="text-2xl font-bold text-blue-800">{borrowedCount}</p>
-              </div>
-              <Package className="w-8 h-8 text-blue-600" />
             </div>
           </div>
 
@@ -272,22 +236,8 @@ export default function AdminStatusPage(){
             </h2>
           </div>
 
-          <div className="space-y-8">
-
+          <div className="space-y-9">
             {/* TABLE VIEW */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Daftar Peminjaman
-                  </h2>
-                  <div className="flex items-center space-x-2">
-                    <Filter className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Filter: {selectedStatus}</span>
-                  </div>
-                </div>
-              </div>
-
               {loading ? (
                 <div className="p-8 text-center">
                   <div className="inline-flex items-center space-x-2">
@@ -352,51 +302,6 @@ export default function AdminStatusPage(){
                   </table>
                 </div>
               )}
-            </div>
-
-            {/* CARD VIEW */}
-            <div className="space-y-6">
-              {requests.map((item) => {
-                const statusInfo = getStatusInfo(item.status);
-                return (
-                  <div key={item.id} className="rounded-2xl border p-6 shadow-sm">
-                    {/* Header Card */}
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{item.barang.nama}</h3>
-                        <p className="text-sm text-gray-600">{item.user.nama} ({item.user.email})</p>
-                      </div>
-                      <span className={`px-2 py-0.5 text-xs rounded-full ${statusInfo.color}`}>
-                        {statusInfo.text}
-                      </span>
-                    </div>
-
-                    {/* Timeline */}
-                    <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
-                      <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
-                      <p className="text-sm">Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</p>
-                      {item.tanggalDipinjam && <p className="text-sm">Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</p>}
-                      {item.tanggalDikembalikan && <p className="text-sm">Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</p>}
-                    </div>
-
-                    {/* Catatan */}
-                    {item.catatan && (
-                      <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
-                        <h4 className="font-medium text-gray-900 mb-1">Catatan</h4>
-                        <p className="text-sm text-gray-700">{item.catatan}</p>
-                      </div>
-                    )}
-
-                    {/* Penanggung Jawab */}
-                    {item.penanggungJawab && (
-                      <p className="text-sm text-gray-700">
-                        <span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
           </div>
         </div>
       </div>
