@@ -373,7 +373,7 @@ export default function UserStatusPage() {
           return (
             <div
               key={item.id}
-              className={`rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all duration-200 bg-white ${statusInfo.bgColor}`}
+              className={`rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all duration-200 ${statusInfo.bgColor}`}
             >
               {/* Header Card */}
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-5 mb-5">
