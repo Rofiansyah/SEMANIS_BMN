@@ -469,7 +469,7 @@ export default function AdminBorrowingRequestsPage() {
                                 size="sm"
                                 variant="danger"
                                 onClick={() => handleReject(request.id)}
-                                className="text-xs"
+                                className="flex items-center"
                               >
                                 <XCircle className="w-3 h-3 mr-1" />
                                 Tolak

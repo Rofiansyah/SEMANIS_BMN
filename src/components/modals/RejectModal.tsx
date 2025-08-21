@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { 
-  XCircle,
+  X,
   User,
   Package,
   MessageSquare
@@ -22,7 +22,8 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
   const [catatan, setCatatan] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
     if (!request) return;
     if (!catatan.trim()) {
       toast.error('Alasan penolakan harus diisi');
@@ -44,48 +45,79 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
   if (!isOpen || !request) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-transparent flex items-center justify-center p-4 z-[60]"
+    <div
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-lg max-w-md w-full p-6 shadow-2xl border-0">
-        <h3 className="text-lg font-semibold mb-4">Tolak Permintaan</h3>
-
-        {/* Info Request */}
-        <div className="bg-gray-50 p-4 rounded-lg mb-4">
-          <div className="flex items-center space-x-3 mb-2">
-            <User className="w-4 h-4 text-gray-500" />
-            <span className="text-sm font-medium">{request.user.nama}</span>
-          </div>
-          <div className="flex items-center space-x-3 mb-2">
-            <Package className="w-4 h-4 text-gray-500" />
-            <span className="text-sm">{request.barang.nama}</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <MessageSquare className="w-4 h-4 text-gray-500" />
-            <span className="text-sm text-gray-600">{request.catatan}</span>
-          </div>
+      <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center p-5 bg-red-700 sticky top-0 z-10">
+          <h3 className="text-lg font-semibold text-white">Tolak Permintaan</h3>
+          <button
+            onClick={onClose}
+            className="text-white hover:text-gray-200 transition"
+            disabled={loading}
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Form */}
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Alasan Penolakan *
-        </label>
-        <textarea
-          value={catatan}
-          onChange={(e) => setCatatan(e.target.value)}
-          placeholder="Jelaskan alasan penolakan..."
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          rows={3}
-          required
-        />
+        {/* Body */}
+        <div className="p-6 overflow-y-auto flex-1">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Info Request */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="flex items-center space-x-3 mb-2">
+                <User className="w-4 h-4 text-gray-500" />
+                <span className="text-sm font-medium">{request.user.nama}</span>
+              </div>
+              <div className="flex items-center space-x-3 mb-2">
+                <Package className="w-4 h-4 text-gray-500" />
+                <span className="text-sm">{request.barang.nama}</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <MessageSquare className="w-4 h-4 text-gray-500" />
+                <span className="text-sm text-gray-600">{request.catatan}</span>
+              </div>
+            </div>
 
-        {/* Actions */}
-        <div className="flex space-x-3 mt-6">
-          <Button variant="outline" onClick={onClose} className="flex-1" disabled={loading}>Batal</Button>
-          <Button variant="danger" onClick={handleSubmit} className="flex-1" disabled={loading}>
-            {loading ? 'Memproses...' : 'Tolak'}
-          </Button>
+            {/* Alasan Penolakan */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Alasan Penolakan <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={catatan}
+                onChange={(e) => setCatatan(e.target.value)}
+                placeholder="Jelaskan alasan penolakan..."
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-red-700 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                rows={3}
+                required
+                disabled={loading}
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col md:flex-row gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                disabled={loading}
+                className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-red-700 hover:bg-red-50 transition-colors duration-200"
+              >
+                Batal
+              </Button>
+              <Button
+                type="submit"
+                variant="danger"
+                disabled={loading}
+                className="flex items-center"
+              >
+                {loading ? 'Memproses...' : 'Tolak'}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

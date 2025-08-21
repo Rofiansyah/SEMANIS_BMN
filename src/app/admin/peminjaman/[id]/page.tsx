@@ -153,7 +153,9 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center space-x-4">
             <Button
-              variant="outline"
+              size="sm"
+                                    variant="outlinesecond"
+                                    className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
               onClick={handleBack}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
