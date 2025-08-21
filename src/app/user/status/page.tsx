@@ -115,12 +115,12 @@ export default function UserStatusPage() {
       };
 
       const csvData = filteredPeminjaman.map((item) => [
-        item.barang.nama || "",
-        item.barang.deskripsi || "",
-        item.barang.kodeBarang || "",
-        item.barang.kategori.nama || "",
-        item.barang.merek.nama || "",
-        item.barang.lokasi.nama || "",
+        item.barang?.nama || "",
+        item.barang?.deskripsi || "",
+        item.barang?.kodeBarang || "",
+        item.barang?.kategori?.nama || "",
+        item.barang?.merek?.nama || "",
+        item.barang?.lokasi?.nama || "",
         item.status === "DIKEMBALIKAN"
           ? "Dikembalikan"
           : item.status === "DITOLAK"
@@ -427,15 +427,15 @@ export default function UserStatusPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Tag className="w-4 h-4 text-gray-500" />
-                      <span>{item.barang.kategori.nama}</span>
+                      <span>{item.barang?.kategori?.nama}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Building className="w-4 h-4 text-gray-500" />
-                      <span>{item.barang.merek.nama}</span>
+                      <span>{item.barang?.merek?.nama}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <MapPin className="w-4 h-4 text-gray-500" />
-                      <span>{item.barang.lokasi.nama}</span>
+                      <span>{item.barang?.lokasi?.nama}</span>
                     </div>
                   </div>
 
