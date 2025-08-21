@@ -22,6 +22,7 @@ import api from "@/lib/api";
 import { Barang, Kategori, Merek, Lokasi, Peminjaman } from "@/types/api";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const statusLabels: Record<
   "ALL" | "PENDING" | "DIPINJAM" | "DITOLAK" | "DIKEMBALIKAN",
@@ -36,6 +37,7 @@ const statusLabels: Record<
 
 export default function UserStatusPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
   const [barang, setBarang] = useState<Barang[]>([]);
