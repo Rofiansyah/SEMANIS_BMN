@@ -279,199 +279,211 @@ export default function DashboardUserPage() {
           ))}
         </div>
 
-{/* Search & Filter */}
-<div className="bg-white rounded-xl shadow-md p-4 sm:p-6">
-  {/* Search & Toggle Filter */}
-  <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mb-4">
-    {/* Search Box */}
-    <div className="flex-1 relative">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700 w-4 h-4" />
-      <input
-        type="text"
-        placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
-      />
-    </div>
-
-    {/* Filter Button */}
-    <div className="flex lg:justify-end">
-      <Button
-        variant="secondary"
-        onClick={() => setShowFilters(!showFilters)}
-        className="flex items-center gap-2 w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-      >
-        <Filter size={16} />
-        <span className="hidden sm:inline">Filter & Sort</span>
-        <span className="sm:hidden">Filter</span>
-      </Button>
-    </div>
-  </div>
-
-  {/* Filter Section */}
-  {showFilters && (
-    <div className="border-t pt-4 mt-2 space-y-4">
-      {/* Filter dropdowns */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Kategori */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-900 mb-1">Kategori</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-          >
-            <option value="">Semua Kategori</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.nama}
-              </option>
-            ))}
-          </select>
+  <div className="bg-white rounded-2xl shadow-lg border overflow-hidden">
+    {/* Search & Filter */}
+    <div className="p-4 sm:p-6 border-b">
+      {/* Search & Toggle Filter */}
+      <div className="flex flex-col lg:flex-row gap-3 lg:gap-4 mb-4">
+        {/* Search Box */}
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-700 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Cari berdasarkan nama, deskripsi, atau kode barang..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+          />
         </div>
 
-        {/* Merek */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-900 mb-1">Merek</label>
-          <select
-            value={selectedBrand}
-            onChange={(e) => setSelectedBrand(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+        {/* Filter Button */}
+        <div className="flex lg:justify-end">
+          <Button
+            variant="secondary"
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center gap-2 w-full sm:w-auto bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
           >
-            <option value="">Semua Merek</option>
-            {brands.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.nama}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Lokasi */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-900 mb-1">Lokasi</label>
-          <select
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-          >
-            <option value="">Semua Lokasi</option>
-            {locations.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.nama}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Sort */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-900 mb-1">Urutkan</label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-          >
-            <option value="nama">Nama A-Z</option>
-            <option value="kodeBarang">Kode Barang</option>
-            <option value="createdAt">Terbaru</option>
-          </select>
+            <Filter size={16} />
+            <span className="hidden sm:inline">Filter & Sort</span>
+            <span className="sm:hidden">Filter</span>
+          </Button>
         </div>
       </div>
 
-      {/* Footer filter */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-        <p className="text-sm text-gray-700">
-          Menampilkan {filteredBarang.length} dari {barang.length} barang
-        </p>
-        <Button variant="outline" size="sm" className="flex items-center gap-2 w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200" onClick={clearFilters}>
-          Hapus Filter
-        </Button>
-      </div>
-    </div>
-  )}
-</div>
-
-        {/* Results */}
-        {loadingBarang ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-          </div>
-        ) : filteredBarang.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredBarang.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+      {/* Filter Section */}
+      {showFilters && (
+        <div className="border-t pt-4 mt-2 space-y-4">
+          {/* Filter dropdowns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Kategori */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-900 mb-1">Kategori</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
               >
-                <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
-                  {item.fotoUrl ? (
-                    <img
-                      src={item.fotoUrl}
-                      alt={item.nama}
-                      className="w-full h-48 object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-48 flex items-center justify-center bg-gray-100">
-                      <Package size={48} className="text-gray-400" />
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold truncate flex-1 text-gray-900">
-                      {item.nama}
-                    </h3>
-                    {getStatusBadge(item.kondisi)}
-                  </div>
-                  <p className="text-sm text-gray-700 mb-2 line-clamp-2">
-                    {item.deskripsi}
-                  </p>
-                  <div className="space-y-1 mb-4 text-xs text-gray-500">
-                    <div className="flex items-center">
-                      <Tag size={12} className="mr-1" />
-                      <span>{item.kategori?.nama}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Bookmark size={12} className="mr-1" />
-                      <span>{item.merek?.nama}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <MapPin size={12} className="mr-1" />
-                      <span>{item.lokasi?.nama}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500 font-mono">
-                      {item.kodeBarang}
-                    </span>
-                    <Link href={`/user/items/${item.id}`}>
-                      <Button size="sm" className="flex items-center gap-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200">
-                        <Eye size={14} />
-                        Detail
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            ))}
+                <option value="">Semua Kategori</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Merek */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-900 mb-1">Merek</label>
+              <select
+                value={selectedBrand}
+                onChange={(e) => setSelectedBrand(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+              >
+                <option value="">Semua Merek</option>
+                {brands.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Lokasi */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-900 mb-1">Lokasi</label>
+              <select
+                value={selectedLocation}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+              >
+                <option value="">Semua Lokasi</option>
+                {locations.map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div className="flex flex-col">
+              <label className="text-sm font-medium text-gray-900 mb-1">Urutkan</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+              >
+                <option value="nama">Nama A-Z</option>
+                <option value="kodeBarang">Kode Barang</option>
+                <option value="createdAt">Terbaru</option>
+              </select>
+            </div>
           </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow p-12 text-center">
-            <Package size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Tidak ada barang ditemukan
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Coba ubah kriteria pencarian atau filter yang digunakan
+
+          {/* Footer filter */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <p className="text-sm text-gray-700">
+              Menampilkan {filteredBarang.length} dari {barang.length} barang
             </p>
-            <Button variant="secondary" onClick={clearFilters}>
-              Hapus Semua Filter
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+              onClick={clearFilters}
+            >
+              Hapus Filter
             </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
+
+    {/* Results */}
+    <div className="p-4 sm:p-6">
+      {loadingBarang ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        </div>
+      ) : filteredBarang.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredBarang.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-xl border shadow-sm hover:shadow-md transition overflow-hidden"
+            >
+              <div className="aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden">
+                {item.fotoUrl ? (
+                  <img
+                    src={item.fotoUrl}
+                    alt={item.nama}
+                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                    <Package size={48} className="text-gray-400" />
+                  </div>
+                )}
+              </div>
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold truncate flex-1 text-gray-900">
+                    {item.nama}
+                  </h3>
+                  {getStatusBadge(item.kondisi)}
+                </div>
+                <p className="text-sm text-gray-700 mb-2 line-clamp-2">
+                  {item.deskripsi}
+                </p>
+                <div className="space-y-1 mb-4 text-xs text-gray-500">
+                  <div className="flex items-center">
+                    <Tag size={12} className="mr-1" />
+                    <span>{item.kategori?.nama}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Bookmark size={12} className="mr-1" />
+                    <span>{item.merek?.nama}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <MapPin size={12} className="mr-1" />
+                    <span>{item.lokasi?.nama}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500 font-mono">
+                    {item.kodeBarang}
+                  </span>
+                  <Link href={`/user/items/${item.id}`}>
+                    <Button
+                      size="sm"
+                      className="flex items-center gap-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                    >
+                      <Eye size={14} />
+                      Detail
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <Package size={48} className="mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Tidak ada barang ditemukan
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Coba ubah kriteria pencarian atau filter yang digunakan
+          </p>
+          <Button variant="secondary" onClick={clearFilters}>
+            Hapus Semua Filter
+          </Button>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
     </DashboardLayout>
   );
 }
