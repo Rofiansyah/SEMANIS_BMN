@@ -51,7 +51,7 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
     >
       <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center p-5 bg-red-700 sticky top-0 z-10">
+        <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
           <h3 className="text-lg font-semibold text-white">Tolak Permintaan</h3>
           <button
             onClick={onClose}
@@ -66,18 +66,33 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
         <div className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Info Request */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="flex items-center space-x-3 mb-2">
-                <User className="w-4 h-4 text-gray-500" />
-                <span className="text-sm font-medium">{request.user.nama}</span>
-              </div>
-              <div className="flex items-center space-x-3 mb-2">
-                <Package className="w-4 h-4 text-gray-500" />
-                <span className="text-sm">{request.barang.nama}</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MessageSquare className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">{request.catatan}</span>
+            <div className="bg-gray-50 border border-gray-200 p-5 rounded-lg shadow-sm">
+              <h4 className="text-sm font-semibold text-gray-800 mb-4">Informasi Permintaan</h4>
+
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <User className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">Pemohon</p>
+                    <p className="text-base font-medium text-gray-900">{request.user.nama}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Package className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">Barang</p>
+                    <p className="text-base font-medium text-gray-900">{request.barang.nama}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <MessageSquare className="w-5 h-5 text-gray-600 mt-1" />
+                  <div>
+                    <p className="text-xs text-gray-500">Catatan</p>
+                    <p className="text-sm text-gray-800">{request.catatan || '-'}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -90,7 +105,7 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}
                 placeholder="Jelaskan alasan penolakan..."
-                className="w-full p-3 border border-gray-300 rounded-lg focus:border-red-700 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                 rows={3}
                 required
                 disabled={loading}
@@ -104,7 +119,7 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
                 variant="outline"
                 onClick={onClose}
                 disabled={loading}
-                className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-red-700 hover:bg-red-50 transition-colors duration-200"
+                className="flex-1 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
               >
                 Batal
               </Button>
@@ -112,7 +127,7 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
                 type="submit"
                 variant="danger"
                 disabled={loading}
-                className="flex items-center"
+                className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
               >
                 {loading ? 'Memproses...' : 'Tolak'}
               </Button>
