@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import CameraCapture from '@/components/camera/CameraCapture';
 import EnhancedReturnModal from '@/components/modals/EnhancedReturnModal';
+import ApproveModal from '@/components/modals/ApproveModal';
+import RejectModal from '@/components/modals/RejectModal';
 import { peminjamanApi } from '@/lib/api';
 import type { Peminjaman } from '@/types/api';
 import { 
@@ -55,6 +57,8 @@ export default function AdminStatusPage(){
   const [selectedPeminjamanForReturn, setSelectedPeminjamanForReturn] = useState<Peminjaman | null>(null);
   const [returnLoading, setReturnLoading] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<Peminjaman | null>(null);
+  const [approveRequest, setApproveRequest] = useState<Peminjaman | null>(null);
+  const [rejectRequest, setRejectRequest] = useState<Peminjaman | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('30'); // days
   const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN' | 'DISETUJUI'>('ALL');
@@ -75,12 +79,72 @@ export default function AdminStatusPage(){
       setLoading(false);
     }
   };
+
+  const handleOpenModal = (request: Peminjaman) => {
+    setSelectedRequest(request);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedRequest(null);
+    setIsModalOpen(false);
+  };
+
+  const handleApprove = async (id: string, penanggungJawab: string, foto?: File) => {
+    const response = await peminjamanApi.approve(id, { penanggungJawab, fotoPinjam: foto });
+    if (response.status === 'success') {
+      toast.success('Permintaan berhasil disetujui! ✅');
+      loadRequests();
+    }
+  };
+
+  const handleReject = async (id: string, catatan: string) => {
+    const response = await peminjamanApi.reject(id, { catatan });
+    if (response.status === 'success') {
+      toast.success('Permintaan berhasil ditolak! ❌');
+      loadRequests();
+    }
+  };  
+
+  const handleOpenReturnModal = (peminjaman: Peminjaman) => {
+    setSelectedPeminjamanForReturn(peminjaman);
+    setIsReturnModalOpen(true);
+  };
+
+  const handleCloseReturnModal = () => {
+    setSelectedPeminjamanForReturn(null);
+    setIsReturnModalOpen(false);
+  };
+
+  const handleProcessReturn = async (penanggungJawab: string, catatan: string, foto?: File) => {
+    if (!selectedPeminjamanForReturn) return;
+    
+    setReturnLoading(true);
+    try {
+      const response = await peminjamanApi.processReturn(selectedPeminjamanForReturn.id, {
+        penanggungJawab,
+        catatan,
+        fotoKembali: foto
+      });
+
+      if (response.status === 'success') {
+        toast.success('Pengembalian berhasil diproses! 📦');
+        handleCloseReturnModal();
+        loadRequests();
+      }
+    } catch (error) {
+      console.error('Failed to process return:', error);
+      toast.error('Gagal memproses pengembalian');
+    } finally {
+      setReturnLoading(false);
+    }
+  };  
   
   const getStatusInfo = (status: string) => {
     const statusMap = {
       'PENDING': {
         icon: <Clock size={16} />,
-        text: 'Menunggu Persetujuan',
+        text: 'Menunggu',
         color: 'bg-yellow-100 text-yellow-800',
         bgColor: 'bg-yellow-50'
       },
@@ -92,7 +156,7 @@ export default function AdminStatusPage(){
       },
       'DIPINJAM': {
         icon: <Package size={16} />,
-        text: 'Sedang Dipinjam',
+        text: 'Dipinjam',
         color: 'bg-blue-100 text-blue-800',
         bgColor: 'bg-blue-50'
       },
@@ -141,7 +205,7 @@ export default function AdminStatusPage(){
   }
   
   return (
-    <DashboardLayout title="Kelola Peminjaman Barang">
+    <DashboardLayout title="Kelola Peminjaman">
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -152,7 +216,7 @@ export default function AdminStatusPage(){
         </div>
 
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total */}
           <div
             className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -186,24 +250,6 @@ export default function AdminStatusPage(){
                 <p className="text-2xl font-bold text-yellow-800">{pendingCount}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600" />
-            </div>
-          </div>
-
-          {/* Disetujui */}
-          <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              activeTab === 'DISETUJUI'
-                ? 'border-indigo-500 bg-indigo-50'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-            onClick={() => setActiveTab('DISETUJUI')}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Disetujui</p>
-                <p className="text-2xl font-bold text-indigo-800">{approvedCount}</p>
-              </div>
-              <CheckCircle className="w-8 h-8 text-indigo-600" />
             </div>
           </div>
 
@@ -262,144 +308,213 @@ export default function AdminStatusPage(){
           </div>  
         </div>
 
-        {/* Table & Card View */}
-        <div className="bg-white rounded-xl shadow border">
-          <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {activeTab === 'ALL'
-                ? 'Semua Peminjaman'
-                : `Peminjaman ${statusLabels[activeTab]}`}
-            </h2>
-          </div>
+<div className="bg-white rounded-xl shadow border">
+  {/* Header */}
+  <div className="p-4 md:p-6 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <h2 className="text-lg font-semibold text-gray-900">
+      {activeTab === "ALL"
+        ? "Semua Peminjaman"
+        : `Peminjaman ${statusLabels[activeTab]}`}
+    </h2>
+  </div>
 
-          <div className="space-y-8">
-
-            {/* TABLE VIEW */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Daftar Peminjaman
-                  </h2>
-                  <div className="flex items-center space-x-2">
-                    <Filter className="w-4 h-4 text-gray-400" />
-                    <span className="text-sm text-gray-500">Filter: {selectedStatus}</span>
-                  </div>
-                </div>
-              </div>
-
-              {loading ? (
-                <div className="p-8 text-center">
-                  <div className="inline-flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
-                    <span className="text-gray-600">Memuat data...</span>
-                  </div>
-                </div>
-              ) : filteredRequests.length === 0 ? (
-                <div className="p-8 text-center">
-                  <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600">Tidak ada permintaan ditemukan</p>
-                </div>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Peminjam</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Barang</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Tanggal Request</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Tanggal Dipinjam</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Status</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Lama Pinjam</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Penanggung Jawab</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-900">Catatan</th>
-                        <th className="text-center py-3 px-4 font-medium text-gray-900">Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {filteredRequests.map((request) => {
-                        const borrowDate = request.tanggalDipinjam 
-                          ? new Date(request.tanggalDipinjam) 
-                          : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
-                        const daysBorrowed = Math.floor((Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
-
-                        return (
-                          <tr key={request.id} className="hover:bg-gray-50">
-                            <td className="py-4 px-4">{request.user.nama}</td>
-                            <td className="py-4 px-4">{request.barang.nama}</td>
-                            <td className="py-4 px-4">{new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}</td>
-                            <td className="py-4 px-4">
-                              {request.tanggalDipinjam ? new Date(request.tanggalDipinjam).toLocaleDateString('id-ID') : '-'}
-                            </td>
-                            <td className="py-4 px-4">{statusLabels[request.status as keyof typeof statusLabels]}</td>
-                            <td className="py-4 px-4">{request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}</td>
-                            <td className="py-4 px-4">{request.penanggungJawab || '-'}</td>
-                            <td className="py-4 px-4 truncate max-w-xs">{request.catatan || '-'}</td>
-                            <td className="py-4 px-4 text-center">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => router.push(`/admin/peminjaman/${request.id}`)}
-                              >
-                                <Eye className="w-3 h-3 mr-1" />
-                                Detail
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-
-            {/* CARD VIEW */}
-            <div className="space-y-6">
-              {requests.map((item) => {
-                const statusInfo = getStatusInfo(item.status);
-                return (
-                  <div key={item.id} className="rounded-2xl border p-6 shadow-sm">
-                    {/* Header Card */}
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="font-semibold text-gray-900">{item.barang.nama}</h3>
-                        <p className="text-sm text-gray-600">{item.user.nama} ({item.user.email})</p>
-                      </div>
-                      <span className={`px-2 py-0.5 text-xs rounded-full ${statusInfo.color}`}>
-                        {statusInfo.text}
-                      </span>
-                    </div>
-
-                    {/* Timeline */}
-                    <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
-                      <h4 className="font-medium text-gray-900 mb-2">Timeline</h4>
-                      <p className="text-sm">Diajukan: {new Date(item.tanggalPengajuan).toLocaleDateString('id-ID')}</p>
-                      {item.tanggalDipinjam && <p className="text-sm">Dipinjam: {new Date(item.tanggalDipinjam).toLocaleDateString('id-ID')}</p>}
-                      {item.tanggalDikembalikan && <p className="text-sm">Dikembalikan: {new Date(item.tanggalDikembalikan).toLocaleDateString('id-ID')}</p>}
-                    </div>
-
-                    {/* Catatan */}
-                    {item.catatan && (
-                      <div className="bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
-                        <h4 className="font-medium text-gray-900 mb-1">Catatan</h4>
-                        <p className="text-sm text-gray-700">{item.catatan}</p>
-                      </div>
-                    )}
-
-                    {/* Penanggung Jawab */}
-                    {item.penanggungJawab && (
-                      <p className="text-sm text-gray-700">
-                        <span className="font-medium">Penanggung Jawab:</span> {item.penanggungJawab}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+  {/* Loading / Empty */}
+  <div className="space-y-9">
+    {loading ? (
+      <div className="p-8 text-center">
+        <div className="inline-flex items-center space-x-2">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
+          <span className="text-gray-600">Memuat data...</span>
         </div>
       </div>
+    ) : filteredRequests.length === 0 ? (
+      <div className="p-8 text-center">
+        <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <p className="text-gray-600">Tidak ada permintaan ditemukan</p>
+      </div>
+    ) : (
+      <>
+        {/* TABLE VIEW (desktop) */}
+        <div className="overflow-x-auto hidden md:block">
+          <table className="w-full border-collapse text-sm text-gray-900">
+            <thead className="bg-gray-50 sticky top-0 z-10">
+              <tr>
+                {[
+                  "Peminjam",
+                  "Barang",
+                  "Tgl Pengajuan",
+                  "Tgl Dipinjam",
+                  "Status",
+                  "Lama",
+                  "PJ",
+                  "Catatan",
+                  "Aksi",
+                ].map((head) => (
+                  <th
+                    key={head}
+                    className="text-center py-3 px-4 border-b font-semibold text-gray-700"
+                  >
+                    {head}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {filteredRequests.map((request) => {
+                const statusInfo = getStatusInfo(request.status);
+                const borrowDate = request.tanggalDipinjam
+                  ? new Date(request.tanggalDipinjam)
+                  : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
+                const daysBorrowed = Math.floor(
+                  (Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24)
+                );
+
+                return (
+                  <tr
+                    key={request.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    {/* Peminjam */}
+                    <td className="py-3 px-4 text-left">
+                      <div className="flex items-start space-x-2">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 text-gray-600" />
+                        </div>
+                        <div>
+                          <p className="font-medium">{request.user.nama}</p>
+                          <p className="text-xs text-gray-500">{request.user.email}</p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Barang */}
+                    <td className="py-3 px-4 text-left">
+                      <p className="font-medium">{request.barang.nama}</p>
+                      <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                    </td>
+
+                    {/* Dates */}
+                    <td className="py-3 px-4 text-center">
+                      {new Date(request.tanggalPengajuan).toLocaleDateString("id-ID")}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      {request.tanggalDipinjam
+                        ? new Date(request.tanggalDipinjam).toLocaleDateString("id-ID")
+                        : "-"}
+                    </td>
+
+                    {/* Status */}
+                    <td className="py-3 px-4 text-center">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium flex items-center justify-center gap-1 ${statusInfo.color}`}
+                      >
+                        {statusInfo.icon}
+                        {statusInfo.text}
+                      </span>
+                    </td>
+
+                    {/* Lama */}
+                    <td className="py-3 px-4 text-center">
+                      {request.status === "DIPINJAM" ? `${daysBorrowed} hari` : "-"}
+                    </td>
+
+                    {/* PJ */}
+                    <td className="py-3 px-4 text-center">
+                      {request.penanggungJawab || "-"}
+                    </td>
+
+                    {/* Catatan */}
+                    <td className="py-3 px-4 text-left">
+                      {request.catatan || "-"}
+                    </td>
+
+                    {/* Aksi */}
+                    <td className="py-3 px-4 text-center min-w-[180px]">
+                      {/* ...button logic sama dengan kode kamu */}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* CARD VIEW (mobile) */}
+        <div className="md:hidden space-y-4">
+          {filteredRequests.map((request) => {
+            const statusInfo = getStatusInfo(request.status);
+            const borrowDate = request.tanggalDipinjam
+              ? new Date(request.tanggalDipinjam)
+              : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
+            const daysBorrowed = Math.floor(
+              (Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24)
+            );
+
+            return (
+              <div
+                key={request.id}
+                className="border rounded-xl p-4 shadow-sm hover:shadow-md transition-all"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{request.user.nama}</p>
+                    <p className="text-xs text-gray-500">{request.user.email}</p>
+                  </div>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
+                  >
+                    {statusInfo.icon}
+                    {statusInfo.text}
+                  </span>
+                </div>
+
+                {/* Body */}
+                <div className="mt-3 space-y-1 text-sm text-gray-700">
+                  <p><span className="font-semibold">Barang:</span> {request.barang.nama}</p>
+                  <p><span className="font-semibold">Kode:</span> {request.barang.kodeBarang}</p>
+                  <p><span className="font-semibold">Pengajuan:</span> {new Date(request.tanggalPengajuan).toLocaleDateString("id-ID")}</p>
+                  <p><span className="font-semibold">Dipinjam:</span> {request.tanggalDipinjam ? new Date(request.tanggalDipinjam).toLocaleDateString("id-ID") : "-"}</p>
+                  <p><span className="font-semibold">Lama:</span> {request.status === "DIPINJAM" ? `${daysBorrowed} hari` : "-"}</p>
+                  <p><span className="font-semibold">PJ:</span> {request.penanggungJawab || "-"}</p>
+                  <p><span className="font-semibold">Catatan:</span> {request.catatan || "-"}</p>
+                </div>
+
+                {/* Actions */}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {/* ...button logic sama */}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </>
+    )}
+  </div>
+</div>
+
+      </div>
+      {/* Enhanced Return Modal */}
+      <EnhancedReturnModal
+        isOpen={isReturnModalOpen}
+        onClose={handleCloseReturnModal}
+        onSubmit={handleProcessReturn}
+        peminjaman={selectedPeminjamanForReturn}
+        loading={returnLoading}
+      />
+      <ApproveModal
+        request={approveRequest}
+        isOpen={!!approveRequest}
+        onClose={() => setApproveRequest(null)}
+        onApprove={handleApprove}
+      />
+
+      <RejectModal
+        request={rejectRequest}
+        isOpen={!!rejectRequest}
+        onClose={() => setRejectRequest(null)}
+        onReject={handleReject}
+      />
     </DashboardLayout>
   );
 }
