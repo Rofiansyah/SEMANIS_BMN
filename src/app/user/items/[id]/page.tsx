@@ -228,147 +228,142 @@ return (
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Image Section */}
-        <div className="space-y-4">
-          <div className="aspect-square bg-gray-200 rounded-2xl overflow-hidden">
-            {item.fotoUrl ? (
-              <img
-                src={item.fotoUrl}
-                alt={item.nama}
-                className="w-full h-full object-cover rounded-lg cursor-pointer"
-                onClick={() => window.open(item.fotoUrl!, "_blank")}
-              />
+<div className="bg-white rounded-2xl shadow-lg border overflow-hidden">
+  <div className="grid grid-cols-1 lg:grid-cols-2">
+    {/* Image Section */}
+    <div className="bg-gray-100 flex items-center justify-center p-6">
+      <div className="w-full aspect-square rounded-xl overflow-hidden shadow-sm">
+        {item.fotoUrl ? (
+          <img
+            src={item.fotoUrl}
+            alt={item.nama}
+            className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+            onClick={() => window.open(item.fotoUrl!, "_blank")}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <Package size={96} className="text-gray-400" />
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* Details Section */}
+    <div className="p-6 lg:p-8 flex flex-col justify-between">
+      <div>
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">
+              {item.nama}
+            </h2>
+            <p className="text-sm text-gray-500 font-mono">
+              Kode: {item.kodeBarang}
+            </p>
+          </div>
+          <div className="flex-shrink-0">{getStatusBadge(item.kondisi)}</div>
+        </div>
+
+        <div className="space-y-3 mb-6">
+          <div className="flex items-center text-gray-600">
+            <Tag size={16} className="mr-3 text-gray-500" />
+            <span className="font-medium mr-2">Kategori:</span>
+            <span>{item.kategori?.nama}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Bookmark size={16} className="mr-3 text-gray-500" />
+            <span className="font-medium mr-2">Merek:</span>
+            <span>{item.merek?.nama}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <MapPin size={16} className="mr-3 text-gray-500" />
+            <span className="font-medium mr-2">Lokasi:</span>
+            <span>{item.lokasi?.nama}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <Calendar size={16} className="mr-3 text-gray-500" />
+            <span className="font-medium mr-2">Ditambahkan:</span>
+            <span>{new Date(item.createdAt).toLocaleDateString("id-ID")}</span>
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <h3 className="font-medium text-gray-900 mb-2">Deskripsi</h3>
+          <p className="text-gray-600 leading-relaxed">
+            {item.deskripsi || "Tidak ada deskripsi"}
+          </p>
+        </div>
+      </div>
+
+      {/* Borrow Action */}
+      <div className="border-t pt-6 mt-4">
+        {canBorrow ? (
+          <div>
+            {!showBorrowForm ? (
+              <Button
+                onClick={() => setShowBorrowForm(true)}
+                className="w-full flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-white rounded-lg py-2 transition"
+              >
+                <Send size={16} />
+                Ajukan Peminjaman
+              </Button>
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                <Package size={96} className="text-gray-400" />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Catatan Peminjaman <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={borrowNote}
+                    onChange={(e) => setBorrowNote(e.target.value)}
+                    placeholder="Jelaskan tujuan peminjaman barang ini..."
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+                    rows={3}
+                    required
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outlinesecond"
+                    onClick={() => {
+                      setShowBorrowForm(false);
+                      setBorrowNote("");
+                    }}
+                    disabled={borrowing}
+                    className="flex-1 flex items-center justify-center gap-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    onClick={handleBorrowRequest}
+                    disabled={borrowing || !borrowNote.trim()}
+                    className="flex-1 flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-white rounded-lg py-2 transition"
+                  >
+                    {borrowing ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        Mengirim...
+                      </>
+                    ) : (
+                      <>
+                        <Send size={16} />
+                        Kirim Permintaan
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             )}
           </div>
-        </div>
-
-        {/* Details Section */}
-        <div className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-md border p-6">
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  {item.nama}
-                </h2>
-                <p className="text-sm text-gray-500 font-mono">
-                  Kode: {item.kodeBarang}
-                </p>
-              </div>
-              <div className="flex-shrink-0 items-center text-center">
-                {getStatusBadge(item.kondisi)}
-              </div>
-            </div>
-
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center text-gray-600">
-                <Tag size={16} className="mr-3" />
-                <span className="font-medium mr-2">Kategori:</span>
-                <span>{item.kategori?.nama}</span>
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Bookmark size={16} className="mr-3" />
-                <span className="font-medium mr-2">Merek:</span>
-                <span>{item.merek?.nama}</span>
-              </div>
-              <div className="flex items-center text-gray-600">
-                <MapPin size={16} className="mr-3" />
-                <span className="font-medium mr-2">Lokasi:</span>
-                <span>{item.lokasi?.nama}</span>
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Calendar size={16} className="mr-3" />
-                <span className="font-medium mr-2">Ditambahkan:</span>
-                <span>{new Date(item.createdAt).toLocaleDateString("id-ID")}</span>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="font-medium text-gray-900 mb-2">Deskripsi</h3>
-              <p className="text-gray-600 leading-relaxed">
-                {item.deskripsi || "Tidak ada deskripsi"}
-              </p>
-            </div>
-
-            {/* Borrow Action */}
-            <div className="border-t pt-6">
-              {canBorrow ? (
-                <div>
-                  {!showBorrowForm ? (
-                    <Button
-                      onClick={() => setShowBorrowForm(true)}
-                      className="w-full flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-white rounded-lg py-2 transition"
-                    >
-                      <Send size={16} />
-                      Ajukan Peminjaman
-                    </Button>
-                  ) : (
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-900 mb-2">
-                          Catatan Peminjaman <span className="text-red-500">*</span>
-                        </label>
-                        <textarea
-                          value={borrowNote}
-                          onChange={(e) => setBorrowNote(e.target.value)}
-                          placeholder="Jelaskan tujuan peminjaman barang ini..."
-                          className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
-                          rows={3}
-                          required
-                        />
-                      </div>
-                      <div className="flex gap-3">
-                        <Button
-                          variant="outlinesecond" 
-                          onClick={() => {
-                            setShowBorrowForm(false);
-                            setBorrowNote("");
-                          }}
-                          disabled={borrowing}
-                          className="flex-1 flex items-center justify-center gap-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                        >
-                          Batal
-                        </Button>
-                        <Button
-                          onClick={handleBorrowRequest}
-                          disabled={borrowing || !borrowNote.trim()}
-                          className="flex-1 flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-white rounded-lg py-2 transition"
-                        >
-                          {borrowing ? (
-                            <>
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                              Mengirim...
-                            </>
-                          ) : (
-                            <>
-                              <Send size={16} />
-                              Kirim Permintaan
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-4 rounded-xl border shadow-sm hover:shadow-md transition bg-blue-100">
-                  <Package
-                    size={20}
-                    className="mx-auto text-blue-600 mb-2"
-                  />
-                  <p className="text-sm text-blue-600">
-                    Barang sedang dipinjam
-                  </p>
-                </div>
-              )}
-            </div>
+        ) : (
+          <div className="text-center py-4 rounded-xl border shadow-sm hover:shadow-md transition bg-blue-100">
+            <Package size={20} className="mx-auto text-blue-600 mb-2" />
+            <p className="text-sm text-blue-600">Barang sedang dipinjam</p>
           </div>
-        </div>
+        )}
       </div>
+    </div>
+  </div>
+</div>
 
       {/* Borrowing History */}
       {borrowHistory.length > 0 && (
