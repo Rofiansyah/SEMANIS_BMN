@@ -142,30 +142,37 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
               />
             </div>
 
-            {/* Upload Foto */}
+            {/* Foto Dokumentasi */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Foto Dokumentasi (Opsional)
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Foto Barang (Opsional)
               </label>
               {fotoPreview ? (
                 <div className="space-y-3">
                   <img
                     src={fotoPreview}
-                    className="w-full h-40 object-cover rounded-lg border"
+                    alt="Preview"
+                    className="w-full h-28 sm:h-32 object-cover rounded-lg border"
                   />
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button
+                      type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => setIsCameraCaptureOpen(true)}
                       className="flex-1"
                     >
-                      <Camera className="w-4 h-4 mr-1" /> Ambil Ulang
+                      <Camera className="w-4 h-4 mr-1" />
+                      Ambil Ulang
                     </Button>
                     <Button
+                      type="button"
                       variant="outline"
                       size="sm"
-                      onClick={handleRemovePhoto}
+                      onClick={() => {
+                        setFoto(null);
+                        setFotoPreview(null);
+                      }}
                       className="flex-1"
                     >
                       Hapus Foto
@@ -173,30 +180,15 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
                   </div>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 mb-2">
-                    Ambil foto atau upload dari galeri
-                  </p>
-                  <div className="flex space-x-2 justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsCameraCaptureOpen(true)}
-                    >
-                      <Camera className="w-4 h-4 mr-1" /> Kamera
-                    </Button>
-                    <label className="cursor-pointer">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                      <div className="inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 rounded-md hover:bg-gray-50">
-                        <Upload className="w-4 h-4 mr-1" /> Upload
-                      </div>
-                    </label>
+                <div
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition"
+                  onClick={() => setIsCameraCaptureOpen(true)}
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
+                    <p className="text-xs sm:text-sm text-gray-600 text-center">
+                      Klik di sini untuk ambil foto barang
+                    </p>
                   </div>
                 </div>
               )}

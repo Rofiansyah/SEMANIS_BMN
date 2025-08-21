@@ -259,7 +259,9 @@ return (
                   Kode: {item.kodeBarang}
                 </p>
               </div>
-              {getStatusBadge(item.kondisi)}
+              <div>
+                {getStatusBadge(item.kondisi)}
+              </div>
             </div>
 
             <div className="space-y-3 mb-6">

@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Button } from '@/components/ui/Button';
-import { 
-  Clock, 
-  Package, 
-  CheckCircle, 
-  XCircle, 
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Button } from "@/components/ui/Button";
+import {
+  Clock,
+  Package,
+  CheckCircle,
+  XCircle,
   Calendar,
   Eye,
   Download,
@@ -15,166 +16,194 @@ import {
   Tag,
   Building,
   MapPin,
-  AlertCircle
-} from 'lucide-react';
-import api from '@/lib/api';
-import { Peminjaman } from '@/types/api';
-import { useAuth } from '@/contexts/AuthContext';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
+  AlertCircle,
+} from "lucide-react";
+import api from "@/lib/api";
+import { Barang, Kategori, Merek, Lokasi, Peminjaman } from "@/types/api";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
-const statusLabels: Record<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN', string> = {
+const statusLabels: Record<
+  "ALL" | "PENDING" | "DIPINJAM" | "DITOLAK" | "DIKEMBALIKAN",
+  string
+> = {
   ALL: "Semua",
   PENDING: "Menunggu",
   DIPINJAM: "Dipinjam",
   DITOLAK: "Ditolak",
-  DIKEMBALIKAN: 'Dikembalikan'
+  DIKEMBALIKAN: "Dikembalikan",
 };
 
 export default function UserStatusPage() {
   const { user } = useAuth();
+
   const [peminjaman, setPeminjaman] = useState<Peminjaman[]>([]);
+  const [barang, setBarang] = useState<Barang[]>([]);
+  const [categories, setCategories] = useState<Kategori[]>([]);
+  const [brands, setBrands] = useState<Merek[]>([]);
+  const [locations, setLocations] = useState<Lokasi[]>([]);
+
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN'>('ALL');
+  const [activeTab, setActiveTab] = useState<
+    "ALL" | "PENDING" | "DIPINJAM" | "DITOLAK" | "DIKEMBALIKAN"
+  >("ALL");
 
   useEffect(() => {
     if (user) {
-      fetchPeminjaman();
+      fetchData();
     }
   }, [user]);
 
-  const fetchPeminjaman = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/peminjaman/my-requests');
-      const data = response.data.data || response.data || [];
-      setPeminjaman(data);
+
+      const [barangRes, kategoriRes, merekRes, lokasiRes, peminjamanRes] =
+        await Promise.all([
+          api.get("/barang"),
+          api.get("/kategori"),
+          api.get("/merek"),
+          api.get("/lokasi"),
+          api.get("/peminjaman/my-requests").catch(() => ({
+            data: { data: [] },
+          })),
+        ]);
+
+      setBarang(barangRes.data.data.items || barangRes.data.data || []);
+      setCategories(kategoriRes.data.data.items || kategoriRes.data.data || []);
+      setBrands(merekRes.data.data.items || merekRes.data.data || []);
+      setLocations(lokasiRes.data.data.items || lokasiRes.data.data || []);
+
+      const peminjamanData = peminjamanRes.data.data || peminjamanRes.data || [];
+      setPeminjaman(peminjamanData);
     } catch (error) {
-      console.error('Error fetching peminjaman:', error);
-      toast.error('Gagal memuat status peminjaman');
+      console.error("Error fetching data:", error);
+      toast.error("Gagal memuat data peminjaman");
     } finally {
       setLoading(false);
     }
   };
 
-// Fungsi export history ke CSV
-const exportHistory = () => {
-  try {
-    if (!filteredPeminjaman || filteredPeminjaman.length === 0) {
-      toast.error("Tidak ada data untuk diexport");
-      return;
-    }
+  // Export CSV
+  const exportHistory = () => {
+    try {
+      if (!filteredPeminjaman || filteredPeminjaman.length === 0) {
+        toast.error("Tidak ada data untuk diexport");
+        return;
+      }
 
-    // Header CSV
-    const headers = [
-      "Nama Barang",
-      "Deskripsi",
-      "Kode Barang",
-      "Kategori",
-      "Merek",
-      "Lokasi",
-      "Status",
-      "Tanggal Pengajuan",
-      "Tanggal Selesai",
-    ];
+      const headers = [
+        "Nama Barang",
+        "Deskripsi",
+        "Kode Barang",
+        "Kategori",
+        "Merek",
+        "Lokasi",
+        "Status",
+        "Tanggal Pengajuan",
+        "Tanggal Selesai",
+      ];
 
-    // Format tanggal (DD/MM/YYYY)
-    const formatDate = (dateString?: string) => {
-      if (!dateString) return "";
-      return new Date(dateString).toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
+      const formatDate = (dateString?: string) => {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+      };
+
+      const csvData = filteredPeminjaman.map((item) => [
+        item.barang?.nama || "",
+        item.barang?.deskripsi || "",
+        item.barang?.kodeBarang || "",
+        item.barang?.kategori?.nama || "",
+        item.barang?.merek?.nama || "",
+        item.barang?.lokasi?.nama || "",
+        item.status === "DIKEMBALIKAN"
+          ? "Dikembalikan"
+          : item.status === "DITOLAK"
+          ? "Ditolak"
+          : item.status || "",
+        formatDate(item.tanggalPengajuan),
+        formatDate(item.updatedAt),
+      ]);
+
+      const csvContent = [headers, ...csvData]
+        .map((row) =>
+          row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(",")
+        )
+        .join("\n");
+
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
       });
-    };
+      const url = URL.createObjectURL(blob);
 
-    // Isi CSV
-    const csvData = filteredPeminjaman.map((item) => [
-      item.barang?.nama || "",
-      item.barang?.deskripsi || "",
-      item.barang?.kodeBarang || "",
-      item.barang?.kategori?.nama || "",
-      item.barang?.merek?.nama || "",
-      item.barang?.lokasi?.nama || "",
-      item.status === "DIKEMBALIKAN"
-        ? "Dikembalikan"
-        : item.status === "DITOLAK"
-        ? "Ditolak"
-        : item.status || "",
-      formatDate(item.tanggalPengajuan),
-      formatDate(item.updatedAt),
-    ]);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `riwayat-peminjaman-${new Date()
+        .toISOString()
+        .split("T")[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    // Gabung header + data
-    const csvContent = [headers, ...csvData]
-      .map((row) => row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(","))
-      .join("\n");
-
-    // Generate file CSV
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-
-    // Buat link download
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `riwayat-peminjaman-${new Date().toISOString().split("T")[0]}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    toast.success("Data riwayat berhasil diexport");
-  } catch (error) {
-    console.error("Error exporting history:", error);
-    toast.error("Gagal mengexport data riwayat");
-  }
-};
+      toast.success("Data riwayat berhasil diexport");
+    } catch (error) {
+      console.error("Error exporting history:", error);
+      toast.error("Gagal mengexport data riwayat");
+    }
+  };
 
   const getStatusInfo = (status: string) => {
     const statusMap = {
-      'PENDING': {
+      PENDING: {
         icon: <Clock size={16} />,
-        text: 'Menunggu Persetujuan',
-        color: 'bg-yellow-100 text-yellow-800',
-        bgColor: 'bg-yellow-50'
+        text: "Menunggu Persetujuan",
+        color: "bg-yellow-100 text-yellow-800",
+        bgColor: "bg-yellow-50",
       },
-      'DIPINJAM': {
+      DIPINJAM: {
         icon: <Package size={16} />,
-        text: 'Sedang Dipinjam',
-        color: 'bg-blue-100 text-blue-800',
-        bgColor: 'bg-blue-50'
+        text: "Sedang Dipinjam",
+        color: "bg-blue-100 text-blue-800",
+        bgColor: "bg-blue-50",
       },
-      'DIKEMBALIKAN': {
+      DIKEMBALIKAN: {
         icon: <CheckCircle size={16} />,
-        text: 'Dikembalikan',
-        color: 'bg-green-100 text-green-800',
-        bgColor: 'bg-green-50'
+        text: "Dikembalikan",
+        color: "bg-green-100 text-green-800",
+        bgColor: "bg-green-50",
       },
-      'DITOLAK': {
+      DITOLAK: {
         icon: <XCircle size={16} />,
-        text: 'Ditolak',
-        color: 'bg-red-100 text-red-800',
-        bgColor: 'bg-red-50'
-      }
+        text: "Ditolak",
+        color: "bg-red-100 text-red-800",
+        bgColor: "bg-red-50",
+      },
     };
 
-    return statusMap[status as keyof typeof statusMap] || {
-      icon: <AlertCircle size={16} />,
-      text: status,
-      color: 'bg-gray-100 text-gray-800',
-      bgColor: 'bg-gray-50'
-    };
+    return (
+      statusMap[status as keyof typeof statusMap] || {
+        icon: <AlertCircle size={16} />,
+        text: status,
+        color: "bg-gray-100 text-gray-800",
+        bgColor: "bg-gray-50",
+      }
+    );
   };
 
   const filteredPeminjaman =
-    activeTab === 'ALL'
+    activeTab === "ALL"
       ? peminjaman
-      : peminjaman.filter(item => item.status === activeTab);
+      : peminjaman.filter((item) => item.status === activeTab);
 
   const allCount = peminjaman.length;
-  const pendingCount = peminjaman.filter(item => item.status === 'PENDING').length;
-  const borrowedCount = peminjaman.filter(item => item.status === 'DIPINJAM').length;
-  const rejectedCount = peminjaman.filter(item => item.status === 'DITOLAK').length;
-  const returnedCount = peminjaman.filter(item => item.status === 'DIKEMBALIKAN').length;
+  const pendingCount = peminjaman.filter((item) => item.status === "PENDING").length;
+  const borrowedCount = peminjaman.filter((item) => item.status === "DIPINJAM").length;
+  const rejectedCount = peminjaman.filter((item) => item.status === "DITOLAK").length;
+  const returnedCount = peminjaman.filter((item) => item.status === "DIKEMBALIKAN").length;
 
   if (loading) {
     return (
