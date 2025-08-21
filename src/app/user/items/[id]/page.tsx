@@ -365,24 +365,29 @@ return (
   </div>
 </div>
 
-      {/* Borrowing History */}
-      {borrowHistory.length > 0 && (
-        <div className="bg-white rounded-2xl shadow-md border p-6">
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <ImageIcon size={20} />
-            Riwayat Peminjaman Anda
-          </h3>
+{/* Borrowing History */}
+{borrowHistory.length > 0 && (
+  <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden">
+    {/* Header */}
+    <div className="p-6 md:p-8 border-b border-gray-100 flex items-center gap-2">
+      <ImageIcon size={22} className="text-gray-700" />
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
+        Riwayat Peminjaman Anda
+      </h3>
+    </div>
 
-          <div className="space-y-6">
-            {borrowHistory.map((history, index) => {
-              const statusInfo = statusMap[history.status] || {
-                icon: null,
-                text: history.status,
-                color: 'bg-gray-100 text-gray-800',
-                bgColor: 'bg-gray-50',
-              };
+    {/* Content */}
+    <div className="p-6 md:p-8">
+      <div className="space-y-6">
+        {borrowHistory.map((history, index) => {
+          const statusInfo = statusMap[history.status] || {
+            icon: null,
+            text: history.status,
+            color: "bg-gray-100 text-gray-800",
+            bgColor: "bg-gray-50",
+          };
 
-              return (
+                        return (
                 <div
                   key={history.id}
                   className={`rounded-xl border p-5 shadow-sm hover:shadow-md transition ${statusInfo.bgColor}`}
@@ -475,10 +480,11 @@ return (
                   )}
                 </div>
               );
-            })}
-          </div>
-        </div>
-      )}
+        })}
+      </div>
+    </div>
+  </div>
+)}
     </div>
   </DashboardLayout>
 );
