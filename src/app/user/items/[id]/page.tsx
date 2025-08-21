@@ -259,7 +259,7 @@ return (
                   Kode: {item.kodeBarang}
                 </p>
               </div>
-              <div>
+              <div className="flex-shrink-0 items-center text-center">
                 {getStatusBadge(item.kondisi)}
               </div>
             </div>
