@@ -369,7 +369,7 @@ const exportHistory = () => {
                             {item.barang.nama}
                           </h3>
                           <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
+                            className={`px-2 py-0.5 text-center rounded-full text-xs font-medium flex items-center gap-1 ${statusInfo.color}`}
                           >
                             {statusInfo.icon}
                             {statusInfo.text}
