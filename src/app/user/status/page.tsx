@@ -487,28 +487,30 @@ export default function UserStatusPage() {
                 <div className="mb-5 border-b border-gray-100 pb-4">
                   <h4 className="font-medium text-gray-900 mb-3">Dokumentasi</h4>
                   <ul className="list-disc pl-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {item.fotoPinjam && (
-                      <li>
-                        <p className="text-sm text-gray-700 font-medium mb-2">Foto Saat Dipinjam</p>
-                        <img
-                          src={item.fotoPinjam}
-                          alt="Foto saat dipinjam"
-                          className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
-                          onClick={() => window.open(item.fotoPinjam!, "_blank")}
-                        />
-                      </li>
-                    )}
-                    {item.fotoKembali && (
-                      <li>
-                        <p className="text-sm text-gray-700 font-medium mb-2">Foto Saat Dikembalikan</p>
-                        <img
-                          src={item.fotoKembali}
-                          alt="Foto saat dikembalikan"
-                          className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
-                          onClick={() => window.open(item.fotoKembali!, "_blank")}
-                        />
-                      </li>
-                    )}
+{item.fotoPinjam && (
+  <li className="mb-6">
+    <p className="text-sm text-gray-700 font-medium mb-2">Foto Saat Dipinjam</p>
+    <img
+      src={item.fotoPinjam}
+      alt="Foto saat dipinjam"
+      className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+      onClick={() => window.open(item.fotoPinjam!, "_blank")}
+    />
+  </li>
+)}
+
+{item.fotoKembali && (
+  <li className="mb-6">
+    <p className="text-sm text-gray-700 font-medium mb-2">Foto Saat Dikembalikan</p>
+    <img
+      src={item.fotoKembali}
+      alt="Foto saat dikembalikan"
+      className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+      onClick={() => window.open(item.fotoKembali!, "_blank")}
+    />
+  </li>
+)}
+
                   </ul>
                 </div>
               )}
