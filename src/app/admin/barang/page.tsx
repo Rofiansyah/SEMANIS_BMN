@@ -247,7 +247,7 @@ export default function AdminBarangPage() {
   {filteredBarang.map((barang) => (
     <tr
       key={barang.id}
-      className="rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200"
+      className="border p-6 transition-all duration-200"
     >
       {/* Foto + Nama Barang */}
       <td className="py-4 px-4 border border-gray-300">
@@ -276,7 +276,6 @@ export default function AdminBarangPage() {
       {/* Kategori */}
       <td className="py-4 px-4 border border-gray-300 text-center">
         <div className="flex items-center justify-center space-x-2">
-          <Tag className="w-4 h-4 text-gray-400" />
           <span className="text-sm text-gray-600">{barang.kategori.nama}</span>
         </div>
       </td>
@@ -284,7 +283,6 @@ export default function AdminBarangPage() {
       {/* Merek */}
       <td className="py-4 px-4 border border-gray-300 text-center">
         <div className="flex items-center justify-center space-x-2">
-          <Building className="w-4 h-4 text-gray-400" />
           <span className="text-sm text-gray-600">{barang.merek.nama}</span>
         </div>
       </td>
@@ -292,7 +290,6 @@ export default function AdminBarangPage() {
       {/* Lokasi */}
       <td className="py-4 px-4 border border-gray-300 text-center">
         <div className="flex items-center justify-center space-x-2">
-          <MapPin className="w-4 h-4 text-gray-400" />
           <span className="text-sm text-gray-600">{barang.lokasi.nama}</span>
         </div>
       </td>
