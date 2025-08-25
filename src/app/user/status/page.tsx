@@ -12,6 +12,7 @@ import {
   Calendar,
   Eye,
   Download,
+  Search,
   ClipboardList,
   Tag,
   Building,
@@ -49,6 +50,7 @@ export default function UserStatusPage() {
   const [activeTab, setActiveTab] = useState<
     "ALL" | "PENDING" | "DIPINJAM" | "DITOLAK" | "DIKEMBALIKAN"
   >("ALL");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (user) {
@@ -195,11 +197,20 @@ export default function UserStatusPage() {
     );
   };
 
-  const filteredPeminjaman =
-    activeTab === "ALL"
-      ? peminjaman
-      : peminjaman.filter((item) => item.status === activeTab);
+  // Filtered Peminjaman (gabungan Tab + Search)
+  const filteredPeminjaman = peminjaman.filter((item) => {
+    // Sesuai tab
+    const matchesTab = activeTab === "ALL" ? true : item.status === activeTab;
 
+    // Sesuai search (nama & kode barang)
+    const matchesSearch =
+      item.barang?.nama.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+      item.barang?.kodeBarang.toLowerCase().includes(searchQuery.toLowerCase().trim());
+
+    return matchesTab && matchesSearch;
+  });
+
+  // Hitung jumlah status (tetap dari semua data, tidak terfilter search)
   const allCount = peminjaman.length;
   const pendingCount = peminjaman.filter((item) => item.status === "PENDING").length;
   const borrowedCount = peminjaman.filter((item) => item.status === "DIPINJAM").length;
@@ -228,6 +239,19 @@ export default function UserStatusPage() {
             Akses informasi riwayat peminjaman barang dari pengajuan hingga pengembalian
           </p>
         </div>
+
+        {/* Search */}
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Cari barang..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+          />
+        </div>       
+
 {/* Statistics Cards */}
 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
   {/* Total */}
