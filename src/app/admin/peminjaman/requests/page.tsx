@@ -362,12 +362,7 @@ export default function AdminStatusPage(){
                         >
                           {/* Peminjam (biar tetap kiri karena biasanya teks panjang) */}
                           <td className="py-4 px-4 border border-gray-300">
-                            <div className="flex items-start space-x-3">
-                              {/* Ikon User */}
-                              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                                <User className="w-4 h-4 text-gray-600" />
-                              </div>
-
+                            <div className="">
                               {/* Nama + Email (justify) */}
                               <div className="flex flex-col">
                                 <p className="font-medium text-gray-900">{request.user.nama}</p>
@@ -376,18 +371,31 @@ export default function AdminStatusPage(){
                             </div>
                           </td>
 
-                          {/* Barang (tetap kiri juga) */}
-                          <td className="py-4 px-4 border border-gray-300">
-                            <div className="flex flex-col">
-                              <p className="font-medium">
-                                {request.barang.nama}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {request.barang.kodeBarang}
-                              </p>
-                            </div>
-                          </td>
+      {/* Foto + Nama Barang */}
+      <td className="py-4 px-4 border border-gray-300">
+        <div className="flex items-start space-x-3">
+                  {/* Foto */}
+                  <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+                    {request.barang.fotoUrl ? (
+                      <img
+                        src={request.barang.fotoUrl}
+                        alt={request.barang.nama}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                      
+                      </div>
+                    )}
+                  </div>
 
+          {/* Nama + Kode Barang */}
+          <div className="flex flex-col">
+            <p className="font-medium text-gray-900">{request.barang.nama}</p>
+            <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+          </div>
+        </div>
+      </td>
                           {/* Tanggal Pengajuan → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
                             {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
