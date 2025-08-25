@@ -128,7 +128,8 @@ export default function AdminBarangPage() {
     barang.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
     barang.kodeBarang.toLowerCase().includes(searchQuery.toLowerCase()) ||
     barang.kategori.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    barang.merek.nama.toLowerCase().includes(searchQuery.toLowerCase())
+    barang.merek.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    barang.lokasi.nama.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
 
   return (

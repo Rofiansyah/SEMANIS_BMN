@@ -24,6 +24,7 @@ import {
   Building,
   MapPin,
   AlertCircle,
+  Search,
   Filter,
   RotateCcw,
   Camera,
@@ -35,6 +36,7 @@ import api from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { request } from 'http';
 
 const statusLabels: Record<
   'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN' | 'DISETUJUI',
@@ -62,6 +64,7 @@ export default function AdminStatusPage(){
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('30'); // days
   const [activeTab, setActiveTab] = useState<'ALL' | 'PENDING' | 'DIPINJAM' | 'DITOLAK' | 'DIKEMBALIKAN' | 'DISETUJUI'>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
     loadRequests();
@@ -138,7 +141,7 @@ export default function AdminStatusPage(){
     } finally {
       setReturnLoading(false);
     }
-  };  
+  }; 
   
   const getStatusInfo = (status: string) => {
     const statusMap = {
@@ -181,6 +184,14 @@ export default function AdminStatusPage(){
       bgColor: 'bg-gray-50'
     };
   };
+
+  const filteredBarang = requests.filter(item =>
+    item.barang.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.barang.kodeBarang.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.barang.kategori.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.barang.merek.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.barang.lokasi.nama.toLowerCase().includes(searchQuery.toLowerCase()) 
+  );  
   
   const filteredRequests =
     activeTab === 'ALL'
@@ -214,6 +225,18 @@ export default function AdminStatusPage(){
             <p className="text-gray-600 mt-1">Kelola semua peminjaman barang - dari pengajuan hingga pengembalian</p>
           </div>
         </div>
+
+        {/* Search */}
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <input
+            type="text"
+            placeholder="Cari barang..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+          />
+        </div>        
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -329,7 +352,10 @@ export default function AdminStatusPage(){
             ) : filteredRequests.length === 0 ? (
               <div className="p-8 text-center">
                 <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Tidak ada permintaan ditemukan</p>
+                <p className="text-gray-600">
+                  Tidak ada permintaan ditemukan ||
+                  {searchQuery ? 'Tidak ada merek yang sesuai dengan pencarian' : 'Belum ada merek'}
+                </p>
               </div>
             ) : (
               <div className="overflow-x-auto">
