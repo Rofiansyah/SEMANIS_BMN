@@ -188,15 +188,15 @@ return (
           key={lokasi.id}
           className="border transition-all duration-200"
         >
-          {/* Nama Lokasi */}
-          <td className="py-4 px-4 border border-gray-300 text-center">
-            <div className="flex items-left justify-center space-x-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center shadow-sm">
-                <MapPin className="w-4 h-4 text-orange-600" />
-              </div>
-              <span className="font-medium text-gray-900">{lokasi.nama}</span>
-            </div>
-          </td>
+{/* Nama Lokasi */}
+<td className="py-4 px-4 border border-gray-300 text-left">
+  <div className="flex items-center justify-start space-x-3">
+    <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center shadow-sm">
+      <MapPin className="w-4 h-4 text-orange-600" />
+    </div>
+    <span className="font-medium text-gray-900">{lokasi.nama}</span>
+  </div>
+</td>
 
           {/* Tanggal Dibuat */}
           <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
@@ -209,21 +209,21 @@ return (
               <div className="flex justify-center gap-2">
                 <Button
                   size="sm"
-                  variant="outlinesecond"
-                  onClick={() => openEditModal(lokasi)}
-                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                >
-                  <Edit className="w-3 h-3 mr-1" />
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
                   variant="danger"
                   onClick={() => handleDeleteLokasi(lokasi.id)}
                   className="flex items-center"
                 >
                   <Trash2 className="w-3 h-3 mr-1" />
                   Hapus
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => openEditModal(lokasi)}
+                  variant="outline"
+                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                >
+                  <Edit className="w-3 h-3 mr-1" />
+                  Edit
                 </Button>
               </div>
             </div>

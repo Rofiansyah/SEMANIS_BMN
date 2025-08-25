@@ -202,15 +202,15 @@ return (
           key={kategori.id}
           className="border transition-all duration-200"
         >
-          {/* Nama Kategori */}
-          <td className="py-4 px-4 border border-gray-300 text-center">
-            <div className="flex items-left justify-center space-x-3">
-              <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center shadow-sm">
-                <Tag className="w-4 h-4 text-pink-600" />
-              </div>
-              <span className="font-medium text-gray-900">{kategori.nama}</span>
-            </div>
-          </td>
+{/* Nama Kategori */}
+<td className="py-4 px-4 border border-gray-300 text-left">
+  <div className="flex items-center justify-start space-x-3">
+    <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center shadow-sm">
+      <Tag className="w-4 h-4 text-pink-600" />
+    </div>
+    <span className="font-medium text-gray-900">{kategori.nama}</span>
+  </div>
+</td>
 
           {/* Tanggal Dibuat */}
           <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
@@ -224,21 +224,21 @@ return (
               <div className="flex justify-center gap-2">
                 <Button
                   size="sm"
-                  variant="outlinesecond"
-                  onClick={() => openEditModal(kategori)}
-                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                >
-                  <Edit className="w-3 h-3 mr-1" />
-                  Edit
-                </Button>
-                <Button
-                  size="sm"
                   variant="danger"
                   onClick={() => handleDeleteKategori(kategori.id)}
                   className="flex items-center"
                 >
                   <Trash2 className="w-3 h-3 mr-1" />
                   Hapus
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => openEditModal(kategori)}
+                  variant="outline"
+                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                >
+                  <Edit className="w-3 h-3 mr-1" />
+                  Edit
                 </Button>
               </div>
             </div>
