@@ -252,18 +252,20 @@ export default function AdminBarangPage() {
       {/* Foto + Nama Barang */}
       <td className="py-4 px-4 border border-gray-300">
         <div className="flex items-start space-x-3">
-          {/* Foto Barang */}
-          <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-            {barang.foto ? (
-              <img
-                src={barang.foto}
-                alt={barang.nama}
-                className="w-10 h-10 object-cover rounded-lg"
-              />
-            ) : (
-              <Package className="w-5 h-5 text-gray-600" />
-            )}
-          </div>
+                  {/* Foto */}
+                  <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+                    {barang.fotoUrl ? (
+                      <img
+                        src={barang.fotoUrl}
+                        alt={barang.nama}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                      
+                      </div>
+                    )}
+                  </div>
 
           {/* Nama + Kode Barang */}
           <div className="flex flex-col">
