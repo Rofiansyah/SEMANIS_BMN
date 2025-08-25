@@ -251,7 +251,7 @@ export default function AdminBarangPage() {
     >
       {/* Foto + Nama Barang */}
       <td className="py-4 px-4 border border-gray-300">
-        <div className="flex items-start space-x-3">
+        <div className="flex items-start space-x-5">
                   {/* Foto */}
                   <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
                     {barang.fotoUrl ? (
