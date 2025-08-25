@@ -191,7 +191,7 @@ return (
         >
           {/* Nama Merek */}
           <td className="py-4 px-4 border border-gray-300 text-center">
-            <div className="flex items-center justify-center space-x-3">
+            <div className="flex items-left justify-center space-x-3">
               <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center shadow-sm">
                 <Bookmark className="w-4 h-4 text-purple-600" />
               </div>
