@@ -185,25 +185,28 @@ export default function AdminStatusPage(){
     };
   };
 
-  const filteredBarang = requests.filter(item =>
-    item.barang.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.barang.kodeBarang.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.barang.kategori.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.barang.merek.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.barang.lokasi.nama.toLowerCase().includes(searchQuery.toLowerCase()) 
-  );  
-  
-  const filteredRequests =
-    activeTab === 'ALL'
-      ? requests
-      : requests.filter(item => item.status === activeTab);
+  // Filtered Requests (gabungan Tab + Search)
+  const filteredRequests = requests.filter((item) => {
+    // Cek tab aktif
+    const matchesTab = activeTab === "ALL" ? true : item.status === activeTab;
+    // Cek search (nama peminjam, email, nama barang, kode barang)
+    const matchesSearch =
+      item.user.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.barang.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.barang.kodeBarang.toLowerCase().includes(searchQuery.toLowerCase());
 
+    return matchesTab && matchesSearch;
+  });
+
+  // Hitung jumlah untuk statistik (tidak ikut search)
   const allCount = requests.length;
   const pendingCount = requests.filter(item => item.status === 'PENDING').length;
   const approvedCount = requests.filter(item => item.status === 'DISETUJUI').length;
   const borrowedCount = requests.filter(item => item.status === 'DIPINJAM').length;
   const rejectedCount = requests.filter(item => item.status === 'DITOLAK').length;
   const returnedCount = requests.filter(item => item.status === 'DIKEMBALIKAN').length;
+
   
   if (loading) {
     return (
@@ -242,10 +245,10 @@ export default function AdminStatusPage(){
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total */}
           <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            className={`p-4 rounded-lg border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
               activeTab === 'ALL'
-                ? 'border-gray-500 bg-gray-100'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-gray-600 bg-gradient-to-br from-gray-100 to-gray-50'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
             }`}
             onClick={() => setActiveTab('ALL')}
           >
@@ -260,10 +263,10 @@ export default function AdminStatusPage(){
 
           {/* Pending */}
           <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            className={`p-4 rounded-lg border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
               activeTab === 'PENDING'
-                ? 'border-yellow-500 bg-yellow-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-yellow-500 bg-gradient-to-br from-yellow-50 to-yellow-100'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
             }`}
             onClick={() => setActiveTab('PENDING')}
           >
@@ -278,10 +281,10 @@ export default function AdminStatusPage(){
 
           {/* Dipinjam */}
           <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            className={`p-4 rounded-lg border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
               activeTab === 'DIPINJAM'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
             }`}
             onClick={() => setActiveTab('DIPINJAM')}
           >
@@ -296,10 +299,10 @@ export default function AdminStatusPage(){
 
           {/* Ditolak */}
           <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            className={`p-4 rounded-lg border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
               activeTab === 'DITOLAK'
-                ? 'border-red-500 bg-red-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-red-500 bg-gradient-to-br from-red-50 to-red-100'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
             }`}
             onClick={() => setActiveTab('DITOLAK')}
           >
@@ -314,10 +317,10 @@ export default function AdminStatusPage(){
 
           {/* Dikembalikan */}
           <div
-            className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            className={`p-4 rounded-lg border-2 shadow-sm cursor-pointer transition-all transform hover:scale-[1.02] hover:shadow-md ${
               activeTab === 'DIKEMBALIKAN'
-                ? 'border-green-500 bg-green-50'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-green-500 bg-gradient-to-br from-green-50 to-green-100'
+                : 'border-gray-200 hover:border-gray-300 bg-white'
             }`}
             onClick={() => setActiveTab('DIKEMBALIKAN')}
           >
