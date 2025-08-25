@@ -57,7 +57,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
         { label: 'Lokasi', href: '/admin/lokasi', icon: <MapPin size={16} /> }
       ]
     },
-    { label: 'Kelola Peminjaman', href: '/admin/peminjaman/approve', icon: <CheckCircle size={20} /> },
+    { label: 'Kelola Peminjaman', href: '/admin/peminjaman/approve', icon: <ClipboardList size={20} /> },
     // {
     //   label: 'Peminjaman',
     //   icon: <ClipboardList size={20} />,
