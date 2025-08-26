@@ -419,72 +419,78 @@ if (!isAdmin) {
     <h3 className="text-lg font-semibold text-gray-900">Aktivitas Terbaru</h3>
   </div>
 
-{/* Loading / Empty / Data State */}
-  {loadingActivity ? (
-    // Loading State
-    <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
-      {/* Animated Icon */}
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center">
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-        <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
-      </div>
-
-      {/* Loading Text */}
-      <p className="text-gray-700 font-semibold text-base sm:text-lg md:text-xl lg:text-2xl animate-pulse">
-        Memuat list aktivitas...
-      </p>
-
-      {/* Progress Bar */}
-      <div className="relative w-40 sm:w-48 md:w-56 lg:w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div className="absolute h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite] w-full"></div>
-      </div>
-
-      <style jsx>{`
-        @keyframes progress {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(0%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+{/* Loading State */}
+{loadingActivity ? (
+  <div className="p-6 flex flex-col items-center justify-center text-center">
+    {/* Ikon animasi */}
+    <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+      {/* Efek ping */}
+      <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+      {/* Ikon bounce */}
+      <Package className="w-8 h-8 sm:w-10 md:w-14 lg:w-16 text-blue-600 animate-bounce drop-shadow-lg" />
     </div>
-  ) : recentActivity.length === 0 ? (
+
+    {/* Teks animasi */}
+    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse">
+      Memuat list aktivitas...
+    </p>
+
+    {/* Progress Bar */}
+    <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+      <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+    </div>
+
+    {/* Custom Animasi Progress */}
+    <style jsx>{`
+      @keyframes progress {
+        0% {
+          transform: translateX(-100%);
+        }
+        50% {
+          transform: translateX(0%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    `}</style>
+  </div>
+) : recentActivity.length === 0 ? (
     // Empty State
-    <div className="flex flex-col items-center justify-center text-center py-8 space-y-2 text-gray-500">
-      <p className="text-base sm:text-lg md:text-xl">Belum ada aktivitas untuk ditampilkan</p>
-      <p className="text-sm sm:text-base">Aktivitas peminjaman akan muncul di sini</p>
+    <div className="p-6 text-center text-gray-500 py-8">
+      <p>Belum ada aktivitas untuk ditampilkan</p>
+      <p className="text-sm mt-2">Aktivitas peminjaman akan muncul di sini</p>
     </div>
   ) : (
     // Data State
-    <div className="w-full divide-y divide-gray-200">
+    <div className="divide-y divide-gray-200">
       {recentActivity.map((activity) => (
         <div
           key={activity.id}
-          className="flex flex-col sm:flex-row items-center sm:items-start justify-between p-4 sm:p-6 hover:bg-gray-50 cursor-pointer transition rounded-lg"
+          className="p-6 flex items-center justify-between hover:bg-gray-50 cursor-pointer transition"
           onClick={() => router.push(`/admin/peminjaman/${activity.id}`)}
         >
-          {/* User & Item Info */}
-          <div className="flex items-center sm:space-x-4 w-full sm:w-auto">
-            {/* Item Image */}
-            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-              {activity.barang.fotoUrl ? (
-                <img
-                  src={activity.barang.fotoUrl}
-                  alt={activity.barang.nama}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                  <Package className="w-6 h-6 text-gray-500" />
-                </div>
-              )}
-            </div>
-
-            {/* User & Item Name */}
-            <div className="mt-2 sm:mt-0">
-              <p className="text-sm sm:text-base md:text-lg font-medium text-gray-900">
+          {/* Info User & Barang */}
+          <div className="flex items-center space-x-4">
+            {/* Foto Barang */}
+<div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+  {activity.barang.fotoUrl ? (
+    <img
+      src={activity.barang.fotoUrl}
+      alt={activity.barang.nama}
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-gray-200">
+      <Package className="w-6 h-6 text-gray-500" />
+    </div>
+  )}
+</div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">
                 {activity.user.nama} - {activity.barang.nama}
               </p>
-              <p className="text-xs sm:text-sm md:text-base text-gray-500">
+              <p className="text-sm text-gray-500">
                 {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "long",
@@ -496,39 +502,40 @@ if (!isAdmin) {
             </div>
           </div>
 
-          {/* Status */}
-          <div className="flex flex-col items-center text-center gap-1 mt-4 sm:mt-0">
-            {activity.status === "PENDING" && <Clock size={20} className="text-yellow-800" />}
-            {activity.status === "DIPINJAM" && <Package size={20} className="text-blue-800" />}
-            {activity.status === "DITOLAK" && <XCircle size={20} className="text-red-800" />}
-            {activity.status === "DIKEMBALIKAN" && <CheckCircle size={20} className="text-green-800" />}
-
-            <span
-              className={`inline-flex px-2 py-1 text-xs sm:text-sm font-medium rounded-full ${
-                activity.status === "PENDING"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : activity.status === "DIPINJAM"
-                  ? "bg-blue-100 text-blue-800"
-                  : activity.status === "DITOLAK"
-                  ? "bg-red-100 text-red-800"
-                  : "bg-green-100 text-green-800"
-              }`}
-            >
-              {activity.status === "PENDING"
-                ? "Menunggu"
-                : activity.status === "DIPINJAM"
-                ? "Sedang Dipinjam"
-                : activity.status === "DITOLAK"
-                ? "Ditolak"
-                : "Dikembalikan"}
-            </span>
-          </div>
+{/* Status */}
+<div className="flex flex-col items-center text-center gap-1">
+  {activity.status === "PENDING" && <Clock size={16} className="text-yellow-800" />}
+  {activity.status === "DIPINJAM" && <Package size={16} className="text-blue-800" />}
+  {activity.status === "DITOLAK" && <XCircle size={16} className="text-red-800" />}
+  {activity.status === "DIKEMBALIKAN" && <CheckCircle size={16} className="text-green-800" />}
+  
+  <span
+    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full
+      ${
+        activity.status === "PENDING"
+          ? "bg-yellow-100 text-yellow-800"
+          : activity.status === "DIPINJAM"
+          ? "bg-blue-100 text-blue-800"
+          : activity.status === "DITOLAK"
+          ? "bg-red-100 text-red-800"
+          : "bg-green-100 text-green-800"
+      }`}
+  >
+    {activity.status === "PENDING"
+      ? "Menunggu"
+      : activity.status === "DIPINJAM"
+      ? "Sedang Dipinjam"
+      : activity.status === "DITOLAK"
+      ? "Ditolak"
+      : "Dikembalikan"}
+  </span>
+</div>
         </div>
       ))}
     </div>
   )}
 </div>
-</div>
+      </div>
 
       {/* Modals */}
       <TambahBarangModal
