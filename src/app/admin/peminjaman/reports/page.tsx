@@ -15,6 +15,7 @@ import {
   Calendar,
   RefreshCw,
   AlertCircle,
+  Package,
   FileText
 } from 'lucide-react';
 
@@ -146,10 +147,13 @@ return (
         className="w-28 sm:w-36 md:w-40 h-auto mx-auto mb-6 animate-pulse"
       />
 
-      {/* Box animasi responsif */}
-      <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mb-4">
-        <div className="absolute inset-0 bg-blue-600 rounded-lg animate-bounce shadow-lg"></div>
-        <div className="absolute inset-0 bg-blue-400 rounded-lg animate-ping opacity-30"></div>
+      {/* Ikon animasi responsif */}
+      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
+        {/* Efek ping responsif */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+
+        {/* Ikon responsif dengan bounce */}
+        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
       </div>
 
       {/* Teks animasi responsif */}
