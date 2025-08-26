@@ -212,20 +212,30 @@ export default function DashboardUserPage() {
 
 if (!user) {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-      {/* Box animasi */}
-      <div className="relative w-16 h-16 mb-4">
-        <div className="absolute inset-0 bg-blue-600 rounded-lg animate-bounce shadow-lg"></div>
-        <div className="absolute inset-0 bg-blue-400 rounded-lg animate-ping opacity-30"></div>
+    <div className="relative flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-32 sm:w-40 md:w-48 h-auto mx-auto mb-6 animate-pulse"
+      />
+
+      {/* Ikon animasi responsif */}
+      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
+        {/* Efek ping responsif */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+
+        {/* Ikon responsif dengan bounce */}
+        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
       </div>
 
       {/* Teks animasi */}
-      <p className="text-lg font-semibold text-gray-700 animate-pulse">
+      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
         Loading...
       </p>
 
-      {/* Progress Bar animasi */}
-      <div className="w-48 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+      {/* Progress Bar animasi responsif */}
+      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
         <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
       </div>
 
@@ -248,21 +258,31 @@ if (!user) {
 
 if (isAdmin) {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-      {/* Box animasi */}
-      <div className="relative w-16 h-16 mb-4">
-        <div className="absolute inset-0 bg-green-600 rounded-lg animate-bounce shadow-lg"></div>
-        <div className="absolute inset-0 bg-green-400 rounded-lg animate-ping opacity-30"></div>
+    <div className="relative flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-32 sm:w-40 md:w-48 h-auto mx-auto mb-6 animate-pulse"
+      />
+
+      {/* Ikon animasi responsif */}
+      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
+        {/* Efek ping responsif */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+
+        {/* Ikon responsif dengan bounce */}
+        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
       </div>
 
       {/* Teks animasi */}
-      <p className="text-lg font-semibold text-gray-700 animate-pulse">
+      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
         Redirecting to admin dashboard...
       </p>
 
-      {/* Progress Bar animasi */}
-      <div className="w-48 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-        <div className="h-2 bg-green-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      {/* Progress Bar animasi responsif */}
+      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
       </div>
 
       <style jsx>{`
