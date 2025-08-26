@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Button } from "@/components/ui/Button";
+import logoSemantis from './logo_semantis.png';
 import {
   Clock,
   Package,
@@ -219,12 +220,47 @@ export default function UserStatusPage() {
 
   if (loading) {
     return (
-      <DashboardLayout title="Status Peminjaman">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-        </div>
-      </DashboardLayout>
-    );
+  <DashboardLayout title="Status Peminjaman">
+    <div className="relative flex flex-col items-center justify-center min-h-[16rem] sm:min-h-[20rem] px-4 bg-gray-50 rounded-xl">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-28 sm:w-36 md:w-40 h-auto mx-auto mb-6 animate-pulse"
+      />
+
+      {/* Kotak animasi responsif */}
+      <div className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 mb-4">
+        <div className="absolute inset-0 bg-blue-600 rounded-lg animate-bounce shadow-lg"></div>
+        <div className="absolute inset-0 bg-blue-400 rounded-lg animate-ping opacity-30"></div>
+      </div>
+
+      {/* Teks animasi */}
+      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
+        Memuat Status Peminjaman...
+      </p>
+
+      {/* Progress Bar animasi responsif */}
+      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
+
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  </DashboardLayout>
+);
   }
 
   return (
