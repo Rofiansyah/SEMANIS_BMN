@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { TambahBarangModal, EditBarangModal } from '@/components/modals';
 import { barangApi, kategoriApi, merekApi, lokasiApi } from '@/lib/api';
 import type { Barang, Kategori, Merek, Lokasi } from '@/types/api';
+import logoSemantis from './logo_semantis.png';
 import { 
   Plus, 
   Edit, 
@@ -220,8 +221,47 @@ export default function AdminBarangPage() {
           {loading ? (
             <div className="p-8 text-center">
               <div className="inline-flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
-                <span className="text-gray-600">Memuat data...</span>
+<div className="flex flex-col justify-center items-center h-screen px-4">
+  {/* Logo */}
+  <img
+    src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+    alt="SEMANTIS BMN Logo"
+    className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
+  />
+
+  {/* Ikon animasi responsif */}
+  <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+    {/* Efek ping responsif */}
+    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+
+    {/* Ikon responsif dengan bounce */}
+    <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
+  </div>
+
+  {/* Teks animasi */}
+  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
+    Loading...
+  </p>
+
+  {/* Progress Bar */}
+  <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+    <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+  </div>
+
+  <style jsx>{`
+    @keyframes progress {
+      0% {
+        transform: translateX(-100%);
+      }
+      50% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+  `}</style>
+</div>
               </div>
             </div>
           ) : filteredBarang.length === 0 ? (
