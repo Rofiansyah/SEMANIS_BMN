@@ -189,25 +189,22 @@ if (!user) {
       <img
         src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
         alt="SEMANTIS BMN Logo"
-        className="w-32 sm:w-40 md:w-48 h-auto mx-auto mb-6 animate-pulse"
+        className="w-28 sm:w-36 md:w-44 h-auto mx-auto mb-8 animate-pulse"
       />
 
-      {/* Ikon animasi responsif */}
-      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
-        {/* Efek ping responsif */}
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-
-        {/* Ikon responsif dengan bounce */}
-        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+      {/* Ikon animasi */}
+      <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center mb-6">
+        <div className="absolute inset-0 rounded-full bg-blue-200 animate-ping"></div>
+        <Package className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-blue-700 animate-bounce" />
       </div>
 
       {/* Teks animasi */}
-      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
-        Loading...
+      <p className="text-lg sm:text-xl md:text-2xl font-bold text-blue-700 animate-pulse text-center">
+        Memuat data pengguna...
       </p>
 
       {/* Progress Bar */}
-      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+      <div className="w-48 sm:w-56 md:w-64 h-2 bg-gray-200 rounded-full mt-6 overflow-hidden">
         <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
       </div>
 
@@ -235,25 +232,22 @@ if (!isAdmin) {
       <img
         src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
         alt="SEMANTIS BMN Logo"
-        className="w-32 sm:w-40 md:w-48 h-auto mx-auto mb-6 animate-pulse"
+        className="w-28 sm:w-36 md:w-44 h-auto mx-auto mb-8 animate-pulse"
       />
 
-      {/* Ikon animasi responsif */}
-      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
-        {/* Efek ping responsif */}
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-
-        {/* Ikon responsif dengan bounce */}
-        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+      {/* Ikon animasi */}
+      <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex items-center justify-center mb-6">
+        <div className="absolute inset-0 rounded-full bg-red-200 animate-ping"></div>
+        <Package className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-red-700 animate-bounce" />
       </div>
 
       {/* Teks animasi */}
-      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
-        Access Denied
+      <p className="text-lg sm:text-xl md:text-2xl font-bold text-red-700 animate-pulse text-center">
+        Akses ditolak, hanya admin yang dapat masuk
       </p>
 
       {/* Progress Bar */}
-      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+      <div className="w-48 sm:w-56 md:w-64 h-2 bg-gray-200 rounded-full mt-6 overflow-hidden">
         <div className="h-2 bg-red-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
       </div>
 
