@@ -420,7 +420,6 @@ if (!isAdmin) {
   </div>
 
 {/* Loading / Empty / Data State */}
-<div className="p-4 sm:p-6 flex flex-col items-center justify-center w-full">
   {loadingActivity ? (
     // Loading State
     <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
@@ -528,7 +527,6 @@ if (!isAdmin) {
       ))}
     </div>
   )}
-</div>
 </div>
 </div>
 
