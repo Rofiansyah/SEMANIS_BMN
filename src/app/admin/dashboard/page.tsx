@@ -37,6 +37,7 @@ import type {
   Peminjaman,
 } from "@/types/api";
 import { exportBarangStatisticsPDF } from '@/utils/pdfExport';
+import logoSemantis from './logo_semantis.png';
 
 export default function AdminDashboardPage() {
   const { user, isAdmin } = useAuth();
@@ -181,13 +182,55 @@ export default function AdminDashboardPage() {
     loadStatistics();
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+if (!user) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-20 h-20 mb-6 animate-pulse"
+      />
+      {/* Spinner */}
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+      <p className="text-gray-700 text-lg font-medium">Loading...</p>
+    </div>
+  );
+}
 
-  if (!isAdmin) {
-    return <div>Access denied</div>;
-  }
+if (isAdmin) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-20 h-20 mb-6 animate-pulse"
+      />
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mb-4"></div>
+      <p className="text-gray-700 text-lg font-medium">
+        Redirecting to admin dashboard...
+      </p>
+    </div>
+  );
+}
+
+// sebelumnya: return <div>Access denied</div>;
+if (!isAdmin) {
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-20 h-20 mb-6 animate-pulse"
+      />
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
+      <p className="text-gray-700 text-lg font-medium">
+        Redirecting to user dashboard...
+      </p>
+    </div>
+  );
+}
+
 
   return (
     <DashboardLayout title="Admin Dashboard">

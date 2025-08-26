@@ -215,8 +215,8 @@ if (!user) {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
       {/* Logo */}
       <img
-        src="/logo.png" // ganti sesuai path logo kamu
-        alt="Logo"
+        src={typeof logoSemantis === 'string' ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
         className="w-20 h-20 mb-6 animate-pulse"
       />
       {/* Spinner */}
