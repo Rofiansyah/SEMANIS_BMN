@@ -488,7 +488,7 @@ if (isAdmin) {
     {/* Results */}
     <div className="p-4 sm:p-6">
       {loadingBarang ? (
-        <div className="relative flex flex-col items-center justify-center min-h-screen px-4 bg-gray-50">
+        <div className="flex justify-center items-center h-64">
           {/* Logo */}
       <img
         src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
