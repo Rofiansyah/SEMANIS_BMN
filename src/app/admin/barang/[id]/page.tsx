@@ -168,53 +168,46 @@ export default function BarangDetailPage({ params }: BarangDetailPageProps) {
     );
   };
 
-  if (loading) {
-return (
-  <DashboardLayout title="Detail Barang">
-    <div className="relative flex flex-col items-center justify-center min-h-[16rem] sm:min-h-[20rem] md:min-h-[24rem] px-4 bg-gray-50 rounded-xl">
-      {/* Logo */}
-      <img
-        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-        alt="SEMANTIS BMN Logo"
-        className="w-32 sm:w-40 md:w-48 h-auto mx-auto mb-6 animate-pulse"
-      />
-      {/* Ikon animasi responsif */}
-      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
-        {/* Efek ping responsif */}
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+if (loading) {
+  return (
+    <DashboardLayout title="Detail Barang">
+      <div className="relative flex flex-col items-center justify-center min-h-[16rem] sm:min-h-[20rem] md:min-h-[24rem] px-4 bg-gray-50 rounded-xl">
+        
+        {/* Ikon animasi */}
+        <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
+          <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+          <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+        </div>
 
-        {/* Ikon responsif dengan bounce */}
-        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+        {/* Teks animasi */}
+        <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
+          Memuat Detail Barang...
+        </p>
+
+        {/* Progress Bar */}
+        <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+          <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+        </div>
+
+        <style jsx>{`
+          @keyframes progress {
+            0% {
+              transform: translateX(-100%);
+            }
+            50% {
+              transform: translateX(0%);
+            }
+            100% {
+              transform: translateX(100%);
+            }
+          }
+        `}</style>
       </div>
+    </DashboardLayout>
+  );
+}
 
-      {/* Teks animasi responsif */}
-      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
-        Memuat Detail Barang...
-      </p>
 
-      {/* Progress Bar animasi responsif */}
-      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-      </div>
-
-      <style jsx>{`
-        @keyframes progress {
-          0% {
-            transform: translateX(-100%);
-          }
-          50% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
-    </div>
-  </DashboardLayout>
-);
-
-  }
 
   if (error || !barang) {
     return (
@@ -440,13 +433,24 @@ return (
                 </div>
               </div>
               <div className="p-6">
-                {historyLoading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="inline-flex items-center space-x-2">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-500"></div>
-                      <span className="text-gray-600">Memuat riwayat...</span>
-                    </div>
-                  </div>
+{historyLoading ? (
+  <div className="flex flex-col items-center justify-center py-8">
+    {/* Ikon animasi */}
+    <div className="relative w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 mb-3 flex items-center justify-center">
+      <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+      <History className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 animate-bounce drop-shadow-lg" />
+    </div>
+
+    {/* Teks animasi */}
+    <p className="text-sm sm:text-base font-medium text-gray-700 animate-pulse text-center">
+      Memuat Riwayat Peminjaman...
+    </p>
+
+    {/* Progress Bar */}
+    <div className="w-32 sm:w-40 md:w-48 h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+      <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+    </div>
+  </div>
                 ) : history.length === 0 ? (
                   <div className="text-center py-8">
                     <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />

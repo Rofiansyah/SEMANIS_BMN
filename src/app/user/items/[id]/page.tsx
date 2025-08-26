@@ -160,53 +160,48 @@ export default function ItemDetailPage() {
 
   const canBorrow = item?.status !== 'DIPINJAM';
 
-  if (loading) {
-return (
-  <DashboardLayout title="Detail Barang">
-    <div className="relative flex flex-col items-center justify-center min-h-[16rem] sm:min-h-[20rem] px-4 bg-gray-50 rounded-xl">
-      {/* Logo */}
-      <img
-        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-        alt="SEMANTIS BMN Logo"
-        className="w-28 sm:w-36 md:w-40 h-auto mx-auto mb-6 animate-pulse"
-      />
+if (loading) {
+  return (
+    <DashboardLayout title="Detail Barang">
+      <div className="relative flex flex-col items-center justify-center min-h-[16rem] sm:min-h-[20rem] px-4 bg-gray-50 rounded-xl">
+        
+        {/* Ikon animasi responsif */}
+        <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
+          {/* Efek ping responsif */}
+          <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
 
-      {/* Ikon animasi responsif */}
-      <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 h-16 sm:h-20 md:h-24 lg:h-28 mb-4 flex items-center justify-center">
-        {/* Efek ping responsif */}
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+          {/* Ikon responsif dengan bounce */}
+          <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+        </div>
 
-        {/* Ikon responsif dengan bounce */}
-        <Package className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-blue-600 animate-bounce drop-shadow-lg" />
+        {/* Teks animasi responsif */}
+        <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
+          Memuat Detail Barang...
+        </p>
+
+        {/* Progress Bar animasi responsif */}
+        <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+          <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+        </div>
+
+        <style jsx>{`
+          @keyframes progress {
+            0% {
+              transform: translateX(-100%);
+            }
+            50% {
+              transform: translateX(0%);
+            }
+            100% {
+              transform: translateX(100%);
+            }
+          }
+        `}</style>
       </div>
+    </DashboardLayout>
+  );
+}
 
-      {/* Teks animasi responsif */}
-      <p className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 animate-pulse text-center">
-        Memuat Detail Barang...
-      </p>
-
-      {/* Progress Bar animasi responsif */}
-      <div className="w-40 sm:w-48 md:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-      </div>
-
-      <style jsx>{`
-        @keyframes progress {
-          0% {
-            transform: translateX(-100%);
-          }
-          50% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-      `}</style>
-    </div>
-  </DashboardLayout>
-);
-  }
 
   if (!item) {
     return (

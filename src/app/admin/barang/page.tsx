@@ -219,59 +219,53 @@ export default function AdminBarangPage() {
     <h2 className="text-lg font-semibold text-gray-900">Daftar Barang</h2>
   </div>
 
-  {/* Loading State */}
-  {loading ? (
-    <div className="p-8 flex flex-col items-center justify-center text-center">
-      {/* Logo */}
-      <img
-        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-        alt="SEMANTIS BMN Logo"
-        className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mb-6 animate-pulse"
-      />
+{/* Loading State */}
+{loading ? (
+  <div className="p-8 flex flex-col items-center justify-center text-center">
+    {/* Ikon animasi */}
+    <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+      {/* Efek ping */}
+      <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+      {/* Ikon bounce */}
+      <Package className="w-8 h-8 sm:w-10 md:w-14 lg:w-16 text-blue-600 animate-bounce drop-shadow-lg" />
+    </div>
 
-      {/* Ikon animasi */}
-      <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
-        {/* Efek ping */}
-        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-        {/* Ikon bounce */}
-        <Package className="w-8 h-8 sm:w-10 md:w-14 lg:w-16 text-blue-600 animate-bounce drop-shadow-lg" />
-      </div>
+    {/* Teks animasi */}
+    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse">
+      Memuat list barang...
+    </p>
 
-      {/* Teks animasi */}
-      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse">
-        Memuat list barang...
-      </p>
+    {/* Progress Bar */}
+    <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+      <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+    </div>
 
-      {/* Progress Bar */}
-      <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-      </div>
-
-      <style jsx>{`
-        @keyframes progress {
-          0% {
-            transform: translateX(-100%);
-          }
-          50% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
+    <style jsx>{`
+      @keyframes progress {
+        0% {
+          transform: translateX(-100%);
         }
-      `}</style>
-    </div>
-  ) : filteredBarang.length === 0 ? (
-    // Empty State
-    <div className="p-8 text-center">
-      <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-      <p className="text-gray-600">
-        {searchQuery
-          ? "Tidak ada barang yang sesuai dengan pencarian"
-          : "Belum ada barang"}
-      </p>
-    </div>
-  ) : (
+        50% {
+          transform: translateX(0%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    `}</style>
+  </div>
+) : filteredBarang.length === 0 ? (
+  // Empty State
+  <div className="p-8 text-center">
+    <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+    <p className="text-gray-600">
+      {searchQuery
+        ? "Tidak ada barang yang sesuai dengan pencarian"
+        : "Belum ada barang"}
+    </p>
+  </div>
+) : (
+  
     // Data State
     <div className="overflow-x-auto">
       <table className="w-full border border-gray-300 text-sm text-gray-900">
