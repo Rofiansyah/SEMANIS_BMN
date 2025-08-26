@@ -95,7 +95,7 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
   }, [loadPeminjamanDetail]);
 
   const handleBack = () => {
-    router.push('/admin/peminjaman/requests');
+    router.push('/admin/peminjaman/approve');
   };
 
   const formatDate = (dateString: string | null) => {
@@ -166,22 +166,21 @@ return (
 );
   }
 
-if (error || !peminjaman) {
-  return (
-    <DashboardLayout title={`Detail Peminjaman - ${peminjaman?.barang?.nama ?? "Barang"}`}>
-      <div className="flex flex-col items-center justify-center h-64">
-        <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Peminjaman Tidak Ditemukan</h2>
-        <p className="text-gray-600 mb-6">{error}</p>
-        <Button onClick={handleBack} variant="primary">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Kembali ke Daftar Peminjaman
-        </Button>
-      </div>
-    </DashboardLayout>
-  );
-}
-
+  if (error || !peminjaman) {
+    return (
+      <DashboardLayout title="Detail Peminjaman">
+        <div className="flex flex-col items-center justify-center h-64">
+          <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Peminjaman Tidak Ditemukan</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Button onClick={handleBack} variant="primary">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Kembali ke Daftar Peminjaman
+          </Button>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout title={`Detail Peminjaman - ${peminjaman.barang.nama}`}>
