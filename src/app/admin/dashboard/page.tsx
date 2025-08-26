@@ -16,10 +16,10 @@ import {
   AlertTriangle,
   Settings,
   Tag,
-  Building,
   Clock, 
   XCircle, 
   CheckCircle,
+  Building,
   FileText,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -472,20 +472,20 @@ if (!isAdmin) {
         >
           {/* Info User & Barang */}
           <div className="flex items-center space-x-4">
-            {/* Foto */}
-                  <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-                    {activity.barang.fotoUrl ? (
-                      <img
-                        src={activity.barang.fotoUrl}
-                        alt={activity.barang.nama}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                      
-                      </div>
-                    )}
-                  </div>
+            {/* Foto Barang */}
+<div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+  {activity.barang.fotoUrl ? (
+    <img
+      src={activity.barang.fotoUrl}
+      alt={activity.barang.nama}
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-gray-200">
+      <Package className="w-6 h-6 text-gray-500" />
+    </div>
+  )}
+</div>
             <div>
               <p className="text-sm font-medium text-gray-900">
                 {activity.user.nama} - {activity.barang.nama}
