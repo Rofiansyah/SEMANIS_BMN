@@ -462,15 +462,15 @@ if (!isAdmin) {
       <p className="text-sm mt-2">Aktivitas peminjaman akan muncul di sini</p>
     </div>
   ) : (
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+<div className="flex flex-col space-y-4 p-6">
   {recentActivity.map((activity) => (
     <div
       key={activity.id}
-      className="p-4 flex flex-col items-center text-center rounded-xl shadow-sm hover:shadow-md transition cursor-pointer bg-white"
+      className="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 cursor-pointer transition bg-white"
       onClick={() => router.push(`/admin/peminjaman/${activity.id}`)}
     >
-      {/* Foto Barang */}
-      <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 mb-4 flex items-center justify-center shadow-sm">
+      {/* Kolom 1: Foto */}
+      <div className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center bg-gray-100">
         {activity.barang.fotoUrl ? (
           <img
             src={activity.barang.fotoUrl}
@@ -482,22 +482,24 @@ if (!isAdmin) {
         )}
       </div>
 
-      {/* Info User & Barang */}
-      <p className="text-sm font-medium text-gray-900">
-        {activity.user.nama} - {activity.barang.nama}
-      </p>
-      <p className="text-xs text-gray-500 mb-2">
-        {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </p>
+      {/* Kolom 2: Info */}
+      <div className="flex-1 px-4">
+        <p className="text-sm font-medium text-gray-900">
+          {activity.user.nama} - {activity.barang.nama}
+        </p>
+        <p className="text-xs text-gray-500">
+          {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </p>
+      </div>
 
-      {/* Status */}
-      <div className="flex flex-col items-center gap-1">
+      {/* Kolom 3: Status */}
+      <div className="flex flex-col items-center text-center gap-1 w-32">
         {activity.status === "PENDING" && <Clock size={16} className="text-yellow-800" />}
         {activity.status === "DIPINJAM" && <Package size={16} className="text-blue-800" />}
         {activity.status === "DITOLAK" && <XCircle size={16} className="text-red-800" />}
