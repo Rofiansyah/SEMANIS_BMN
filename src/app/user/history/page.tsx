@@ -182,12 +182,40 @@ export default function UserHistoryPage() {
 
   if (loading) {
     return (
-      <DashboardLayout title="Riwayat Peminjaman">
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-        </div>
-      </DashboardLayout>
-    );
+  <DashboardLayout title="Riwayat Peminjaman">
+    <div className="flex flex-col items-center justify-center h-64 bg-gray-50 rounded-xl">
+      {/* Kotak animasi */}
+      <div className="relative w-16 h-16 mb-4">
+        <div className="absolute inset-0 bg-blue-600 rounded-lg animate-bounce shadow-lg"></div>
+        <div className="absolute inset-0 bg-blue-400 rounded-lg animate-ping opacity-30"></div>
+      </div>
+
+      {/* Teks animasi */}
+      <p className="text-lg font-semibold text-gray-700 animate-pulse">
+        Memuat Riwayat Peminjaman...
+      </p>
+
+      {/* Progress Bar animasi */}
+      <div className="w-48 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
+
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  </DashboardLayout>
+);
   }
 
   return (
