@@ -139,29 +139,29 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const loadRecentActivity = async () => {
-    try {
-      setLoadingActivity(true);
-      const response = await peminjamanApi.getReports();
-      if (response.status === "success") {
-        // Combine all requests and sort by most recent
-        const allRequests = [
-          ...response.data.pending,
-          ...response.data.dipinjam,
-          ...response.data.dikembalikan,
-        ].sort(
+const loadRecentActivity = async () => {
+  try {
+    setLoadingActivity(true);
+    const response = await peminjamanApi.getAllRequests(); // API baru
+
+    if (response.status === "success") {
+      // response.data langsung berupa Peminjaman[]
+      const sortedRequests = response.data
+        .sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        )
+        .slice(0, 5); // Ambil 5 paling baru
 
-        setRecentActivity(allRequests.slice(0, 5)); // Show only 5 most recent
-      }
-    } catch (error) {
-      console.error("Failed to load recent activity:", error);
-    } finally {
-      setLoadingActivity(false);
+      setRecentActivity(sortedRequests);
     }
-  };
+  } catch (error) {
+    console.error("Failed to load recent activity:", error);
+  } finally {
+    setLoadingActivity(false);
+  }
+};
+
 
   const handleExportStatistics = () => {
     if (statistics) {
@@ -515,10 +515,10 @@ if (!isAdmin) {
         activity.status === "PENDING"
           ? "bg-yellow-100 text-yellow-800"
           : activity.status === "DIPINJAM"
-          ? "bg-green-100 text-blue-800"
+          ? "bg-blue-100 text-blue-800"
           : activity.status === "DITOLAK"
           ? "bg-red-100 text-red-800"
-          : "bg-blue-100 text-green-800"
+          : "bg-green-100 text-green-800"
       }`}
   >
     {activity.status === "PENDING"
