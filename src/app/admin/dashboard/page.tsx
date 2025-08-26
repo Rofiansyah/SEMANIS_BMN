@@ -462,77 +462,71 @@ if (!isAdmin) {
       <p className="text-sm mt-2">Aktivitas peminjaman akan muncul di sini</p>
     </div>
   ) : (
-    // Data State
-    <div className="divide-y divide-gray-200">
-      {recentActivity.map((activity) => (
-        <div
-          key={activity.id}
-          className="p-6 flex items-center justify-between hover:bg-gray-50 cursor-pointer transition"
-          onClick={() => router.push(`/admin/peminjaman/${activity.id}`)}
-        >
-          {/* Info User & Barang */}
-          <div className="flex items-center space-x-4">
-            {/* Foto Barang */}
-<div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-  {activity.barang.fotoUrl ? (
-    <img
-      src={activity.barang.fotoUrl}
-      alt={activity.barang.nama}
-      className="w-full h-full object-cover"
-    />
-  ) : (
-    <div className="w-full h-full flex items-center justify-center bg-gray-200">
-      <Package className="w-6 h-6 text-gray-500" />
-    </div>
-  )}
-</div>
-            <div>
-              <p className="text-sm font-medium text-gray-900">
-                {activity.user.nama} - {activity.barang.nama}
-              </p>
-              <p className="text-sm text-gray-500">
-                {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
-            </div>
-          </div>
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+  {recentActivity.map((activity) => (
+    <div
+      key={activity.id}
+      className="p-4 flex flex-col items-center text-center rounded-xl shadow-sm hover:shadow-md transition cursor-pointer bg-white"
+      onClick={() => router.push(`/admin/peminjaman/${activity.id}`)}
+    >
+      {/* Foto Barang */}
+      <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 mb-4 flex items-center justify-center shadow-sm">
+        {activity.barang.fotoUrl ? (
+          <img
+            src={activity.barang.fotoUrl}
+            alt={activity.barang.nama}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <Package className="w-6 h-6 text-gray-500" />
+        )}
+      </div>
 
-{/* Status */}
-<div className="flex flex-col items-center text-center gap-1">
-  {activity.status === "PENDING" && <Clock size={16} className="text-yellow-800" />}
-  {activity.status === "DIPINJAM" && <Package size={16} className="text-blue-800" />}
-  {activity.status === "DITOLAK" && <XCircle size={16} className="text-red-800" />}
-  {activity.status === "DIKEMBALIKAN" && <CheckCircle size={16} className="text-green-800" />}
-  
-  <span
-    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full
-      ${
-        activity.status === "PENDING"
-          ? "bg-yellow-100 text-yellow-800"
-          : activity.status === "DIPINJAM"
-          ? "bg-blue-100 text-blue-800"
-          : activity.status === "DITOLAK"
-          ? "bg-red-100 text-red-800"
-          : "bg-green-100 text-green-800"
-      }`}
-  >
-    {activity.status === "PENDING"
-      ? "Menunggu"
-      : activity.status === "DIPINJAM"
-      ? "Sedang Dipinjam"
-      : activity.status === "DITOLAK"
-      ? "Ditolak"
-      : "Dikembalikan"}
-  </span>
-</div>
-        </div>
-      ))}
+      {/* Info User & Barang */}
+      <p className="text-sm font-medium text-gray-900">
+        {activity.user.nama} - {activity.barang.nama}
+      </p>
+      <p className="text-xs text-gray-500 mb-2">
+        {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </p>
+
+      {/* Status */}
+      <div className="flex flex-col items-center gap-1">
+        {activity.status === "PENDING" && <Clock size={16} className="text-yellow-800" />}
+        {activity.status === "DIPINJAM" && <Package size={16} className="text-blue-800" />}
+        {activity.status === "DITOLAK" && <XCircle size={16} className="text-red-800" />}
+        {activity.status === "DIKEMBALIKAN" && <CheckCircle size={16} className="text-green-800" />}
+
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-medium rounded-full
+            ${
+              activity.status === "PENDING"
+                ? "bg-yellow-100 text-yellow-800"
+                : activity.status === "DIPINJAM"
+                ? "bg-blue-100 text-blue-800"
+                : activity.status === "DITOLAK"
+                ? "bg-red-100 text-red-800"
+                : "bg-green-100 text-green-800"
+            }`}
+        >
+          {activity.status === "PENDING"
+            ? "Menunggu"
+            : activity.status === "DIPINJAM"
+            ? "Sedang Dipinjam"
+            : activity.status === "DITOLAK"
+            ? "Ditolak"
+            : "Dikembalikan"}
+        </span>
+      </div>
     </div>
+  ))}
+</div>
   )}
 </div>
       </div>
