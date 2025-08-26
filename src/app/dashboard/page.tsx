@@ -485,128 +485,141 @@ if (isAdmin) {
       )}
     </div>
 
-    {/* Results */}
-    <div className="p-4 sm:p-6">
-      {loadingBarang ? (
-  <div className="flex flex-col justify-center items-center h-screen px-4">
-  {/* Logo */}
-  <img
-    src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-    alt="SEMANTIS BMN Logo"
-    className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
-  />
+{/* Results */}
+<div className="p-4 sm:p-6">
+  {loadingBarang ? (
+    // Loading State
+    <div className="flex flex-col justify-center items-center h-screen px-4">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
+      />
 
-  {/* Ikon animasi responsif */}
-  <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
-    {/* Efek ping responsif */}
-    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+      {/* Ikon animasi responsif */}
+      <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+        {/* Efek ping */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
 
-    {/* Ikon responsif dengan bounce */}
-    <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
-  </div>
+        {/* Ikon bounce */}
+        <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
+      </div>
 
-  {/* Teks animasi */}
-  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
-    Memuat list barang...
-  </p>
+      {/* Teks animasi */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
+        Memuat list barang...
+      </p>
 
-  {/* Progress Bar */}
-  <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-    <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-  </div>
+      {/* Progress Bar */}
+      <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
 
-  <style jsx>{`
-    @keyframes progress {
-      0% {
-        transform: translateX(-100%);
-      }
-      50% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
-    }
-  `}</style>
-</div>
-      ) : filteredBarang.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredBarang.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-xl border shadow-sm hover:shadow-md transition overflow-hidden"
-            >
-              <div className="aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden">
-                {item.fotoUrl ? (
-                  <img
-                    src={item.fotoUrl}
-                    alt={item.nama}
-                    className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-48 flex items-center justify-center bg-gray-100">
-                    <Package size={48} className="text-gray-400" />
-                  </div>
-                )}
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  ) : filteredBarang.length > 0 ? (
+    // List Barang
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {filteredBarang.map((item) => (
+        <div
+          key={item.id}
+          className="bg-white rounded-xl border shadow-sm hover:shadow-md transition overflow-hidden"
+        >
+          {/* Foto / Placeholder */}
+          <div className="aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden">
+            {item.fotoUrl ? (
+              <img
+                src={item.fotoUrl}
+                alt={item.nama}
+                className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                <Package size={48} className="text-gray-400" />
               </div>
-              <div className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold truncate flex-1 text-gray-900">
-                    {item.nama}
-                  </h3>
-                  {getStatusBadge(item.kondisi)}
-                </div>
-                <p className="text-sm text-gray-700 mb-2 line-clamp-2">
-                  {item.deskripsi}
-                </p>
-                <div className="space-y-1 mb-4 text-xs text-gray-500">
-                  <div className="flex items-center">
-                    <Tag size={12} className="mr-1" />
-                    <span>{item.kategori?.nama}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Bookmark size={12} className="mr-1" />
-                    <span>{item.merek?.nama}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin size={12} className="mr-1" />
-                    <span>{item.lokasi?.nama}</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500 font-mono">
-                    {item.kodeBarang}
-                  </span>
-                  <Link href={`/user/items/${item.id}`}>
-                    <Button
-                      size="sm"
-                      className="flex items-center gap-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                    >
-                      <Eye size={14} />
-                      Detail
-                    </Button>
-                  </Link>
-                </div>
+            )}
+          </div>
+
+          {/* Konten Card */}
+          <div className="p-4">
+            {/* Nama + Kondisi */}
+            <div className="flex items-start justify-between mb-2">
+              <h3 className="font-semibold truncate flex-1 text-gray-900">
+                {item.nama}
+              </h3>
+              {getStatusBadge(item.kondisi)}
+            </div>
+
+            {/* Deskripsi */}
+            <p className="text-sm text-gray-700 mb-2 line-clamp-2">
+              {item.deskripsi}
+            </p>
+
+            {/* Detail tambahan */}
+            <div className="space-y-1 mb-4 text-xs text-gray-500">
+              <div className="flex items-center">
+                <Tag size={12} className="mr-1" />
+                <span>{item.kategori?.nama}</span>
+              </div>
+              <div className="flex items-center">
+                <Bookmark size={12} className="mr-1" />
+                <span>{item.merek?.nama}</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin size={12} className="mr-1" />
+                <span>{item.lokasi?.nama}</span>
               </div>
             </div>
-          ))}
+
+            {/* Footer (Kode + Detail) */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500 font-mono">
+                {item.kodeBarang}
+              </span>
+              <Link href={`/user/items/${item.id}`}>
+                <Button
+                  size="sm"
+                  className="flex items-center gap-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                >
+                  <Eye size={14} />
+                  Detail
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
-      ) : (
-        <div className="text-center py-12">
-          <Package size={48} className="mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Tidak ada barang ditemukan
-          </h3>
-          <p className="text-gray-600 mb-4">
-            Coba ubah kriteria pencarian atau filter yang digunakan
-          </p>
-          <Button variant="secondary" onClick={clearFilters}>
-            Hapus Semua Filter
-          </Button>
-        </div>
-      )}
+      ))}
     </div>
-  </div>
+  ) : (
+    // Empty State
+    <div className="text-center py-12">
+      <Package size={48} className="mx-auto text-gray-400 mb-4" />
+      <h3 className="text-lg font-medium text-gray-900 mb-2">
+        Tidak ada barang ditemukan
+      </h3>
+      <p className="text-gray-600 mb-4">
+        Coba ubah kriteria pencarian atau filter yang digunakan
+      </p>
+      <Button variant="secondary" onClick={clearFilters}>
+        Hapus Semua Filter
+      </Button>
+    </div>
+  )}
+</div>
+</div>
 </div>
     </DashboardLayout>
   );

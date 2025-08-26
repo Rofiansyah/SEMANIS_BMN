@@ -148,135 +148,134 @@ return (
         </div>
       </div>
 
-      {/* Merek List */}
-      <div className="bg-white rounded-lg shadow border">
-        <div className="p-4 sm:p-6 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Daftar Merek</h2>
-        </div>
-
-        {loading ? (
-          <div className="p-8 text-center">
-            <div className="inline-flex items-center space-x-2">
-<div className="flex flex-col justify-center items-center h-screen px-4">
-  {/* Logo */}
-  <img
-    src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-    alt="SEMANTIS BMN Logo"
-    className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
-  />
-
-  {/* Ikon animasi responsif */}
-  <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
-    {/* Efek ping responsif */}
-    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-
-    {/* Ikon responsif dengan bounce */}
-    <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
+{/* Merek List */}
+<div className="bg-white rounded-lg shadow border">
+  {/* Header */}
+  <div className="p-4 sm:p-6 border-b border-gray-200">
+    <h2 className="text-lg font-semibold text-gray-900">Daftar Merek</h2>
   </div>
 
-  {/* Teks animasi */}
-  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
-    Memuat list merk...
-  </p>
+  {/* Loading State */}
+  {loading ? (
+    <div className="flex flex-col justify-center items-center h-96 px-4">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
+      />
 
-  {/* Progress Bar */}
-  <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-    <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-  </div>
+      {/* Ikon animasi responsif */}
+      <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+        {/* Efek ping responsif */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
 
-  <style jsx>{`
-    @keyframes progress {
-      0% {
-        transform: translateX(-100%);
-      }
-      50% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
-    }
-  `}</style>
-</div>
-            </div>
-          </div>
-        ) : filteredMerek.length === 0 ? (
-          <div className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">
-              {searchQuery ? 'Tidak ada merek yang sesuai dengan pencarian' : 'Belum ada merek'}
-            </p>
-          </div>
-        ) : (
-<div className="overflow-x-auto">
-  <table className="w-full border border-gray-300 text-sm text-gray-900">
-    <thead className="bg-gray-100">
-      <tr>
-        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-          Nama Merek
-        </th>
-        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-          Tanggal Dibuat
-        </th>
-        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-          Aksi
-        </th>
-      </tr>
-    </thead>
-
-    <tbody className="divide-y divide-gray-200">
-      {filteredMerek.map((merek) => (
-        <tr
-          key={merek.id}
-          className="border transition-all duration-200"
-        >
-{/* Nama Merek */}
-<td className="py-4 px-4 border border-gray-300 text-left">
-  <div className="flex items-center justify-start space-x-3">
-    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center shadow-sm">
-      <Bookmark className="w-4 h-4 text-purple-600" />
-    </div>
-    <span className="font-medium text-gray-900">{merek.nama}</span>
-  </div>
-</td>
-
-          {/* Tanggal Dibuat */}
-          <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
-            {new Date(merek.createdAt).toLocaleDateString("id-ID")}
-          </td>
-
-          {/* Aksi */}
-          <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex justify-center gap-2">
-                <Button
-                  size="sm"
-                  variant="danger"
-                  onClick={() => handleDeleteMerek(merek.id)}
-                  className="flex items-center"
-                >
-                  <Trash2 className="w-3 h-3 mr-1" />
-                  Hapus
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => openEditModal(merek)}
-                  variant="outline"
-                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                >
-                  <Edit className="w-3 h-3 mr-1" />
-                  Edit
-                </Button>
-              </div>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-        )}
+        {/* Ikon bounce */}
+        <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
       </div>
+
+      {/* Teks animasi */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
+        Memuat daftar merek...
+      </p>
+
+      {/* Progress Bar */}
+      <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
+
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  ) : filteredMerek.length === 0 ? (
+    // Empty State
+    <div className="p-8 text-center">
+      <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+      <p className="text-gray-600">
+        {searchQuery
+          ? "Tidak ada merek yang sesuai dengan pencarian"
+          : "Belum ada merek"}
+      </p>
+    </div>
+  ) : (
+    // Table
+    <div className="overflow-x-auto">
+      <table className="w-full border border-gray-300 text-sm text-gray-900">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+              Nama Merek
+            </th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+              Tanggal Dibuat
+            </th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-gray-200">
+          {filteredMerek.map((merek) => (
+            <tr key={merek.id} className="border transition-all duration-200">
+              {/* Nama Merek */}
+              <td className="py-4 px-4 border border-gray-300 text-left">
+                <div className="flex items-center justify-start space-x-3">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center shadow-sm">
+                    <Bookmark className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <span className="font-medium text-gray-900">
+                    {merek.nama}
+                  </span>
+                </div>
+              </td>
+
+              {/* Tanggal Dibuat */}
+              <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
+                {new Date(merek.createdAt).toLocaleDateString("id-ID")}
+              </td>
+
+              {/* Aksi */}
+              <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
+                <div className="flex justify-center gap-2 flex-wrap">
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => handleDeleteMerek(merek.id)}
+                    className="flex items-center"
+                  >
+                    <Trash2 className="w-3 h-3 mr-1" />
+                    Hapus
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => openEditModal(merek)}
+                    variant="outline"
+                    className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                  >
+                    <Edit className="w-3 h-3 mr-1" />
+                    Edit
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
     </div>
 
     {/* Modals */}
