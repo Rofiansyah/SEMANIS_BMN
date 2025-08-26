@@ -7,8 +7,8 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Sistem Inventaris",
-  description: "Aplikasi pengelolaan inventaris barang",
+  title: "SEMANIS-BMN",
+  description: "Aplikasi pengelolaan inventaris barang kantor",
 };
 
 export default function RootLayout({

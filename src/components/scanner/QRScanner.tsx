@@ -138,7 +138,8 @@ return (
             <p className="text-red-600 mb-4 text-sm sm:text-base">{error}</p>
             <Button
               onClick={startScanning}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              variant="outline"
+              className="px-4 py-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
             >
               Try Again
             </Button>
@@ -151,7 +152,7 @@ return (
             </p>
             <Button
               onClick={startScanning}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              className="w-full px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
             >
               Grant Permission
             </Button>

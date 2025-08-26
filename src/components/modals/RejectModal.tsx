@@ -127,7 +127,7 @@ export default function RejectModal({ request, isOpen, onClose, onReject }: Reje
                 type="submit"
                 variant="danger"
                 disabled={loading}
-                className="flex-1 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                className="flex-1"
               >
                 {loading ? 'Memproses...' : 'Tolak'}
               </Button>

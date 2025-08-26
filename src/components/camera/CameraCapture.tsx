@@ -192,16 +192,17 @@ return (
             <div className="space-y-2">
               <Button
                 onClick={startCamera}
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                variant="outline"
+                className="px-4 py-2 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
               >
                 Try Again
               </Button>
               <Button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full px-4 py-2 text-gray-700 border-2 border-gray-300 rounded-md hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200 flex items-center justify-center gap-2"
+                className="px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
               >
                 <Upload className="w-4 h-4" />
-                Upload from Gallery
+                Upload form Gallery
               </Button>
             </div>
           </div>
