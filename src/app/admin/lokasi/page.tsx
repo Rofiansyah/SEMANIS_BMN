@@ -175,7 +175,7 @@ return (
 
   {/* Teks animasi */}
   <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
-    Loading...
+    Memuat list lokasi...
   </p>
 
   {/* Progress Bar */}

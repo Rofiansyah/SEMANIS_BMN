@@ -415,86 +415,118 @@ if (!isAdmin) {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow border">
-          <div className="p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Aktivitas Terbaru</h3>
+{/* Recent Activity */}
+<div className="bg-white rounded-lg shadow border">
+  {/* Header */}
+  <div className="p-6 border-b border-gray-200">
+    <h3 className="text-lg font-semibold text-gray-900">Aktivitas Terbaru</h3>
+  </div>
+
+  {/* Loading State */}
+  {loadingActivity ? (
+    <div className="p-6 flex flex-col items-center justify-center text-center">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mb-6 animate-pulse"
+      />
+
+      {/* Ikon animasi */}
+      <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+        {/* Efek ping */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+        {/* Ikon bounce */}
+        <Package className="w-8 h-8 sm:w-10 md:w-14 lg:w-16 text-blue-600 animate-bounce drop-shadow-lg" />
+      </div>
+
+      {/* Teks animasi */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse">
+        Memuat list aktivitas...
+      </p>
+
+      {/* Progress Bar */}
+      <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
+
+      {/* Custom Animasi Progress */}
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  ) : recentActivity.length === 0 ? (
+    // Empty State
+    <div className="p-6 text-center text-gray-500 py-8">
+      <p>Belum ada aktivitas untuk ditampilkan</p>
+      <p className="text-sm mt-2">Aktivitas peminjaman akan muncul di sini</p>
+    </div>
+  ) : (
+    // Data State
+    <div className="divide-y divide-gray-200">
+      {recentActivity.map((activity) => (
+        <div
+          key={activity.id}
+          className="p-6 flex items-center justify-between hover:bg-gray-50 cursor-pointer transition"
+          onClick={() => router.push(`/admin/peminjaman/${activity.id}`)}
+        >
+          {/* Info User & Barang */}
+          <div className="flex items-center space-x-4">
+            <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <Package className="w-5 h-5 text-gray-600" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-900">
+                {activity.user.nama} - {activity.barang.nama}
+              </p>
+              <p className="text-sm text-gray-500">
+                {new Date(activity.tanggalPengajuan).toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            </div>
           </div>
 
-          {loadingActivity ? (
-            <div className="p-6">
-              <div className="text-center text-gray-500 py-8">
-                <div className="inline-flex items-center space-x-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-500"></div>
-                  <span>Memuat aktivitas...</span>
-                </div>
-              </div>
-            </div>
-          ) : recentActivity.length === 0 ? (
-            <div className="p-6">
-              <div className="text-center text-gray-500 py-8">
-                <p>Belum ada aktivitas untuk ditampilkan</p>
-                <p className="text-sm mt-2">
-                  Aktivitas peminjaman akan muncul di sini
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-200">
-              {recentActivity.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="p-6 flex items-center justify-between hover:bg-gray-50 cursor-pointer"
-                  onClick={() =>
-                    router.push(`/admin/peminjaman/${activity.id}`)
-                  }
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                      <Package className="w-5 h-5 text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
-                        {activity.user.nama} - {activity.barang.nama}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {new Date(activity.tanggalPengajuan).toLocaleDateString(
-                          "id-ID",
-                          {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  <span
-                    className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      activity.status === "PENDING"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : activity.status === "DIPINJAM"
-                        ? "bg-green-100 text-green-800"
-                        : activity.status === "DITOLAK"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-blue-100 text-blue-800"
-                    }`}
-                  >
-                    {activity.status === "PENDING"
-                      ? "Menunggu"
-                      : activity.status === "DIPINJAM"
-                      ? "Sedang Dipinjam"
-                      : activity.status === "DITOLAK"
-                      ? "Ditolak"
-                      : "Dikembalikan"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Status */}
+          <span
+            className={`inline-flex px-2 py-1 text-xs font-medium rounded-full
+              ${
+                activity.status === "PENDING"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : activity.status === "DIPINJAM"
+                  ? "bg-green-100 text-green-800"
+                  : activity.status === "DITOLAK"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-blue-100 text-blue-800"
+              }`}
+          >
+            {activity.status === "PENDING"
+              ? "Menunggu"
+              : activity.status === "DIPINJAM"
+              ? "Sedang Dipinjam"
+              : activity.status === "DITOLAK"
+              ? "Ditolak"
+              : "Dikembalikan"}
+          </span>
         </div>
+      ))}
+    </div>
+  )}
+</div>
       </div>
 
       {/* Modals */}

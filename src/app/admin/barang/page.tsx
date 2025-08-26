@@ -212,87 +212,89 @@ export default function AdminBarangPage() {
           </div>
         </div>
 
-        {/* Barang List */}
-        <div className="bg-white rounded-lg shadow border">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Daftar Barang</h2>
-          </div>
-
-          {loading ? (
-            <div className="p-8 text-center">
-              <div className="inline-flex items-center space-x-2">
-<div className="flex flex-col justify-center items-center h-screen px-4">
-  {/* Logo */}
-  <img
-    src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
-    alt="SEMANTIS BMN Logo"
-    className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mx-auto mb-6 animate-pulse"
-  />
-
-  {/* Ikon animasi responsif */}
-  <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
-    {/* Efek ping responsif */}
-    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-
-    {/* Ikon responsif dengan bounce */}
-    <Package className="w-8 h-8 sm:w-10 sm:h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-blue-600 animate-bounce drop-shadow-lg" />
+{/* Barang List */}
+<div className="bg-white rounded-lg shadow border">
+  {/* Header */}
+  <div className="p-6 border-b border-gray-200">
+    <h2 className="text-lg font-semibold text-gray-900">Daftar Barang</h2>
   </div>
 
-  {/* Teks animasi */}
-  <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse text-center">
-    Loading...
-  </p>
+  {/* Loading State */}
+  {loading ? (
+    <div className="p-8 flex flex-col items-center justify-center text-center">
+      {/* Logo */}
+      <img
+        src={typeof logoSemantis === "string" ? logoSemantis : logoSemantis.src}
+        alt="SEMANTIS BMN Logo"
+        className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mb-6 animate-pulse"
+      />
 
-  {/* Progress Bar */}
-  <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
-    <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
-  </div>
+      {/* Ikon animasi */}
+      <div className="relative w-12 sm:w-16 md:w-20 lg:w-24 h-12 sm:h-16 md:h-20 lg:h-24 mb-4 flex items-center justify-center">
+        {/* Efek ping */}
+        <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+        {/* Ikon bounce */}
+        <Package className="w-8 h-8 sm:w-10 md:w-14 lg:w-16 text-blue-600 animate-bounce drop-shadow-lg" />
+      </div>
 
-  <style jsx>{`
-    @keyframes progress {
-      0% {
-        transform: translateX(-100%);
-      }
-      50% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(100%);
-      }
-    }
-  `}</style>
-</div>
-              </div>
-            </div>
-          ) : filteredBarang.length === 0 ? (
-            <div className="p-8 text-center">
-              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">
-                {searchQuery ? 'Tidak ada barang yang sesuai dengan pencarian' : 'Belum ada barang'}
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border border-gray-300 text-sm text-gray-900">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kategori</th>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Merek</th>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lokasi</th>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kondisi</th>
-                    <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
-                  </tr>
-                </thead>
-<tbody className="divide-y divide-gray-200">
-  {filteredBarang.map((barang) => (
-    <tr
-      key={barang.id}
-      className="border p-6 transition-all duration-200"
-    >
-      {/* Foto + Nama Barang */}
-      <td className="py-4 px-4 border border-gray-300">
-        <div className="flex items-start space-x-5">
+      {/* Teks animasi */}
+      <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-gray-700 animate-pulse">
+        Memuat list barang...
+      </p>
+
+      {/* Progress Bar */}
+      <div className="w-32 sm:w-40 md:w-48 lg:w-56 h-2 bg-gray-200 rounded-full mt-4 overflow-hidden">
+        <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+      </div>
+
+      <style jsx>{`
+        @keyframes progress {
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
+    </div>
+  ) : filteredBarang.length === 0 ? (
+    // Empty State
+    <div className="p-8 text-center">
+      <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+      <p className="text-gray-600">
+        {searchQuery
+          ? "Tidak ada barang yang sesuai dengan pencarian"
+          : "Belum ada barang"}
+      </p>
+    </div>
+  ) : (
+    // Data State
+    <div className="overflow-x-auto">
+      <table className="w-full border border-gray-300 text-sm text-gray-900">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kategori</th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Merek</th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lokasi</th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kondisi</th>
+            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-gray-200">
+          {filteredBarang.map((barang) => (
+            <tr
+              key={barang.id}
+              className="border transition-all duration-200 hover:bg-gray-50"
+            >
+              {/* Foto + Nama Barang */}
+              <td className="py-4 px-4 border border-gray-300">
+                <div className="flex items-start space-x-5">
                   {/* Foto */}
                   <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
                     {barang.fotoUrl ? (
@@ -302,97 +304,90 @@ export default function AdminBarangPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                      
+                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                        No Image
                       </div>
                     )}
                   </div>
 
-          {/* Nama + Kode Barang */}
-          <div className="flex flex-col">
-            <p className="font-medium text-gray-900">{barang.nama}</p>
-            <p className="text-xs text-gray-500">{barang.kodeBarang}</p>
-          </div>
-        </div>
-      </td>
+                  {/* Nama + Kode Barang */}
+                  <div className="flex flex-col">
+                    <p className="font-medium text-gray-900">{barang.nama}</p>
+                    <p className="text-xs text-gray-500">{barang.kodeBarang}</p>
+                  </div>
+                </div>
+              </td>
 
-      {/* Kategori */}
-      <td className="py-4 px-4 border border-gray-300 text-center">
-        <div className="flex items-center justify-center space-x-2">
-          <span className="text-sm text-gray-600">{barang.kategori.nama}</span>
-        </div>
-      </td>
+              {/* Kategori */}
+              <td className="py-4 px-4 border border-gray-300 text-center">
+                <span className="text-sm text-gray-600">{barang.kategori.nama}</span>
+              </td>
 
-      {/* Merek */}
-      <td className="py-4 px-4 border border-gray-300 text-center">
-        <div className="flex items-center justify-center space-x-2">
-          <span className="text-sm text-gray-600">{barang.merek.nama}</span>
-        </div>
-      </td>
+              {/* Merek */}
+              <td className="py-4 px-4 border border-gray-300 text-center">
+                <span className="text-sm text-gray-600">{barang.merek.nama}</span>
+              </td>
 
-      {/* Lokasi */}
-      <td className="py-4 px-4 border border-gray-300 text-center">
-        <div className="flex items-center justify-center space-x-2">
-          <span className="text-sm text-gray-600">{barang.lokasi.nama}</span>
-        </div>
-      </td>
+              {/* Lokasi */}
+              <td className="py-4 px-4 border border-gray-300 text-center">
+                <span className="text-sm text-gray-600">{barang.lokasi.nama}</span>
+              </td>
 
-      {/* Kondisi */}
-      <td className="py-4 px-4 border border-gray-300 text-center">
-        <span
-          className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center justify-center ${kondisiColors[barang.kondisi]}`}
-        >
-          {kondisiLabels[barang.kondisi]}
-        </span>
-      </td>
+              {/* Kondisi */}
+              <td className="py-4 px-4 border border-gray-300 text-center">
+                <span
+                  className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center justify-center ${kondisiColors[barang.kondisi]}`}
+                >
+                  {kondisiLabels[barang.kondisi]}
+                </span>
+              </td>
 
-      {/* Aksi */}
-      <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
-        <div className="flex flex-col items-center gap-2">
-          {/* Baris 1 */}
-          <div className="flex justify-center">
-            <Button
-              size="sm"
-              variant="outlinesecond"
-              className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-              onClick={() => router.push(`/admin/barang/${barang.id}`)}
-            >
-              <Eye className="w-3 h-3 mr-1" />
-              Detail
-            </Button>
-          </div>
+              {/* Aksi */}
+              <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
+                <div className="flex flex-col items-center gap-2">
+                  {/* Baris 1 */}
+                  <div className="flex justify-center">
+                    <Button
+                      size="sm"
+                      variant="outlinesecond"
+                      className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                      onClick={() => router.push(`/admin/barang/${barang.id}`)}
+                    >
+                      <Eye className="w-3 h-3 mr-1" />
+                      Detail
+                    </Button>
+                  </div>
 
-          {/* Baris 2 */}
-          <div className="flex justify-center gap-2">
-            <Button
-              size="sm"
-              variant="danger"
-              className="flex items-center"
-              onClick={() => handleDeleteBarang(barang.id)}
-            >
-              <Trash2 className="w-3 h-3 mr-1" />
-              Hapus
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-              onClick={() => openEditModal(barang)}
-            >
-              <Edit className="w-3 h-3 mr-1" />
-              Edit
-            </Button>
-          </div>
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
-              </table>
-            </div>
-          )}
-        </div>
+                  {/* Baris 2 */}
+                  <div className="flex justify-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      className="flex items-center"
+                      onClick={() => handleDeleteBarang(barang.id)}
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" />
+                      Hapus
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                      onClick={() => openEditModal(barang)}
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
       </div>
 
       {/* Modals */}
