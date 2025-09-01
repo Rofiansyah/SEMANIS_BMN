@@ -62,22 +62,27 @@ export default function ForgotPasswordPage() {
       </div>
 
 {/* Action Buttons */}
-<div className="mt-6 space-y-3">
-  <Link href="/login/user">
-          <Button variant="outline"
-    className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200">
-            Kembali ke Login
-          </Button>
-        </Link>
-  <Button
-    className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-    onClick={() => {
-      setSuccess(false);
-      setEmail('');
-    }}
-  >
-    Kirim ulang email
-  </Button>
+<div className="mt-6 flex flex-wrap gap-3">
+  <Link href="/login/user" className="flex-1 min-w-[200px]">
+    <Button
+      variant="outline"
+      className="w-full h-12 text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+    >
+      Kembali ke Login
+    </Button>
+  </Link>
+  
+  <div className="flex-1 min-w-[200px]">
+    <Button
+      className="w-full h-12 bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+      onClick={() => {
+        setSuccess(false);
+        setEmail('');
+      }}
+    >
+      Kirim ulang email
+    </Button>
+  </div>
 </div>
     </div>
 
