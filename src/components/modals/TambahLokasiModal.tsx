@@ -64,7 +64,7 @@ export function TambahLokasiModal({ isOpen, onClose, onSuccess }: TambahLokasiMo
       <div className="bg-white rounded-xl max-w-md w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col animate-fadeIn">
         {/* Header Fixed */}
         <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
-          <h3 className="text-lg font-semibold text-white">Tambah Merek</h3>
+          <h3 className="text-lg font-semibold text-white">Tambah Lokasi</h3>
           <button onClick={onClose} className="text-white hover:text-gray-200 transition">
             <X className="w-5 h-5" />
           </button>
