@@ -426,70 +426,68 @@ if (loading) {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border border-gray-300 text-sm text-gray-900">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Peminjam</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Tgl Pengajuan</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Tgl Dipinjam</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Status</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lama</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Penanggung Jawab</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Catatan</th>
-                      <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {filteredRequests.map((request) => {
-                      const statusInfo = getStatusInfo(request.status);
-                      const borrowDate = request.tanggalDipinjam 
-                        ? new Date(request.tanggalDipinjam) 
-                        : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
-                      const daysBorrowed = Math.floor((Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
+<div className="overflow-x-auto">
+  <table className="w-full border border-gray-300 text-sm text-gray-900">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold w-12">No</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Peminjam</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Tgl Pengajuan</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Tgl Dipinjam</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Status</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lama</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Penanggung Jawab</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Catatan</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200">
+      {filteredRequests.map((request, index) => {
+        const statusInfo = getStatusInfo(request.status);
+        const borrowDate = request.tanggalDipinjam 
+          ? new Date(request.tanggalDipinjam) 
+          : new Date(request.tanggalDisetujui || request.tanggalPengajuan);
+        const daysBorrowed = Math.floor((Date.now() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
 
-                      return (
-                        <tr
-                          key={request.id}
-                          className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}
-                        >
-                          {/* Peminjam (biar tetap kiri karena biasanya teks panjang) */}
-                          <td className="py-4 px-4 border border-gray-300">
-                            <div className="">
-                              {/* Nama + Email (justify) */}
-                              <div className="flex flex-col">
-                                <p className="font-medium text-gray-900">{request.user.nama}</p>
-                                <p className="text-xs text-gray-500">{request.user.email}</p>
-                              </div>
-                            </div>
-                          </td>
+        return (
+          <tr
+            key={request.id}
+            className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${statusInfo.bgColor}`}
+          >
+            {/* Nomor Urut */}
+            <td className="py-4 px-4 border border-gray-300 text-center">
+              {index + 1}
+            </td>
 
-      {/* Foto + Nama Barang */}
-      <td className="py-4 px-4 border border-gray-300">
-        <div className="flex items-start space-x-3">
-                  {/* Foto */}
-                  <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-                    {request.barang.fotoUrl ? (
-                      <img
-                        src={request.barang.fotoUrl}
-                        alt={request.barang.nama}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                      
-                      </div>
-                    )}
-                  </div>
+            {/* Peminjam */}
+            <td className="py-4 px-4 border border-gray-300">
+              <div className="flex flex-col">
+                <p className="font-medium text-gray-900">{request.user.nama}</p>
+                <p className="text-xs text-gray-500">{request.user.email}</p>
+              </div>
+            </td>
 
-          {/* Nama + Kode Barang */}
-          <div className="flex flex-col">
-            <p className="font-medium text-gray-900">{request.barang.nama}</p>
-            <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
-          </div>
-        </div>
-      </td>
+            {/* Barang */}
+            <td className="py-4 px-4 border border-gray-300">
+              <div className="flex items-start space-x-3">
+                <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+                  {request.barang.fotoUrl ? (
+                    <img
+                      src={request.barang.fotoUrl}
+                      alt={request.barang.nama}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center"></div>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-medium text-gray-900">{request.barang.nama}</p>
+                  <p className="text-xs text-gray-500">{request.barang.kodeBarang}</p>
+                </div>
+              </div>
+            </td>
                           {/* Tanggal Pengajuan → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
                             {new Date(request.tanggalPengajuan).toLocaleDateString('id-ID')}
