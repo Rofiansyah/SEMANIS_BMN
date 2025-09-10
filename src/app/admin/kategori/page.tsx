@@ -216,75 +216,83 @@ return (
   </div>
 ) : (
     // Data State
-    <div className="overflow-x-auto">
-      <table className="w-full border border-gray-300 text-sm text-gray-900">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Nama Kategori
-            </th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Tanggal Dibuat
-            </th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Aksi
-            </th>
-          </tr>
-        </thead>
+<div className="overflow-x-auto">
+  <table className="w-full border border-gray-300 text-sm text-gray-900">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold w-12">
+          No
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Nama Kategori
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Tanggal Dibuat
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Aksi
+        </th>
+      </tr>
+    </thead>
 
-        <tbody className="divide-y divide-gray-200">
-          {filteredKategori.map((kategori) => (
-            <tr
-              key={kategori.id}
-              className="border transition-all duration-200 hover:bg-gray-50"
-            >
-              {/* Nama Kategori */}
-              <td className="py-4 px-4 border border-gray-300 text-left">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center shadow-sm">
-                    <Tag className="w-4 h-4 text-pink-600" />
-                  </div>
-                  <span className="font-medium text-gray-900">{kategori.nama}</span>
-                </div>
-              </td>
+    <tbody className="divide-y divide-gray-200">
+      {filteredKategori.map((kategori, index) => (
+        <tr
+          key={kategori.id}
+          className="border transition-all duration-200 hover:bg-gray-50"
+        >
+          {/* Nomor Urut */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            {index + 1}
+          </td>
 
-              {/* Tanggal Dibuat */}
-              <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
-                {new Date(kategori.createdAt).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </td>
+          {/* Nama Kategori */}
+          <td className="py-4 px-4 border border-gray-300 text-left">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-pink-100 rounded-lg flex items-center justify-center shadow-sm">
+                <Tag className="w-4 h-4 text-pink-600" />
+              </div>
+              <span className="font-medium text-gray-900">{kategori.nama}</span>
+            </div>
+          </td>
 
-              {/* Aksi */}
-              <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
-                <div className="flex justify-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => handleDeleteKategori(kategori.id)}
-                    className="flex items-center"
-                  >
-                    <Trash2 className="w-3 h-3 mr-1" />
-                    Hapus
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => openEditModal(kategori)}
-                    variant="outline"
-                    className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                  >
-                    <Edit className="w-3 h-3 mr-1" />
-                    Edit
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          {/* Tanggal Dibuat */}
+          <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
+            {new Date(kategori.createdAt).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </td>
+
+          {/* Aksi */}
+          <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
+            <div className="flex justify-center gap-2">
+              <Button
+                size="sm"
+                variant="danger"
+                onClick={() => handleDeleteKategori(kategori.id)}
+                className="flex items-center"
+              >
+                <Trash2 className="w-3 h-3 mr-1" />
+                Hapus
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => openEditModal(kategori)}
+                variant="outline"
+                className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+              >
+                <Edit className="w-3 h-3 mr-1" />
+                Edit
+              </Button>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
   )}
 </div>
     </div>

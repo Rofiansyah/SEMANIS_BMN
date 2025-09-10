@@ -199,68 +199,76 @@ return (
   </div>
 ) : (
     // Table Data
-    <div className="overflow-x-auto">
-      <table className="w-full border border-gray-300 text-sm text-gray-900">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Nama Lokasi
-            </th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Tanggal Dibuat
-            </th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
-              Aksi
-            </th>
-          </tr>
-        </thead>
+<div className="overflow-x-auto">
+  <table className="w-full border border-gray-300 text-sm text-gray-900">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold w-12">
+          No
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Nama Lokasi
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Tanggal Dibuat
+        </th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">
+          Aksi
+        </th>
+      </tr>
+    </thead>
 
-        <tbody className="divide-y divide-gray-200">
-          {filteredLokasi.map((lokasi) => (
-            <tr key={lokasi.id} className="border transition-all duration-200">
-              {/* Nama Lokasi */}
-              <td className="py-4 px-4 border border-gray-300 text-left">
-                <div className="flex items-center justify-start space-x-3">
-                  <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center shadow-sm">
-                    <MapPin className="w-4 h-4 text-orange-600" />
-                  </div>
-                  <span className="font-medium text-gray-900">{lokasi.nama}</span>
-                </div>
-              </td>
+    <tbody className="divide-y divide-gray-200">
+      {filteredLokasi.map((lokasi, index) => (
+        <tr key={lokasi.id} className="border transition-all duration-200">
+          {/* Nomor Urut */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            {index + 1}
+          </td>
 
-              {/* Tanggal Dibuat */}
-              <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
-                {new Date(lokasi.createdAt).toLocaleDateString("id-ID")}
-              </td>
+          {/* Nama Lokasi */}
+          <td className="py-4 px-4 border border-gray-300 text-left">
+            <div className="flex items-center justify-start space-x-3">
+              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center shadow-sm">
+                <MapPin className="w-4 h-4 text-orange-600" />
+              </div>
+              <span className="font-medium text-gray-900">{lokasi.nama}</span>
+            </div>
+          </td>
 
-              {/* Aksi */}
-              <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
-                <div className="flex justify-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => handleDeleteLokasi(lokasi.id)}
-                    className="flex items-center"
-                  >
-                    <Trash2 className="w-3 h-3 mr-1" />
-                    Hapus
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={() => openEditModal(lokasi)}
-                    variant="outline"
-                    className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                  >
-                    <Edit className="w-3 h-3 mr-1" />
-                    Edit
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          {/* Tanggal Dibuat */}
+          <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
+            {new Date(lokasi.createdAt).toLocaleDateString("id-ID")}
+          </td>
+
+          {/* Aksi */}
+          <td className="py-4 px-4 border border-gray-300 text-center min-w-[200px]">
+            <div className="flex justify-center gap-2">
+              <Button
+                size="sm"
+                variant="danger"
+                onClick={() => handleDeleteLokasi(lokasi.id)}
+                className="flex items-center"
+              >
+                <Trash2 className="w-3 h-3 mr-1" />
+                Hapus
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => openEditModal(lokasi)}
+                variant="outline"
+                className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+              >
+                <Edit className="w-3 h-3 mr-1" />
+                Edit
+              </Button>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
   )}
 </div>
     </div>
