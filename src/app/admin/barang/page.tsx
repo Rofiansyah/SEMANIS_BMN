@@ -266,120 +266,125 @@ export default function AdminBarangPage() {
   </div>
 ) : (
   
-    // Data State
-    <div className="overflow-x-auto">
-      <table className="w-full border border-gray-300 text-sm text-gray-900">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kategori</th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Merek</th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lokasi</th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kondisi</th>
-            <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
-          </tr>
-        </thead>
+<div className="overflow-x-auto">
+  <table className="w-full border border-gray-300 text-sm text-gray-900">
+    <thead className="bg-gray-100">
+      <tr>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold w-12">No</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Barang</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kategori</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Merek</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Lokasi</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Kondisi</th>
+        <th className="text-center py-3 px-4 border border-gray-300 font-semibold">Aksi</th>
+      </tr>
+    </thead>
 
-        <tbody className="divide-y divide-gray-200">
-          {filteredBarang.map((barang) => (
-            <tr
-              key={barang.id}
-              className="border transition-all duration-200 hover:bg-gray-50"
+    <tbody className="divide-y divide-gray-200">
+      {filteredBarang.map((barang, index) => (
+        <tr
+          key={barang.id}
+          className="border transition-all duration-200 hover:bg-gray-50"
+        >
+          {/* Nomor Urut */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            {index + 1}
+          </td>
+
+          {/* Foto + Nama Barang */}
+          <td className="py-4 px-4 border border-gray-300">
+            <div className="flex items-start space-x-5">
+              {/* Foto */}
+              <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
+                {barang.fotoUrl ? (
+                  <img
+                    src={barang.fotoUrl}
+                    alt={barang.nama}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                    No Image
+                  </div>
+                )}
+              </div>
+
+              {/* Nama + Kode Barang */}
+              <div className="flex flex-col">
+                <p className="font-medium text-gray-900">{barang.nama}</p>
+                <p className="text-xs text-gray-500">{barang.kodeBarang}</p>
+              </div>
+            </div>
+          </td>
+
+          {/* Kategori */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            <span className="text-sm text-gray-600">{barang.kategori.nama}</span>
+          </td>
+
+          {/* Merek */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            <span className="text-sm text-gray-600">{barang.merek.nama}</span>
+          </td>
+
+          {/* Lokasi */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            <span className="text-sm text-gray-600">{barang.lokasi.nama}</span>
+          </td>
+
+          {/* Kondisi */}
+          <td className="py-4 px-4 border border-gray-300 text-center">
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center justify-center ${kondisiColors[barang.kondisi]}`}
             >
-              {/* Foto + Nama Barang */}
-              <td className="py-4 px-4 border border-gray-300">
-                <div className="flex items-start space-x-5">
-                  {/* Foto */}
-                  <div className="w-16 h-16 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-                    {barang.fotoUrl ? (
-                      <img
-                        src={barang.fotoUrl}
-                        alt={barang.nama}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
-                        No Image
-                      </div>
-                    )}
-                  </div>
+              {kondisiLabels[barang.kondisi]}
+            </span>
+          </td>
 
-                  {/* Nama + Kode Barang */}
-                  <div className="flex flex-col">
-                    <p className="font-medium text-gray-900">{barang.nama}</p>
-                    <p className="text-xs text-gray-500">{barang.kodeBarang}</p>
-                  </div>
-                </div>
-              </td>
-
-              {/* Kategori */}
-              <td className="py-4 px-4 border border-gray-300 text-center">
-                <span className="text-sm text-gray-600">{barang.kategori.nama}</span>
-              </td>
-
-              {/* Merek */}
-              <td className="py-4 px-4 border border-gray-300 text-center">
-                <span className="text-sm text-gray-600">{barang.merek.nama}</span>
-              </td>
-
-              {/* Lokasi */}
-              <td className="py-4 px-4 border border-gray-300 text-center">
-                <span className="text-sm text-gray-600">{barang.lokasi.nama}</span>
-              </td>
-
-              {/* Kondisi */}
-              <td className="py-4 px-4 border border-gray-300 text-center">
-                <span
-                  className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center justify-center ${kondisiColors[barang.kondisi]}`}
+          {/* Aksi */}
+          <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
+            <div className="flex flex-col items-center gap-2">
+              {/* Baris 1 */}
+              <div className="flex justify-center">
+                <Button
+                  size="sm"
+                  variant="outlinesecond"
+                  className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                  onClick={() => router.push(`/admin/barang/${barang.id}`)}
                 >
-                  {kondisiLabels[barang.kondisi]}
-                </span>
-              </td>
+                  <Eye className="w-3 h-3 mr-1" />
+                  Detail
+                </Button>
+              </div>
 
-              {/* Aksi */}
-              <td className="py-4 px-4 border border-gray-300 text-center min-w-[240px]">
-                <div className="flex flex-col items-center gap-2">
-                  {/* Baris 1 */}
-                  <div className="flex justify-center">
-                    <Button
-                      size="sm"
-                      variant="outlinesecond"
-                      className="flex items-center text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
-                      onClick={() => router.push(`/admin/barang/${barang.id}`)}
-                    >
-                      <Eye className="w-3 h-3 mr-1" />
-                      Detail
-                    </Button>
-                  </div>
-
-                  {/* Baris 2 */}
-                  <div className="flex justify-center gap-2">
-                    <Button
-                      size="sm"
-                      variant="danger"
-                      className="flex items-center"
-                      onClick={() => handleDeleteBarang(barang.id)}
-                    >
-                      <Trash2 className="w-3 h-3 mr-1" />
-                      Hapus
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
-                      onClick={() => openEditModal(barang)}
-                    >
-                      <Edit className="w-3 h-3 mr-1" />
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              {/* Baris 2 */}
+              <div className="flex justify-center gap-2">
+                <Button
+                  size="sm"
+                  variant="danger"
+                  className="flex items-center"
+                  onClick={() => handleDeleteBarang(barang.id)}
+                >
+                  <Trash2 className="w-3 h-3 mr-1" />
+                  Hapus
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="flex items-center bg-blue-950 hover:bg-blue-900 text-white transition-colors duration-200"
+                  onClick={() => openEditModal(barang)}
+                >
+                  <Edit className="w-3 h-3 mr-1" />
+                  Edit
+                </Button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
   )}
 </div>
       </div>
