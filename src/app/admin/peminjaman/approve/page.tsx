@@ -421,8 +421,7 @@ if (loading) {
               <div className="p-8 text-center">
                 <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  Tidak ada permintaan ditemukan
-                  {searchQuery ? 'Tidak ada yang sesuai dengan pencarian' : ''}
+                  {searchQuery ? "Tidak ada permintaan ditemukan" : "Tidak ada yang sesuai dengan pencarian"}
                 </p>
               </div>
             ) : (
