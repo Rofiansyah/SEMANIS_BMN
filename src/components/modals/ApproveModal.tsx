@@ -66,8 +66,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
       // ✅ Setelah lokasi berhasil diupdate → baru approve
       await onApprove(request.id, penanggungJawab, foto || undefined, lokasiId);
 
-      toast.success('Barang berhasil diperbarui & permintaan disetujui ✨');
-
       // reset
       setPenanggungJawab('');
       setFoto(null);

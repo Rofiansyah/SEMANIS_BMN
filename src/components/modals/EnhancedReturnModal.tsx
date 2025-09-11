@@ -162,7 +162,6 @@ export default function EnhancedReturnModal({
       // ✅ Setelah barang terupdate → baru jalankan onSubmit
       await onSubmit(penanggungJawab.trim(), catatan.trim(), foto || undefined, lokasiId);
 
-      toast.success('Barang berhasil diperbarui & pengembalian diproses ✨');
       onClose();
     } catch (error) {
       console.error(error);
