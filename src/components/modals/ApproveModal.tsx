@@ -1,63 +1,49 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import CameraCapture from '@/components/camera/CameraCapture';
 import { 
   CheckCircle, 
   Camera,
+  Upload,
   User,
   Package,
   X,
-  MessageSquare,
-  MapPin
+  MessageSquare
 } from 'lucide-react';
-import CameraCapture from '@/components/camera/CameraCapture';
 import toast from 'react-hot-toast';
-import type { Peminjaman, Lokasi } from '@/types/api';
+import type { Peminjaman } from '@/types/api';
 
 interface ApproveModalProps {
   request: Peminjaman | null;
   isOpen: boolean;
   onClose: () => void;
-  onApprove: (id: string, penanggungJawab: string, foto?: File, lokasiId?: string) => Promise<void>;
-  lokasiList: Lokasi[];
+  onApprove: (id: string, penanggungJawab: string, foto?: File) => Promise<void>;
 }
 
-export default function ApproveModal({ request, isOpen, onClose, onApprove, lokasiList }: ApproveModalProps) {
+export default function ApproveModal({ request, isOpen, onClose, onApprove }: ApproveModalProps) {
   const [penanggungJawab, setPenanggungJawab] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
 
-  const [lokasiId, setLokasiId] = useState('');
-
-  useEffect(() => {
-    if (isOpen && request) {
-      setLokasiId(request.barang.lokasi?.id || '');
-    }
-  }, [isOpen, request]);
-
-  const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const handleSubmit = async () => {
     if (!request) return;
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
       return;
     }
-    if (!lokasiId) {
-      toast.error('Lokasi harus dipilih');
-      return;
-    }
 
     setLoading(true);
     try {
-      await onApprove(request.id, penanggungJawab, foto || undefined, lokasiId);
+      await onApprove(request.id, penanggungJawab, foto || undefined);
       // reset
       setPenanggungJawab('');
       setFoto(null);
       setFotoPreview(null);
-      setLokasiId('');
       onClose();
     } catch (error) {
       console.error(error);
@@ -70,6 +56,20 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
     setFoto(file);
     setFotoPreview(URL.createObjectURL(file));
     setIsCameraCaptureOpen(false);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFoto(file);
+      setFotoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    if (fotoPreview) URL.revokeObjectURL(fotoPreview);
+    setFoto(null);
+    setFotoPreview(null);
   };
 
   if (!isOpen || !request) return null;
@@ -143,28 +143,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
             </div>
 
             {/* Edit Lokasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lokasi Barang <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-gray-600" />
-                <select
-                  value={lokasiId}
-                  onChange={(e) => setLokasiId(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-                  required
-                  disabled={loading}
-                >
-                  <option value="">Pilih Lokasi</option>
-                  {lokasiList.map((lokasi) => (
-                    <option key={lokasi.id} value={lokasi.id}>
-                      {lokasi.nama}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
             {/* Foto Dokumentasi */}
             <div>

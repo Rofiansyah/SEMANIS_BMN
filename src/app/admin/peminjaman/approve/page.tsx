@@ -9,8 +9,8 @@ import CameraCapture from '@/components/camera/CameraCapture';
 import EnhancedReturnModal from '@/components/modals/EnhancedReturnModal';
 import ApproveModal from '@/components/modals/ApproveModal';
 import RejectModal from '@/components/modals/RejectModal';
-import { peminjamanApi, lokasiApi } from '@/lib/api';
-import type { Peminjaman, Lokasi } from '@/types/api';
+import { peminjamanApi } from '@/lib/api';
+import type { Peminjaman } from '@/types/api';
 import logoSemantis from './logo_semantis.png';
 import { 
   Clock, 
@@ -54,7 +54,6 @@ const statusLabels: Record<
 export default function AdminStatusPage(){
   const router = useRouter();
   const [requests, setRequests] = useState<Peminjaman[]>([]);
-  const [lokasiList, setLokasiList] = useState<Lokasi[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
@@ -69,19 +68,8 @@ export default function AdminStatusPage(){
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
-  const fetchLokasi = async () => {
-    try {
-      const response = await lokasiApi.getAll();
-      setLokasiList(response.data);
-    } catch (error) {
-      console.error("Gagal fetch lokasi:", error);
-      toast.error("Gagal memuat data lokasi");
-    }
-  };
-
-  fetchLokasi();
-  loadRequests();
-}, []);
+    loadRequests();
+  }, []);
 
   const loadRequests = async () => {
     try {
@@ -642,14 +630,12 @@ if (loading) {
         onSubmit={handleProcessReturn}
         peminjaman={selectedPeminjamanForReturn}
         loading={returnLoading}
-        lokasiList={lokasiList}
       />
       <ApproveModal
         request={approveRequest}
         isOpen={!!approveRequest}
         onClose={() => setApproveRequest(null)}
         onApprove={handleApprove}
-        lokasiList={lokasiList}
       />
 
       <RejectModal
