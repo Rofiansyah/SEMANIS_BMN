@@ -69,27 +69,32 @@ export default function AdminStatusPage(){
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
-    loadAllData();
-  }, []);
+  const fetchLokasi = async () => {
+    try {
+      const response = await lokasiApi.getAll();
+      setLokasiList(response.data);
+    } catch (error) {
+      console.error("Gagal fetch lokasi:", error);
+      toast.error("Gagal memuat data lokasi");
+    }
+  };
 
-  const loadAllData = async () => {
+  fetchLokasi();
+  loadRequests();
+}, []);
+
+  const loadRequests = async () => {
     try {
       setLoading(true);
-      const [reqRes, lokasiRes] = await Promise.all([
-        peminjamanApi.getAllRequests(),
-        lokasiApi.getAll(), // ✅ ambil data lokasi
-      ]);
-
-      setRequests(reqRes.data);
-      if (lokasiRes.success) setLokasiList(lokasiRes.data); // ✅ simpan ke state
+      const response = await peminjamanApi.getAllRequests();
+      setRequests(response.data);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      toast.error('Gagal memuat data peminjaman atau lokasi');
+      console.error('Error fetching peminjaman:', error);
+      toast.error('Gagal memuat kelola peminjaman');
     } finally {
       setLoading(false);
     }
   };
-
 
   const handleOpenModal = (request: Peminjaman) => {
     setSelectedRequest(request);
@@ -101,11 +106,11 @@ export default function AdminStatusPage(){
     setIsModalOpen(false);
   };
 
-  const handleApprove = async (id: string, penanggungJawab: string, lokasiId: string, foto?: File) => {
+  const handleApprove = async (id: string, penanggungJawab: string, foto?: File) => {
     const response = await peminjamanApi.approve(id, { penanggungJawab, fotoPinjam: foto });
     if (response.status === 'success') {
       toast.success('Permintaan berhasil disetujui! ✅');
-      loadAllData();
+      loadRequests();
     }
   };
 
@@ -113,7 +118,7 @@ export default function AdminStatusPage(){
     const response = await peminjamanApi.reject(id, { catatan });
     if (response.status === 'success') {
       toast.success('Permintaan berhasil ditolak! ❌');
-      loadAllData();
+      loadRequests();
     }
   };  
 
@@ -127,7 +132,7 @@ export default function AdminStatusPage(){
     setIsReturnModalOpen(false);
   };
 
-  const handleProcessReturn = async (penanggungJawab: string, lokasiId: string, catatan: string, foto?: File) => {
+  const handleProcessReturn = async (penanggungJawab: string, catatan: string, foto?: File) => {
     if (!selectedPeminjamanForReturn) return;
     
     setReturnLoading(true);
@@ -141,7 +146,7 @@ export default function AdminStatusPage(){
       if (response.status === 'success') {
         toast.success('Pengembalian berhasil diproses! 📦');
         handleCloseReturnModal();
-        loadAllData;
+        loadRequests();
       }
     } catch (error) {
       console.error('Failed to process return:', error);
@@ -518,7 +523,9 @@ if (loading) {
 
                           {/* Lama Pinjam → center */}
                           <td className="py-4 px-4 border border-gray-300 text-center">
-                            {request.status === 'DIPINJAM' ? `${daysBorrowed} hari` : '-'}
+                            {request.status === 'DIPINJAM' 
+                              ? `${daysBorrowed < 0 ? 0 : daysBorrowed} hari` 
+                              : '-'}
                           </td>
 
                           {/* Penanggung Jawab → center */}

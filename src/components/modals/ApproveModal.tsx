@@ -1,15 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
-import CameraCapture from '@/components/camera/CameraCapture';
 import { 
+  CheckCircle, 
   Camera,
   User,
   Package,
   X,
-  MessageSquare
+  MessageSquare,
+  MapPin
 } from 'lucide-react';
+import CameraCapture from '@/components/camera/CameraCapture';
 import toast from 'react-hot-toast';
 import type { Peminjaman, Lokasi } from '@/types/api';
 
@@ -17,20 +19,27 @@ interface ApproveModalProps {
   request: Peminjaman | null;
   isOpen: boolean;
   onClose: () => void;
-  onApprove: (id: string, penanggungJawab: string, lokasiId: string, foto?: File) => Promise<void>;
-  lokasiList: Lokasi[];   // ⬅️ tambahkan props lokasiList
+  onApprove: (id: string, penanggungJawab: string, foto?: File, lokasiId?: string) => Promise<void>;
+  lokasiList: Lokasi[];
 }
 
 export default function ApproveModal({ request, isOpen, onClose, onApprove, lokasiList }: ApproveModalProps) {
   const [penanggungJawab, setPenanggungJawab] = useState('');
-  const [lokasiId, setLokasiId] = useState('');   // ⬅️ state lokasi
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
 
+  const [lokasiId, setLokasiId] = useState('');
+
+  useEffect(() => {
+    if (isOpen && request) {
+      setLokasiId(request.barang.lokasi?.id || '');
+    }
+  }, [isOpen, request]);
+
   const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+    if (e) e.preventDefault();
     if (!request) return;
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
@@ -43,12 +52,12 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
 
     setLoading(true);
     try {
-      await onApprove(request.id, penanggungJawab, lokasiId, foto || undefined);
+      await onApprove(request.id, penanggungJawab, foto || undefined, lokasiId);
       // reset
       setPenanggungJawab('');
-      setLokasiId('');
       setFoto(null);
       setFotoPreview(null);
+      setLokasiId('');
       onClose();
     } catch (error) {
       console.error(error);
@@ -61,12 +70,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
     setFoto(file);
     setFotoPreview(URL.createObjectURL(file));
     setIsCameraCaptureOpen(false);
-  };
-
-  const handleRemovePhoto = () => {
-    if (fotoPreview) URL.revokeObjectURL(fotoPreview);
-    setFoto(null);
-    setFotoPreview(null);
   };
 
   if (!isOpen || !request) return null;
@@ -139,25 +142,28 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
               />
             </div>
 
-            {/* Lokasi */}
+            {/* Edit Lokasi */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lokasi <span className="text-red-500">*</span>
+                Lokasi Barang <span className="text-red-500">*</span>
               </label>
-              <select
-                value={lokasiId}
-                onChange={(e) => setLokasiId(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-                required
-                disabled={loading}
-              >
-                <option value="">Pilih Lokasi</option>
-                {lokasiList.map((lokasi) => (
-                  <option key={lokasi.id} value={lokasi.id}>
-                    {lokasi.nama}
-                  </option>
-                ))}
-              </select>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-gray-600" />
+                <select
+                  value={lokasiId}
+                  onChange={(e) => setLokasiId(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                  required
+                  disabled={loading}
+                >
+                  <option value="">Pilih Lokasi</option>
+                  {lokasiList.map((lokasi) => (
+                    <option key={lokasi.id} value={lokasi.id}>
+                      {lokasi.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Foto Dokumentasi */}
@@ -187,7 +193,10 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={handleRemovePhoto}
+                      onClick={() => {
+                        setFoto(null);
+                        setFotoPreview(null);
+                      }}
                       className="flex-1"
                     >
                       Hapus Foto
