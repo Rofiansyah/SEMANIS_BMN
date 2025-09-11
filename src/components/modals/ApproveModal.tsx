@@ -2,53 +2,46 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import CameraCapture from '@/components/camera/CameraCapture';
 import { 
   CheckCircle, 
   Camera,
+  Upload,
   User,
   Package,
   X,
-  MessageSquare,
-  MapPin
+  MessageSquare
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import type { Peminjaman, Lokasi } from '@/types/api';
+import type { Peminjaman } from '@/types/api';
 
 interface ApproveModalProps {
   request: Peminjaman | null;
   isOpen: boolean;
   onClose: () => void;
-  onApprove: (id: string, penanggungJawab: string, foto?: File, lokasiId?: string) => Promise<void>;
-  lokasiList: Lokasi[];
+  onApprove: (id: string, penanggungJawab: string, foto?: File) => Promise<void>;
 }
 
-export default function ApproveModal({ request, isOpen, onClose, onApprove, lokasiList }: ApproveModalProps) {
+export default function ApproveModal({ request, isOpen, onClose, onApprove }: ApproveModalProps) {
   const [penanggungJawab, setPenanggungJawab] = useState('');
-  const [lokasiId, setLokasiId] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = async () => {
     if (!request) return;
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
       return;
     }
-    if (!lokasiId) {
-      toast.error('Lokasi harus dipilih');
-      return;
-    }
 
     setLoading(true);
     try {
-      await onApprove(request.id, penanggungJawab, foto || undefined, lokasiId);
+      await onApprove(request.id, penanggungJawab, foto || undefined);
       // reset
       setPenanggungJawab('');
-      setLokasiId('');
       setFoto(null);
       setFotoPreview(null);
       onClose();
@@ -65,6 +58,20 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
     setIsCameraCaptureOpen(false);
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFoto(file);
+      setFotoPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    if (fotoPreview) URL.revokeObjectURL(fotoPreview);
+    setFoto(null);
+    setFotoPreview(null);
+  };
+
   if (!isOpen || !request) return null;
 
   return (
@@ -73,7 +80,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Header */}
+        {/* Header Fixed */}
         <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
           <h3 className="text-lg font-semibold text-white">Setujui Permintaan</h3>
           <button
@@ -85,7 +92,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
           </button>
         </div>
 
-        {/* Form */}
+        {/* Form Scrollable */}
         <div className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Info Request */}
@@ -136,25 +143,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
             </div>
 
             {/* Lokasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lokasi <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={lokasiId}
-                onChange={(e) => setLokasiId(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-                required
-                disabled={loading}
-              >
-                <option value="">Pilih Lokasi</option>
-                {lokasiList.map((lokasi) => (
-                  <option key={lokasi.id} value={lokasi.id}>
-                    {lokasi.nama}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* Foto Dokumentasi */}
             <div>
