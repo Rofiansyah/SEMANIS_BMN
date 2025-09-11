@@ -9,8 +9,8 @@ import CameraCapture from '@/components/camera/CameraCapture';
 import EnhancedReturnModal from '@/components/modals/EnhancedReturnModal';
 import ApproveModal from '@/components/modals/ApproveModal';
 import RejectModal from '@/components/modals/RejectModal';
-import { peminjamanApi } from '@/lib/api';
-import type { Peminjaman } from '@/types/api';
+import { peminjamanApi, lokasiApi } from '@/lib/api';
+import type { Peminjaman, Lokasi } from '@/types/api';
 import logoSemantis from './logo_semantis.png';
 import { 
   Clock, 
@@ -54,6 +54,7 @@ const statusLabels: Record<
 export default function AdminStatusPage(){
   const router = useRouter();
   const [requests, setRequests] = useState<Peminjaman[]>([]);
+  const [lokasiList, setLokasiList] = useState<Lokasi[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
@@ -68,21 +69,27 @@ export default function AdminStatusPage(){
   const [searchQuery, setSearchQuery] = useState('');
   
   useEffect(() => {
-    loadRequests();
+    loadAllData();
   }, []);
 
-  const loadRequests = async () => {
+  const loadAllData = async () => {
     try {
       setLoading(true);
-      const response = await peminjamanApi.getAllRequests();
-      setRequests(response.data);
+      const [reqRes, lokasiRes] = await Promise.all([
+        peminjamanApi.getAllRequests(),
+        lokasiApi.getAll(), // ✅ ambil data lokasi
+      ]);
+
+      setRequests(reqRes.data);
+      if (lokasiRes.success) setLokasiList(lokasiRes.data); // ✅ simpan ke state
     } catch (error) {
-      console.error('Error fetching peminjaman:', error);
-      toast.error('Gagal memuat kelola peminjaman');
+      console.error('Error fetching data:', error);
+      toast.error('Gagal memuat data peminjaman atau lokasi');
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleOpenModal = (request: Peminjaman) => {
     setSelectedRequest(request);
@@ -94,11 +101,11 @@ export default function AdminStatusPage(){
     setIsModalOpen(false);
   };
 
-  const handleApprove = async (id: string, penanggungJawab: string, foto?: File) => {
+  const handleApprove = async (id: string, penanggungJawab: string, lokasiId: string, foto?: File) => {
     const response = await peminjamanApi.approve(id, { penanggungJawab, fotoPinjam: foto });
     if (response.status === 'success') {
       toast.success('Permintaan berhasil disetujui! ✅');
-      loadRequests();
+      loadAllData();
     }
   };
 
@@ -106,7 +113,7 @@ export default function AdminStatusPage(){
     const response = await peminjamanApi.reject(id, { catatan });
     if (response.status === 'success') {
       toast.success('Permintaan berhasil ditolak! ❌');
-      loadRequests();
+      loadAllData();
     }
   };  
 
@@ -120,7 +127,7 @@ export default function AdminStatusPage(){
     setIsReturnModalOpen(false);
   };
 
-  const handleProcessReturn = async (penanggungJawab: string, catatan: string, foto?: File) => {
+  const handleProcessReturn = async (penanggungJawab: string, lokasiId: string, catatan: string, foto?: File) => {
     if (!selectedPeminjamanForReturn) return;
     
     setReturnLoading(true);
@@ -134,7 +141,7 @@ export default function AdminStatusPage(){
       if (response.status === 'success') {
         toast.success('Pengembalian berhasil diproses! 📦');
         handleCloseReturnModal();
-        loadRequests();
+        loadAllData;
       }
     } catch (error) {
       console.error('Failed to process return:', error);
@@ -628,12 +635,14 @@ if (loading) {
         onSubmit={handleProcessReturn}
         peminjaman={selectedPeminjamanForReturn}
         loading={returnLoading}
+        lokasiList={lokasiList}
       />
       <ApproveModal
         request={approveRequest}
         isOpen={!!approveRequest}
         onClose={() => setApproveRequest(null)}
         onApprove={handleApprove}
+        lokasiList={lokasiList}
       />
 
       <RejectModal

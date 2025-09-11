@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/Button';
 import CameraCapture from '@/components/camera/CameraCapture';
 import { 
   Camera,
-  X,
   User,
   Package,
-  MessageSquare,
-  MapPin
+  X,
+  MessageSquare
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Peminjaman, Lokasi } from '@/types/api';
@@ -19,19 +18,19 @@ interface ApproveModalProps {
   isOpen: boolean;
   onClose: () => void;
   onApprove: (id: string, penanggungJawab: string, lokasiId: string, foto?: File) => Promise<void>;
-  lokasiList: Lokasi[];
+  lokasiList: Lokasi[];   // ⬅️ tambahkan props lokasiList
 }
 
 export default function ApproveModal({ request, isOpen, onClose, onApprove, lokasiList }: ApproveModalProps) {
   const [penanggungJawab, setPenanggungJawab] = useState('');
-  const [lokasiId, setLokasiId] = useState('');
+  const [lokasiId, setLokasiId] = useState('');   // ⬅️ state lokasi
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
 
   const handleSubmit = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+    e?.preventDefault();
     if (!request) return;
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
@@ -78,7 +77,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Header */}
+        {/* Header Fixed */}
         <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
           <h3 className="text-lg font-semibold text-white">Setujui Permintaan</h3>
           <button
@@ -90,12 +89,13 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
           </button>
         </div>
 
-        {/* Body */}
+        {/* Form Scrollable */}
         <div className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Info Request */}
             <div className="bg-gray-50 border border-gray-200 p-5 rounded-lg shadow-sm">
               <h4 className="text-sm font-semibold text-gray-800 mb-4">Informasi Permintaan</h4>
+
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <User className="w-5 h-5 text-gray-600" />
@@ -104,6 +104,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
                     <p className="text-base font-medium text-gray-900">{request.user.nama}</p>
                   </div>
                 </div>
+
                 <div className="flex items-center space-x-3">
                   <Package className="w-5 h-5 text-gray-600" />
                   <div>
@@ -111,6 +112,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
                     <p className="text-base font-medium text-gray-900">{request.barang.nama}</p>
                   </div>
                 </div>
+
                 <div className="flex items-start space-x-3">
                   <MessageSquare className="w-5 h-5 text-gray-600 mt-1" />
                   <div>
@@ -132,6 +134,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
                 onChange={(e) => setPenanggungJawab(e.target.value)}
                 placeholder="Nama lengkap penanggung jawab"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
+                required
                 disabled={loading}
               />
             </div>
@@ -145,6 +148,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
                 value={lokasiId}
                 onChange={(e) => setLokasiId(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                required
                 disabled={loading}
               >
                 <option value="">Pilih Lokasi</option>
