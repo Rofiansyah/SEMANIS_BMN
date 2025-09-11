@@ -14,6 +14,7 @@ import {
 import CameraCapture from '@/components/camera/CameraCapture';
 import toast from 'react-hot-toast';
 import type { Peminjaman, Lokasi } from '@/types/api';
+import { barangApi } from '@/lib/api';
 
 interface ApproveModalProps {
   request: Peminjaman | null;
@@ -142,29 +143,50 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
               />
             </div>
 
-            {/* Edit Lokasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lokasi Barang <span className="text-red-500">*</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-gray-600" />
-                <select
-                  value={lokasiId}
-                  onChange={(e) => setLokasiId(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-                  required
-                  disabled={loading}
-                >
-                  <option value="">Pilih Lokasi</option>
-                  {lokasiList.map((lokasi) => (
-                    <option key={lokasi.id} value={lokasi.id}>
-                      {lokasi.nama}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            {/* Edit Lokasi (Update Barang) */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Lokasi Barang <span className="text-red-500">*</span>
+  </label>
+  <div className="flex items-center gap-2">
+    <MapPin className="w-5 h-5 text-gray-600" />
+    <select
+      value={lokasiId}
+      onChange={async (e) => {
+        const newLokasiId = e.target.value;
+        setLokasiId(newLokasiId);
+
+        if (!request?.barang) return;
+        try {
+          // update barang lokasi langsung ke API
+          await barangApi.update(request.barang.id, {
+            nama: request.barang.nama,
+            deskripsi: request.barang.deskripsi || '',
+            kategoriId: request.barang.kategori.id,
+            merekId: request.barang.merek.id,
+            lokasiId: newLokasiId,
+            kondisi: request.barang.kondisi,
+          });
+          toast.success('Lokasi barang berhasil diperbarui ✅');
+        } catch (error) {
+          console.error(error);
+          toast.error('Gagal memperbarui lokasi barang');
+        }
+      }}
+      className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+      required
+      disabled={loading}
+    >
+      <option value="">Pilih Lokasi</option>
+      {lokasiList.map((lokasi) => (
+        <option key={lokasi.id} value={lokasi.id}>
+          {lokasi.nama}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
 
             {/* Foto Dokumentasi */}
             <div>
