@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { 
-  CheckCircle, 
   Camera,
   User,
   Package,
@@ -14,7 +13,7 @@ import {
 import CameraCapture from '@/components/camera/CameraCapture';
 import toast from 'react-hot-toast';
 import type { Peminjaman, Lokasi } from '@/types/api';
-import { barangApi } from '@/lib/api';
+import { barangApi } from '@/lib/api'; // ✅ tambahin import barangApi
 
 interface ApproveModalProps {
   request: Peminjaman | null;
@@ -42,6 +41,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!request) return;
+
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
       return;
@@ -53,7 +53,21 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
 
     setLoading(true);
     try {
+      // ✅ Update lokasi barang dulu sebelum approve
+      await barangApi.update(request.barang.id, {
+        nama: request.barang.nama,
+        deskripsi: request.barang.deskripsi || '',
+        kategoriId: request.barang.kategori.id,
+        merekId: request.barang.merek.id,
+        lokasiId: lokasiId,
+        kondisi: request.barang.kondisi,
+      });
+
+      // ✅ Setelah lokasi berhasil diupdate → baru approve
       await onApprove(request.id, penanggungJawab, foto || undefined, lokasiId);
+
+      toast.success('Barang berhasil diperbarui & permintaan disetujui ✨');
+
       // reset
       setPenanggungJawab('');
       setFoto(null);
@@ -62,6 +76,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
       onClose();
     } catch (error) {
       console.error(error);
+      toast.error('Gagal memproses persetujuan');
     } finally {
       setLoading(false);
     }
@@ -143,50 +158,29 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove, loka
               />
             </div>
 
-            {/* Edit Lokasi (Update Barang) */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    Lokasi Barang <span className="text-red-500">*</span>
-  </label>
-  <div className="flex items-center gap-2">
-    <MapPin className="w-5 h-5 text-gray-600" />
-    <select
-      value={lokasiId}
-      onChange={async (e) => {
-        const newLokasiId = e.target.value;
-        setLokasiId(newLokasiId);
-
-        if (!request?.barang) return;
-        try {
-          // update barang lokasi langsung ke API
-          await barangApi.update(request.barang.id, {
-            nama: request.barang.nama,
-            deskripsi: request.barang.deskripsi || '',
-            kategoriId: request.barang.kategori.id,
-            merekId: request.barang.merek.id,
-            lokasiId: newLokasiId,
-            kondisi: request.barang.kondisi,
-          });
-          toast.success('Lokasi barang berhasil diperbarui ✅');
-        } catch (error) {
-          console.error(error);
-          toast.error('Gagal memperbarui lokasi barang');
-        }
-      }}
-      className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-      required
-      disabled={loading}
-    >
-      <option value="">Pilih Lokasi</option>
-      {lokasiList.map((lokasi) => (
-        <option key={lokasi.id} value={lokasi.id}>
-          {lokasi.nama}
-        </option>
-      ))}
-    </select>
-  </div>
-</div>
-
+            {/* Lokasi Barang */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lokasi Barang <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-gray-600" />
+                <select
+                  value={lokasiId}
+                  onChange={(e) => setLokasiId(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                  required
+                  disabled={loading}
+                >
+                  <option value="">Pilih Lokasi</option>
+                  {lokasiList.map((lokasi) => (
+                    <option key={lokasi.id} value={lokasi.id}>
+                      {lokasi.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
 
             {/* Foto Dokumentasi */}
             <div>
