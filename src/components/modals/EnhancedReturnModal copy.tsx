@@ -10,22 +10,22 @@ import {
   QrCode, 
   X, 
   AlertCircle,
-  Check
+  Check,
+  Upload
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import toast from 'react-hot-toast';
 import QRScanner from '@/components/scanner/QRScanner';
 import CameraCapture from '@/components/camera/CameraCapture';
 import { barangApi } from '@/lib/api';
-import type { Peminjaman, Barang, Lokasi } from '@/types/api';
+import type { Peminjaman, Barang } from '@/types/api';
 
 interface EnhancedReturnModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (penanggungJawab: string, catatan: string, foto?: File, lokasiId?: string) => Promise<void>;
+  onSubmit: (penanggungJawab: string, catatan: string, foto?: File) => Promise<void>;
   peminjaman?: Peminjaman | null;
   loading?: boolean;
-  lokasiList: Lokasi[]; // ✅ tambahan
 }
 
 interface ValidationResult {
@@ -39,19 +39,22 @@ export default function EnhancedReturnModal({
   onClose, 
   onSubmit, 
   peminjaman, 
-  loading,
-  lokasiList
+  loading 
 }: EnhancedReturnModalProps) {
   const [step, setStep] = useState<'scan' | 'form'>('scan');
   const [penanggungJawab, setPenanggungJawab] = useState('');
   const [catatan, setCatatan] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
-  const [lokasiId, setLokasiId] = useState(''); // ✅ state lokasi
   
   // Scanner states
   const [isQRScannerOpen, setIsQRScannerOpen] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
+  
+  // Debug log for camera state changes
+  useEffect(() => {
+    console.log('EnhancedReturnModal: isCameraCaptureOpen changed to:', isCameraCaptureOpen);
+  }, [isCameraCaptureOpen]);
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
   const [scanLoading, setScanLoading] = useState(false);
 
@@ -65,13 +68,11 @@ export default function EnhancedReturnModal({
       setFotoPreview(null);
       setValidationResult(null);
       setScanLoading(false);
-      setLokasiId(''); // ✅ reset lokasi
-    } else if (peminjaman) {
-      setLokasiId(peminjaman.barang.lokasi.id); // ✅ default lokasi saat barang dipinjam
     }
-  }, [isOpen, peminjaman]);
+  }, [isOpen]);
 
   const validateScannedItem = (scannedItem: Barang, expectedItem: Barang): ValidationResult => {
+    // Compare nama, merek, and lokasi as requested
     const nameMatch = scannedItem.nama.toLowerCase() === expectedItem.nama.toLowerCase();
     const merekMatch = scannedItem.merek.nama.toLowerCase() === expectedItem.merek.nama.toLowerCase();
     const lokasiMatch = scannedItem.lokasi.nama.toLowerCase() === expectedItem.lokasi.nama.toLowerCase();
@@ -84,9 +85,9 @@ export default function EnhancedReturnModal({
       };
     } else {
       const errors = [];
-      if (!nameMatch) errors.push(`Nama barang tidak sesuai`);
-      if (!merekMatch) errors.push(`Merek tidak sesuai`);
-      if (!lokasiMatch) errors.push(`Lokasi tidak sesuai`);
+      if (!nameMatch) errors.push(`Nama barang tidak sesuai (scan: ${scannedItem.nama}, expected: ${expectedItem.nama})`);
+      if (!merekMatch) errors.push(`Merek tidak sesuai (scan: ${scannedItem.merek.nama}, expected: ${expectedItem.merek.nama})`);
+      if (!lokasiMatch) errors.push(`Lokasi tidak sesuai (scan: ${scannedItem.lokasi.nama}, expected: ${expectedItem.lokasi.nama})`);
       
       return {
         isValid: false,
@@ -98,13 +99,16 @@ export default function EnhancedReturnModal({
 
   const handleQRScan = async (qrData: string) => {
     if (!peminjaman) return;
+
     setScanLoading(true);
     try {
       const response = await barangApi.getByQRCode(qrData);
       if (response.success) {
         const validation = validateScannedItem(response.data, peminjaman.barang);
         setValidationResult(validation);
+        
         if (validation.isValid) {
+          // Auto-advance to form step after successful validation
           setTimeout(() => {
             setStep('form');
           }, 2000);
@@ -134,8 +138,18 @@ export default function EnhancedReturnModal({
     setIsCameraCaptureOpen(false);
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFoto(file);
+      const previewUrl = URL.createObjectURL(file);
+      setFotoPreview(previewUrl);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
       return;
@@ -144,11 +158,8 @@ export default function EnhancedReturnModal({
       toast.error('Catatan pengembalian harus diisi');
       return;
     }
-    if (!lokasiId) {
-      toast.error('Lokasi harus dipilih');
-      return;
-    }
-    await onSubmit(penanggungJawab.trim(), catatan.trim(), foto || undefined, lokasiId);
+
+    await onSubmit(penanggungJawab.trim(), catatan.trim(), foto || undefined);
   };
 
   const handleSkipScan = () => {
@@ -303,7 +314,7 @@ return (
               </Button>
               <Button
                 variant="outline"
-                className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"
+                className="w-full sm:w-auto text-gray-700 border-2 border-gray-300 hover:border-blue-900 hover:bg-blue-50 transition-colors duration-200"  
                 onClick={handleSkipScan}
                 disabled={scanLoading}
               >
@@ -330,24 +341,6 @@ return (
             </div>
 
             {/* Lokasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Lokasi <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={lokasiId}
-                onChange={(e) => setLokasiId(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
-                required
-              >
-                <option value="">Pilih Lokasi</option>
-                {lokasiList.map((lokasi) => (
-                  <option key={lokasi.id} value={lokasi.id}>
-                    {lokasi.nama}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             {/* Catatan */}
             <div>
@@ -364,57 +357,57 @@ return (
               />
             </div>
 
-            {/* Foto Dokumentasi */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Foto Barang (Opsional)
-              </label>
-              {fotoPreview ? (
-                <div className="space-y-3">
-                  <img
-                    src={fotoPreview}
-                    alt="Preview"
-                    className="w-full h-28 sm:h-32 object-cover rounded-lg border"
-                  />
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsCameraCaptureOpen(true)}
-                      className="flex-1"
-                    >
-                      <Camera className="w-4 h-4 mr-1" />
-                      Ambil Ulang
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setFoto(null);
-                        setFotoPreview(null);
-                      }}
-                      className="flex-1"
-                    >
-                      Hapus Foto
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition"
-                  onClick={() => setIsCameraCaptureOpen(true)}
-                >
-                  <div className="flex flex-col items-center space-y-2">
-                    <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
-                    <p className="text-xs sm:text-sm text-gray-600 text-center">
-                      Klik di sini untuk ambil foto barang
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
+{/* Foto Dokumentasi */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Foto Barang (Opsional)
+  </label>
+  {fotoPreview ? (
+    <div className="space-y-3">
+      <img
+        src={fotoPreview}
+        alt="Preview"
+        className="w-full h-28 sm:h-32 object-cover rounded-lg border"
+      />
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setIsCameraCaptureOpen(true)}
+          className="flex-1"
+        >
+          <Camera className="w-4 h-4 mr-1" />
+          Ambil Ulang
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setFoto(null);
+            setFotoPreview(null);
+          }}
+          className="flex-1"
+        >
+          Hapus Foto
+        </Button>
+      </div>
+    </div>
+  ) : (
+    <div
+      className="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer hover:border-blue-950 transition"
+      onClick={() => setIsCameraCaptureOpen(true)}
+    >
+      <div className="flex flex-col items-center space-y-2">
+        <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-gray-400" />
+        <p className="text-xs sm:text-sm text-gray-600 text-center">
+          Klik di sini untuk ambil foto barang
+        </p>
+      </div>
+    </div>
+  )}
+</div>
 
             {/* Actions */}
             <div className="flex flex-col md:flex-row gap-3 pt-4">
