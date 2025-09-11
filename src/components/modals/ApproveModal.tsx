@@ -2,46 +2,52 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import CameraCapture from '@/components/camera/CameraCapture';
 import { 
-  CheckCircle, 
   Camera,
-  Upload,
+  X,
   User,
   Package,
-  X,
-  MessageSquare
+  MessageSquare,
+  MapPin
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import type { Peminjaman } from '@/types/api';
+import type { Peminjaman, Lokasi } from '@/types/api';
 
 interface ApproveModalProps {
   request: Peminjaman | null;
   isOpen: boolean;
   onClose: () => void;
-  onApprove: (id: string, penanggungJawab: string, foto?: File) => Promise<void>;
+  onApprove: (id: string, penanggungJawab: string, lokasiId: string, foto?: File) => Promise<void>;
+  lokasiList: Lokasi[];
 }
 
-export default function ApproveModal({ request, isOpen, onClose, onApprove }: ApproveModalProps) {
+export default function ApproveModal({ request, isOpen, onClose, onApprove, lokasiList }: ApproveModalProps) {
   const [penanggungJawab, setPenanggungJawab] = useState('');
+  const [lokasiId, setLokasiId] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCameraCaptureOpen, setIsCameraCaptureOpen] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!request) return;
     if (!penanggungJawab.trim()) {
       toast.error('Nama penanggung jawab harus diisi');
       return;
     }
+    if (!lokasiId) {
+      toast.error('Lokasi harus dipilih');
+      return;
+    }
 
     setLoading(true);
     try {
-      await onApprove(request.id, penanggungJawab, foto || undefined);
+      await onApprove(request.id, penanggungJawab, lokasiId, foto || undefined);
       // reset
       setPenanggungJawab('');
+      setLokasiId('');
       setFoto(null);
       setFotoPreview(null);
       onClose();
@@ -58,14 +64,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
     setIsCameraCaptureOpen(false);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFoto(file);
-      setFotoPreview(URL.createObjectURL(file));
-    }
-  };
-
   const handleRemovePhoto = () => {
     if (fotoPreview) URL.revokeObjectURL(fotoPreview);
     setFoto(null);
@@ -80,7 +78,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-xl max-w-2xl w-full shadow-lg border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Header Fixed */}
+        {/* Header */}
         <div className="flex justify-between items-center p-5 bg-blue-950 sticky top-0 z-10">
           <h3 className="text-lg font-semibold text-white">Setujui Permintaan</h3>
           <button
@@ -92,13 +90,12 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
           </button>
         </div>
 
-        {/* Form Scrollable */}
+        {/* Body */}
         <div className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Info Request */}
             <div className="bg-gray-50 border border-gray-200 p-5 rounded-lg shadow-sm">
               <h4 className="text-sm font-semibold text-gray-800 mb-4">Informasi Permintaan</h4>
-
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <User className="w-5 h-5 text-gray-600" />
@@ -107,7 +104,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
                     <p className="text-base font-medium text-gray-900">{request.user.nama}</p>
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-3">
                   <Package className="w-5 h-5 text-gray-600" />
                   <div>
@@ -115,7 +111,6 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
                     <p className="text-base font-medium text-gray-900">{request.barang.nama}</p>
                   </div>
                 </div>
-
                 <div className="flex items-start space-x-3">
                   <MessageSquare className="w-5 h-5 text-gray-600 mt-1" />
                   <div>
@@ -137,12 +132,29 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
                 onChange={(e) => setPenanggungJawab(e.target.value)}
                 placeholder="Nama lengkap penanggung jawab"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900 placeholder-gray-500"
-                required
                 disabled={loading}
               />
             </div>
 
             {/* Lokasi */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lokasi <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={lokasiId}
+                onChange={(e) => setLokasiId(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
+                disabled={loading}
+              >
+                <option value="">Pilih Lokasi</option>
+                {lokasiList.map((lokasi) => (
+                  <option key={lokasi.id} value={lokasi.id}>
+                    {lokasi.nama}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Foto Dokumentasi */}
             <div>
@@ -171,10 +183,7 @@ export default function ApproveModal({ request, isOpen, onClose, onApprove }: Ap
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => {
-                        setFoto(null);
-                        setFotoPreview(null);
-                      }}
+                      onClick={handleRemovePhoto}
                       className="flex-1"
                     >
                       Hapus Foto
