@@ -9,6 +9,7 @@ import {
   Camera, 
   QrCode, 
   X, 
+  MapPin,
   AlertCircle,
   Check
 } from 'lucide-react';
@@ -346,16 +347,19 @@ export default function EnhancedReturnModal({
                 />
               </div>
 
-              {/* Lokasi */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lokasi <span className="text-red-500">*</span>
-                </label>
+              {/* Lokasi Barang */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lokasi Barang <span className="text-red-500">*</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-gray-600" />
                 <select
                   value={lokasiId}
                   onChange={(e) => setLokasiId(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-950 bg-white text-gray-900"
                   required
+                  disabled={loading}
                 >
                   <option value="">Pilih Lokasi</option>
                   {lokasiList.map((lokasi) => (
@@ -365,6 +369,7 @@ export default function EnhancedReturnModal({
                   ))}
                 </select>
               </div>
+            </div>
 
               {/* Catatan */}
               <div>
