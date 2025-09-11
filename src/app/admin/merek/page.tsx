@@ -241,7 +241,11 @@ return (
 
           {/* Tanggal Dibuat */}
           <td className="py-4 px-4 border border-gray-300 text-center text-gray-600">
-            {new Date(merek.createdAt).toLocaleDateString("id-ID")}
+            {new Date(merek.createdAt).toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
           </td>
 
           {/* Aksi */}
