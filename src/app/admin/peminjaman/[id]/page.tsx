@@ -322,59 +322,57 @@ if (loading) {
               </div>
             </div>
 
-            {/* Photos */}
-            {(peminjaman.fotoPinjam || peminjaman.fotoKembali) && (
-              <div className="bg-white rounded-lg shadow border">
-                <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-lg font-semibold text-gray-900">Dokumentasi Foto</h2>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {peminjaman.fotoPinjam && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Foto Peminjaman</h4>
-                        <div className="relative">
-                          <img
-                            src={peminjaman.fotoPinjam}
-                            alt="Foto Peminjaman"
-                            className="w-full h-48 object-cover rounded-lg border"
-                          />
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="absolute top-2 right-2"
-                            onClick={() => window.open(peminjaman.fotoPinjam!, '_blank')}
-                          >
-                            <Download className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {peminjaman.fotoKembali && (
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Foto Pengembalian</h4>
-                        <div className="relative">
-                          <img
-                            src={peminjaman.fotoKembali}
-                            alt="Foto Pengembalian"
-                            className="w-full h-48 object-cover rounded-lg border"
-                          />
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="absolute top-2 right-2"
-                            onClick={() => window.open(peminjaman.fotoKembali!, '_blank')}
-                          >
-                            <Download className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+{/* Dokumentasi */}
+{(peminjaman.fotoPinjam || peminjaman.fotoKembali) && (
+  <div className="bg-white rounded-lg shadow border">
+    <div className="p-6 border-b border-gray-200">
+      <h2 className="text-lg font-semibold text-gray-900">Dokumentasi</h2>
+    </div>
+    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {peminjaman.fotoPinjam && (
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 mb-1">Foto Saat Peminjaman</span>
+          <div className="relative">
+            <img
+              src={peminjaman.fotoPinjam}
+              alt="Foto Peminjaman"
+              className="w-full h-48 object-cover rounded-lg border"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              className="absolute top-2 right-2"
+              onClick={() => window.open(peminjaman.fotoPinjam!, "_blank")}
+            >
+              <Download className="w-3 h-3" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {peminjaman.fotoKembali && (
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-500 mb-1">Foto Saat Pengembalian</span>
+          <div className="relative">
+            <img
+              src={peminjaman.fotoKembali}
+              alt="Foto Pengembalian"
+              className="w-full h-48 object-cover rounded-lg border"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              className="absolute top-2 right-2"
+              onClick={() => window.open(peminjaman.fotoKembali!, "_blank")}
+            >
+              <Download className="w-3 h-3" />
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+)}
           </div>
 
           {/* Sidebar */}
