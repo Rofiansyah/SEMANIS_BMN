@@ -424,165 +424,155 @@ if (loading) {
               </div>
             </div>
 
-            {/* Riwayat Peminjaman */}
-            <div className="bg-white rounded-lg shadow border">
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex items-center space-x-2">
-                  <History className="w-5 h-5 text-gray-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">Riwayat Peminjaman</h2>
-                </div>
-              </div>
-              <div className="p-6">
-{historyLoading ? (
-  <div className="flex flex-col items-center justify-center py-8">
-    {/* Ikon animasi */}
-    <div className="relative w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 mb-3 flex items-center justify-center">
-      <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
-      <History className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 animate-bounce drop-shadow-lg" />
-    </div>
-
-    {/* Teks animasi */}
-    <p className="text-sm sm:text-base font-medium text-gray-700 animate-pulse text-center">
-      Memuat Riwayat Peminjaman...
-    </p>
-
-    {/* Progress Bar */}
-    <div className="w-32 sm:w-40 md:w-48 h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
-      <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+{/* Riwayat Peminjaman */}
+<div className="bg-white rounded-lg shadow border">
+  <div className="p-4 sm:p-6 border-b border-gray-200">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+      <History className="w-5 h-5 text-gray-600" />
+      <h2 className="text-lg font-semibold text-gray-900">Riwayat Peminjaman</h2>
     </div>
   </div>
-                ) : history.length === 0 ? (
-                  <div className="text-center py-8">
-                    <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-500">Belum ada riwayat peminjaman</p>
+  <div className="p-4 sm:p-6">
+    {historyLoading ? (
+      <div className="flex flex-col items-center justify-center py-8">
+        <div className="relative w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 mb-3 flex items-center justify-center">
+          <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30"></div>
+          <History className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 animate-bounce drop-shadow-lg" />
+        </div>
+        <p className="text-sm sm:text-base font-medium text-gray-700 animate-pulse text-center">
+          Memuat Riwayat Peminjaman...
+        </p>
+        <div className="w-32 sm:w-40 md:w-48 h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+          <div className="h-2 bg-blue-600 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
+        </div>
+      </div>
+    ) : history.length === 0 ? (
+      <div className="text-center py-8">
+        <History className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+        <p className="text-gray-500">Belum ada riwayat peminjaman</p>
+      </div>
+    ) : (
+      <div className="space-y-4">
+        {history.map((item) => {
+          const config = statusConfig[item.status as keyof typeof statusConfig] || 
+                         { color: 'bg-gray-100 text-gray-800', bgColor: 'bg-gray-50' };
+          return (
+            <div
+              key={item.id}
+              className={`rounded-2xl border p-4 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200 ${config.bgColor}`}
+            >
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0">
+                    <User className="w-10 h-10 text-gray-500 bg-gray-100 rounded-full p-2" />
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    {history.map((item) => {
-                      const config = statusConfig[item.status as keyof typeof statusConfig] || 
-                                    { color: 'bg-gray-100 text-gray-800', bgColor: 'bg-gray-50' };
+                  <div>
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-900">
+                      {item.user.nama}
+                    </h4>
+                    <p className="text-sm text-gray-600">{item.user.email}</p>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">{getStatusBadge(item.status)}</div>
+              </div>
 
-return (
-  <div
-    key={item.id}
-    className={`rounded-2xl border p-6 shadow-sm hover:shadow-md transition-all duration-200 ${config.bgColor}`}
-  >
-    {/* Header */}
-    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
-      <div className="flex items-center space-x-3">
-        <div className="flex-shrink-0">
-          <User className="w-10 h-10 text-gray-500 bg-gray-100 rounded-full p-2" />
-        </div>
-        <div>
-          <h4 className="text-base sm:text-lg font-semibold text-gray-900">
-            {item.user.nama}
-          </h4>
-          <p className="text-sm text-gray-600">{item.user.email}</p>
-        </div>
-      </div>
-      <div className="flex-shrink-0">{getStatusBadge(item.status)}</div>
-    </div>
-
-    {/* Info Grid */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-      <div>
-        <span className="text-gray-500">Tanggal Pengajuan:</span>
-        <p className="font-medium text-gray-900">
-          {new Date(item.tanggalPengajuan).toLocaleDateString("id-ID")}
-        </p>
-      </div>
-      {item.tanggalDisetujui && (
-        <div>
-          <span className="text-gray-500">Tanggal Disetujui:</span>
-          <p className="font-medium text-gray-900">
-            {new Date(item.tanggalDisetujui).toLocaleDateString("id-ID")}
-          </p>
-        </div>
-      )}
-      {item.tanggalDikembalikan && (
-        <div>
-          <span className="text-gray-500">Tanggal Dikembalikan:</span>
-          <p className="font-medium text-gray-900">
-            {new Date(item.tanggalDikembalikan).toLocaleDateString("id-ID")}
-          </p>
-        </div>
-      )}
-      {item.penanggungJawab && (
-        <div>
-          <span className="text-gray-500">Penanggung Jawab:</span>
-          <p className="font-medium text-gray-900">{item.penanggungJawab}</p>
-        </div>
-      )}
-    </div>
-
-{/* Dokumentasi */}
-{(item.fotoPinjam || item.fotoKembali) && (
-  <div className="mt-4 pt-4 border-t rounded-lg p-3 mb-4 border-b">
-    <div className="flex items-start space-x-3">
-      <ImageIcon className="w-5 h-5 text-gray-400 mt-0.5" />
-      <div className="space-y-3 w-full">
-        <span className="text-sm text-gray-500">Dokumentasi:</span>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
-          {item.fotoPinjam && (
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Foto Saat Peminjaman</p>
-              <img
-                src={item.fotoPinjam}
-                alt="Foto Peminjaman"
-                className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
-                onClick={() => window.open(item.fotoPinjam!, "_blank")}
-              />
-            </div>
-          )}
-          {item.fotoKembali && (
-            <div>
-              <p className="text-xs text-gray-500 mb-1">Foto Saat Pengembalian</p>
-              <img
-                src={item.fotoKembali}
-                alt="Foto Pengembalian"
-                className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
-                onClick={() => window.open(item.fotoKembali!, "_blank")}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
-    {/* Catatan */}
-    {item.catatan && (
-      <div className="mt-4 pt-4 border-t bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
-        <div className="flex items-start space-x-3">
-          <FileText className="w-5 h-5 text-gray-400 mt-0.5" />
-          <div>
-            <span className="text-sm text-gray-500">Catatan:</span>
-            <p className="text-sm text-gray-900 mt-1 leading-relaxed">
-              {item.catatan}
-            </p>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* Approved By */}
-    {item.approvedByUser && (
-      <div className="mt-1 pt-1 border-t border-gray-100">
-        <span className="text-sm text-gray-500">Disetujui oleh:</span>
-        <p className="text-sm font-medium text-gray-900">
-          {item.approvedByUser.nama}
-        </p>
-      </div>
-    )}
-  </div>
-);
-
-                    })}
+              {/* Info Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Tanggal Pengajuan:</span>
+                  <p className="font-medium text-gray-900">
+                    {new Date(item.tanggalPengajuan).toLocaleDateString("id-ID")}
+                  </p>
+                </div>
+                {item.tanggalDisetujui && (
+                  <div>
+                    <span className="text-gray-500">Tanggal Disetujui:</span>
+                    <p className="font-medium text-gray-900">
+                      {new Date(item.tanggalDisetujui).toLocaleDateString("id-ID")}
+                    </p>
+                  </div>
+                )}
+                {item.tanggalDikembalikan && (
+                  <div>
+                    <span className="text-gray-500">Tanggal Dikembalikan:</span>
+                    <p className="font-medium text-gray-900">
+                      {new Date(item.tanggalDikembalikan).toLocaleDateString("id-ID")}
+                    </p>
+                  </div>
+                )}
+                {item.penanggungJawab && (
+                  <div>
+                    <span className="text-gray-500">Penanggung Jawab:</span>
+                    <p className="font-medium text-gray-900">{item.penanggungJawab}</p>
                   </div>
                 )}
               </div>
+
+              {/* Dokumentasi */}
+              {(item.fotoPinjam || item.fotoKembali) && (
+                <div className="mt-4 pt-4 border-t rounded-lg p-3 mb-4 border-b">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3 w-full">
+                    <ImageIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                      {item.fotoPinjam && (
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Foto Saat Peminjaman</p>
+                          <img
+                            src={item.fotoPinjam}
+                            alt="Foto Peminjaman"
+                            className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+                            onClick={() => window.open(item.fotoPinjam!, "_blank")}
+                          />
+                        </div>
+                      )}
+                      {item.fotoKembali && (
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Foto Saat Pengembalian</p>
+                          <img
+                            src={item.fotoKembali}
+                            alt="Foto Pengembalian"
+                            className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+                            onClick={() => window.open(item.fotoKembali!, "_blank")}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Catatan */}
+              {item.catatan && (
+                <div className="mt-4 pt-4 border-t bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                    <FileText className="w-5 h-5 text-gray-400 mt-0.5" />
+                    <div>
+                      <span className="text-sm text-gray-500">Catatan:</span>
+                      <p className="text-sm text-gray-900 mt-1 leading-relaxed">
+                        {item.catatan}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Approved By */}
+              {item.approvedByUser && (
+                <div className="mt-1 pt-1 border-t border-gray-100">
+                  <span className="text-sm text-gray-500">Disetujui oleh:</span>
+                  <p className="text-sm font-medium text-gray-900">
+                    {item.approvedByUser.nama}
+                  </p>
+                </div>
+              )}
             </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</div>
           </div>
         </div>
       </div>
