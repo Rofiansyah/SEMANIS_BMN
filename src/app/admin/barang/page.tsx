@@ -78,8 +78,6 @@ export default function AdminBarangPage() {
     loadAllData();
   };
 
-  // Function removed - not currently used in the UI
-
   const handleDeleteBarang = async (id: string) => {
     if (!confirm('Apakah Anda yakin ingin menghapus barang ini?')) return;
     

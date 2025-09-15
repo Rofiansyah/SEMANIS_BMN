@@ -515,6 +515,42 @@ return (
       )}
     </div>
 
+    {/* Dokumentasi */}
+    {(item.fotoPinjam || item.fotoKembali) && (
+      <div className="mt-4 pt-4 border-t bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
+        <div className="flex items-start space-x-3">
+          <ImageIcon className="w-5 h-5 text-gray-400 mt-0.5" />
+          <div className="space-y-3">
+            <span className="text-sm text-gray-500">Dokumentasi:</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {item.fotoPinjam && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Foto Saat Peminjaman</p>
+                  <img
+                    src={item.fotoPinjam}
+                    alt="Foto Peminjaman"
+                    className="w-full h-48 object-cover rounded-lg border cursor-pointer hover:opacity-90 transition"
+                    onClick={() => window.open(item.fotoPinjam!, "_blank")}
+                  />
+                </div>
+              )}
+              {item.fotoKembali && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-1">Foto Saat Pengembalian</p>
+                  <img
+                    src={item.fotoKembali}
+                    alt="Foto Pengembalian"
+                    className="w-full h-48 object-cover rounded-lg border cursor-pointer hover:opacity-90 transition"
+                    onClick={() => window.open(item.fotoKembali!, "_blank")}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
     {/* Catatan */}
     {item.catatan && (
       <div className="mt-4 pt-4 border-t bg-gray-50 rounded-lg p-3 mb-4 border-b border-gray-200">
