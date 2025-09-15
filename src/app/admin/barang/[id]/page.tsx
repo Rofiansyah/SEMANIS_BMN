@@ -521,7 +521,7 @@ if (loading) {
                           <img
                             src={item.fotoPinjam}
                             alt="Foto Peminjaman"
-                            className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+                            className="w-full h-full rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
                             onClick={() => window.open(item.fotoPinjam!, "_blank")}
                           />
                         </div>
@@ -532,7 +532,7 @@ if (loading) {
                           <img
                             src={item.fotoKembali}
                             alt="Foto Pengembalian"
-                            className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+                            className="w-full h-full rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
                             onClick={() => window.open(item.fotoKembali!, "_blank")}
                           />
                         </div>
