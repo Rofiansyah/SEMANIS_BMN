@@ -257,10 +257,12 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-500 mb-1">Foto Saat Peminjaman</span>
                       <div className="relative w-full h-48 sm:h-64">
-                        <img src={peminjaman.fotoPinjam} alt="Foto Peminjaman" className="w-full h-full object-cover rounded-lg border" />
-                        <Button size="sm" variant="outline" className="absolute top-2 right-2" onClick={() => window.open(peminjaman.fotoPinjam!, "_blank")}>
-                          <Download className="w-3 h-3" />
-                        </Button>
+                        <img 
+                        src={peminjaman.fotoPinjam} 
+                        alt="Foto Peminjaman" 
+                        className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition"
+                        onClick={() => window.open(peminjaman.fotoPinjam!, "_blank")}
+                         />
                       </div>
                     </div>
                   )}
@@ -268,10 +270,12 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-500 mb-1">Foto Saat Pengembalian</span>
                       <div className="relative w-full h-48 sm:h-64">
-                        <img src={peminjaman.fotoKembali} alt="Foto Pengembalian" className="w-full h-full object-cover rounded-lg border" />
-                        <Button size="sm" variant="outline" className="absolute top-2 right-2" onClick={() => window.open(peminjaman.fotoKembali!, "_blank")}>
-                          <Download className="w-3 h-3" />
-                        </Button>
+                        <img 
+                        src={peminjaman.fotoKembali} 
+                        alt="Foto Pengembalian" 
+                        className="w-full h-full object-cover rounded-xl cursor-pointer shadow-sm hover:shadow-md transition" 
+                        onClick={() => window.open(peminjaman.fotoKembali!, "_blank")}
+                        />
                       </div>
                     </div>
                   )}
