@@ -171,7 +171,7 @@ export default function PeminjamanDetailPage({ params }: PeminjamanDetailPagePro
               <p className="text-gray-600 mt-1">Informasi lengkap peminjaman barang</p>
             </div>
           </div>
-          <span className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-full border ${statusColors[peminjaman.status]} mt-2 sm:mt-0`}>
+          <span className={`inline-flex text-center items-center px-4 py-2 text-sm font-medium rounded-full border ${statusColors[peminjaman.status]} mt-2 sm:mt-0`}>
             {statusIcons[peminjaman.status]}
             <span className="ml-2">{statusLabels[peminjaman.status]}</span>
           </span>
